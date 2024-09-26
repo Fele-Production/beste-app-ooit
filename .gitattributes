@@ -56,4 +56,4 @@
 *.lxo filter=lfs diff=lfs merge=lfs -text
 
 #other
-*.py filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
