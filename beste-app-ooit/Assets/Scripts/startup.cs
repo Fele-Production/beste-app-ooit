@@ -1,19 +1,18 @@
+using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Extensions.Http;
+
 using UnityEngine;
+using UnityEngine.Networking;
 using ParkSquare.Discogs;
 
-public class startup : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-}
+
+
+public class startup : MonoBehaviour
+{}
