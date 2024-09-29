@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 
@@ -24,8 +24,8 @@ public class APItest : MonoBehaviour
 
             var searchRes = client.SearchAsync(new SearchCriteria 
             {
-                Artist = "Taylor Swift", 
-                ReleaseTitle = "Tortured Poets Department"
+                Artist = "$uicideboy$", 
+                ReleaseTitle = "New World Depression"
             }).Result;
             Debug.Log(searchRes);
     }
@@ -37,3 +37,4 @@ public class HardCodedClientConfig : IClientConfig
 
         public string BaseUrl => "https://api.discogs.com";
     }
+*/
