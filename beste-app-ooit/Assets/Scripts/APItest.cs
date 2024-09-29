@@ -1,33 +1,46 @@
-/*using System.Collections;
-using System.Collections.Generic;
+
+using System;
 using System.Net.Http;
+using System.Threading.Tasks;
+using System.Collections;
+using System.Collections.Generic;
+
 
 using UnityEngine;
 using UnityEngine.Networking;
 using ParkSquare.Discogs;
 using Microsoft.Extensions.Http;
 
-public class APItest : MonoBehaviour
-{
+public class APItest : MonoBehaviour {}
+/* {
+
     public string[] test;
 
     public void Start() {
         Debug.Log("Start");
-        Main(test);
+        Main(null);
     }
 
-    public static void Main(string[] args) {
+    public static async void Main(string[] args) {
         Debug.Log("Main Called");
-        DiscogsClient client = new DiscogsClient( 
-            new HttpClient(new HttpClientHandler()),
-            new ApiQueryBuilder(new HardCodedClientConfig())); 
+        //DiscogsClient client = new DiscogsClient( 
+            //new HttpClient(new HttpClientHandler()),
+           // new ApiQueryBuilder(new HardCodedClientConfig())); 
 
-            var searchRes = client.SearchAsync(new SearchCriteria 
+        try{
+            
+            var searchRes = await client.SearchAsync(new SearchCriteria 
             {
-                Artist = "$uicideboy$", 
-                ReleaseTitle = "New World Depression"
-            }).Result;
+                Artist = "Taylor Swift", 
+                ReleaseTitle = "1989"
+            });
             Debug.Log(searchRes);
+        } catch (ArgumentNullException ex) {
+        Debug.LogError("ArgumentNullException: " + ex.Message);
+        } catch (Exception ex) {
+        Debug.LogError("General Exception: " + ex.Message);
+        }
+        
     }
 }
 
