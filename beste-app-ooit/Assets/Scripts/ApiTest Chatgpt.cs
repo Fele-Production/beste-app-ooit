@@ -116,7 +116,7 @@ public class ApiTestChatgpt : MonoBehaviour
     HttpClient client = new HttpClient(handler);
 
     // Add User-Agent header
-    client.DefaultRequestHeaders.Add("User-Agent", "PlaatFanaat/1.0");
+    client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
     client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
     
     try {
