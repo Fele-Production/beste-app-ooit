@@ -12,6 +12,7 @@ using Microsoft.Extensions.Http;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
 using UnityEditor.PackageManager;
+using ParkSquare.Discogs.Dto;
 
 
 public class APItestGOATED : MonoBehaviour {
@@ -65,8 +66,8 @@ public class APItestGOATED : MonoBehaviour {
 
         //Search Type Definitions
         var searchFormat = "";
-        var searchFormatMaster = "https://api.discogs.com/database/search?q="+search+"&type=master?page="+page+"&per_page="+per_page;
-        var searchFormatRelease = "https://api.discogs.com/database/masters/"+master_id+"/versions?page="+page+"&per_page="+per_page;
+        var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master?page={page}&per_page={per_page}";
+        var searchFormatRelease = $"https://api.discogs.com/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
 
         //Select Search Type
         if (type == "master") {searchFormat=searchFormatMaster;} //Requires: search, page, per_page
@@ -79,13 +80,13 @@ public class APItestGOATED : MonoBehaviour {
             string jsonResponse = await response.Content.ReadAsStringAsync();
             Debug.Log($"Raw Response: {jsonResponse}");
             if (type == "master") {Debug.Log(ConvertJSONtoMaster(jsonResponse).pagination.pages);} //Test if Master search works
-            if (type == "release") {Debug.Log(jsonResponse);} //Test if Release Search works
+            if (type == "release") {Debug.Log(jsonResponse); jsontest = ConvertJSONtoRelease(jsonResponse);} //Test if Release Search works
         } else {
             Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
         }
         
     }
-    //Master / Release Class
+    //Master Class
     [System.Serializable]
     public class Userdata {
         public bool in_wantlist;
@@ -136,14 +137,79 @@ public class APItestGOATED : MonoBehaviour {
         public Master[] results;
     }
 
-    public MasterJson jsontest = new MasterJson();
+    //Release Class
+    [System.Serializable]
+    public class AppliedFilters {
+        public string[] format;
+    }
+    
+    [System.Serializable]
+    public class AvailableFilters {
+
+    }
+
+    [System.Serializable]
+    public class Filters {
+        public AppliedFilters applied;
+        public AvailableFilters available;
+    }
+
+    [System.Serializable]
+    public class FilterFacetComponent {
+        public string title;
+        public string value;
+        public int count;
+    }
+
+    [System.Serializable]
+    public class FilterFacet {
+        public string title;
+        public string id;
+        public FilterFacetComponent[] values;
+        public bool allow_multiple_values;
+    }
+
+    [System.Serializable]
+    public class ReleaseStats {
+        public UserData community;
+        public UserData user;
+    }
+
+    [System.Serializable]
+    public class ReleaseVersion {
+        public int id;
+        public string label;
+        public string country;
+        public string title;
+        public string[] major_formats;
+        public string format;
+        public string catno;
+        public string released;
+        public string status;
+        public string resource_url;
+        public string thumb;
+        public ReleaseStats stats;
+    }
+
+    [System.Serializable]
+    public class ReleaseJson {
+        public PagesInfo pagination;
+        public Filters filters;
+        public FilterFacet[] filter_facets;
+        public ReleaseVersion[] versions;
+    }
+
+
+
+
+    public ReleaseJson jsontest = new ReleaseJson(); //json test look nice :)
 
     public MasterJson ConvertJSONtoMaster(string jsonMasterInput) {
         return JsonUtility.FromJson<MasterJson>(jsonMasterInput);
     }
 
-    public MasterJson ConvertJSONtoRelease(string jsonMasterInput) {
-        return JsonUtility.FromJson<MasterJson>(jsonMasterInput);
+    public ReleaseJson ConvertJSONtoRelease(string jsonReleaseInput) {
+        return JsonUtility.FromJson<ReleaseJson>(jsonReleaseInput);
     }
      
 }
@@ -157,7 +223,15 @@ public class HardCodedClientConfig : IClientConfig
     } 
 
 
+
+
+
+
+
+
+
 /* SEARCH QUERY THINGIES
+___________MASTER___________________
 query   --INCLUDED
 string (optional) Example: nirvana
 Your search query
@@ -206,7 +280,7 @@ year
 string (optional) Example: 1991
 Search release year.
 
-format --HARDCODED (vinyl)
+format
 string (optional) Example: album
 Search formats.
 
@@ -229,5 +303,46 @@ Search submitter username.
 contributor
 string (optional) Example: jerome99
 Search contributor usernames.
+__________RELEASES__________
+master_id --INCLUDED
+number (required) Example: 1000
+The Master ID
 
+page --INCLUDED
+number (optional) Example: 3
+The page you want to request
+
+per_page --INCLUDED
+number (optional) Example: 25
+The number of items per page
+
+format --HARDCODED
+string (optional) Example: Vinyl
+The format to filter
+
+label
+string (optional) Example: Scorpio Music
+The label to filter
+
+released
+string (optional) Example: 1992
+The release year to filter
+
+country
+string (optional) Example: Belgium
+The country to filter
+
+sort
+string (optional) Example: released
+Sort items by this field:
+released (i.e. year of the release)
+title (i.e. title of the release)
+format
+label
+catno (i.e. catalog number of the release)
+country
+
+sort_order
+string (optional) Example: asc
+Sort items in a particular order (one of asc, desc)
 */

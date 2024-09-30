@@ -1,0 +1,81 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 23,
+        "per_page": 5,
+        "items": 111,
+        "urls": {
+            "last": "https://api.discogs.com/masters/13773/versions?format=Vinyl&page=23&per_page=5&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux",
+            "next": "https://api.discogs.com/masters/13773/versions?format=Vinyl&page=2&per_page=5&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux"
+        }
+    }, 
+    "filters": {
+        "applied": {
+            "format": ["Vinyl"]
+        }, 
+        "available": {
+            "label": {
+                "Sub Pop": 82
+            },
+            "country": {
+                "US": 36
+            },
+            "released": {
+                "1989": 16
+            }
+        }
+    }, 
+    "filter_facets": [ {
+            "title": "Label",
+            "id": "label",
+            "values": [ {
+                    "title": "Sub Pop",
+                    "value": "Sub+Pop",
+                    "count": 82
+                    }
+                ], 
+            "allows_multiple_values": true
+            },{
+                "title": "Country",
+                "id": "country",
+                "values": [ {
+                    "title": "US", 
+                    "value": "US", 
+                    "count": 36
+                } ],
+                "allows_multiple_values": true
+            }, {
+                "title": "Released",
+                "id": "released",
+                "values": [{
+                    "title": "1989",
+                    "value": "1989",
+                    "count": 16
+                } ],
+                "allows_multiple_values": false
+            }
+    ],
+    "versions": [ {
+        "id": 420290,
+        "label": "Tupelo Recording Company",
+        "country": "UK",
+        "title": "Bleach",
+        "major_formats": ["Vinyl"],
+        "format": "LP, Album",
+        "catno": "TUPLP6, TUP LP6",
+        "released": "1989",
+        "status": "Accepted",
+        "resource_url": "https://api.discogs.com/releases/420290",
+        "thumb": "https://i.discogs.com/aeh7yaLd0N7vQhgc-bqAv6VGc08PrbqkX7jO-fcCe0k/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTQyMDI5/MC0xNzA3MTU4MjIx/LTk0NTIuanBlZw.jpeg",
+        "stats": {
+            "community": {
+                "in_wantlist": 3107,
+                "in_collection": 6604
+            }, 
+            "user": {
+                "in_wantlist": 0,
+                "in_collection": 0
+            }
+        }
+    } ]
+}
