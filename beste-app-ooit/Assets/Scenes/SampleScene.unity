@@ -122,62 +122,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &165372551
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 165372553}
-  - component: {fileID: 165372552}
-  m_Layer: 0
-  m_Name: Ik ga iemand neerslaan
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &165372552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165372551}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8798ad2eb60541b4ea646fb569df97f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  apiTest: {fileID: 1230518511}
-  JSONfile: 
-  jsontest:
-    pagination:
-      page: 0
-      pages: 0
-      per_page: 0
-      items: 0
-      urls:
-        last: 
-        next: 
-    results: []
---- !u!4 &165372553
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 165372551}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1062296210
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,9 +258,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 12e42d5039074314b8efe20baea87873, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  search: Speak_Now
-  type: release
-  finalResult: 
+  search: bleach
+  type: master
+  page: 1
+  per_page: 1
+  master_id: 13773
   jsontest:
     pagination:
       page: 0
@@ -333,4 +279,3 @@ SceneRoots:
   m_Roots:
   - {fileID: 1062296213}
   - {fileID: 1230518510}
-  - {fileID: 165372553}

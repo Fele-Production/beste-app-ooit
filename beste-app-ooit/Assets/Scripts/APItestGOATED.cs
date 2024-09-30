@@ -10,17 +10,25 @@ using UnityEngine.Networking;
 using ParkSquare.Discogs;
 using Microsoft.Extensions.Http;
 using Unity.VisualScripting;
+using System.Runtime.CompilerServices;
+using UnityEditor.PackageManager;
 
-public class APItestGOATED : MonoBehaviour
-{
-    public string search;
-    public string type;
-    public string finalResult;
 
+public class APItestGOATED : MonoBehaviour {
+    //Var
+    public string search;   //search query
+    public string type;     //discogs type (master, release, artist, label)
+    public int page;
+    public int per_page;
+    public int master_id;
+
+
+
+    //Test API Code
     void Start() {
         StartCoroutine(CallDiscogsAPI());
     }
-
+    //Discogs API Code
     public IEnumerator CallDiscogsAPI() {
         yield return TestRawHttpWithVar();
     }
@@ -55,19 +63,29 @@ public class APItestGOATED : MonoBehaviour
         }
         Debug.Log("DiscogsClient initialized correctly");
 
-        var searchFormat = "https://api.discogs.com/database/search?q="+search+"&type="+type+"?page=1&per_page=5";
+        //Search Type Definitions
+        var searchFormat = "";
+        var searchFormatMaster = "https://api.discogs.com/database/search?q="+search+"&type=master?page="+page+"&per_page="+per_page;
+        var searchFormatRelease = "https://api.discogs.com/database/masters/"+master_id+"/versions?page="+page+"&per_page="+per_page;
+
+        //Select Search Type
+        if (type == "master") {searchFormat=searchFormatMaster;} //Requires: search, page, per_page
+        else if (type == "release") {searchFormat=searchFormatRelease;} //Requires: master_id, page, per_page
+        else Debug.LogError("Invalid/Unsupported Type");
+        Debug.Log(searchFormat);
+        Debug.Log(searchFormatMaster);
         var response = await client.GetAsync(searchFormat+"&token=" + config.AuthToken);
         if (response.IsSuccessStatusCode) {
             string jsonResponse = await response.Content.ReadAsStringAsync();
             Debug.Log($"Raw Response: {jsonResponse}");
-            finalResult = jsonResponse;
-            JSONConvert();
+            if (type == "master") {Debug.Log(ConvertJSONtoMaster(jsonResponse).pagination.pages);} //Test if Master search works
+            if (type == "release") {Debug.Log(jsonResponse);} //Test if Release Search works
         } else {
             Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
         }
         
     }
-
+    //Master / Release Class
     [System.Serializable]
     public class Userdata {
         public bool in_wantlist;
@@ -113,16 +131,19 @@ public class APItestGOATED : MonoBehaviour
         public Urls urls;
     }
     [System.Serializable]
-    public class ResultJson {
+    public class MasterJson {
         public PagesInfo pagination;
         public Master[] results;
     }
 
-    public ResultJson jsontest = new ResultJson();
+    public MasterJson jsontest = new MasterJson();
 
-    public void JSONConvert() {
-        jsontest = JsonUtility.FromJson<ResultJson>(finalResult);
-        Debug.Log(jsontest.pagination.pages);
+    public MasterJson ConvertJSONtoMaster(string jsonMasterInput) {
+        return JsonUtility.FromJson<MasterJson>(jsonMasterInput);
+    }
+
+    public MasterJson ConvertJSONtoRelease(string jsonMasterInput) {
+        return JsonUtility.FromJson<MasterJson>(jsonMasterInput);
     }
      
 }
@@ -136,3 +157,77 @@ public class HardCodedClientConfig : IClientConfig
     } 
 
 
+/* SEARCH QUERY THINGIES
+query   --INCLUDED
+string (optional) Example: nirvana
+Your search query
+
+type    --INCLUDED
+string (optional) Example: release
+String. One of release, master, artist, label
+
+title
+string (optional) Example: nirvana - nevermind
+Search by combined “Artist Name - Release Title” title field.
+
+release_title
+string (optional) Example: nevermind
+Search release titles.
+
+credit
+string (optional) Example: kurt
+Search release credits.
+
+artist
+string (optional) Example: nirvana
+Search artist names.
+
+anv
+string (optional) Example: nirvana
+Search artist ANV.
+
+label
+string (optional) Example: dgc
+Search label names.
+
+genre
+string (optional) Example: rock
+Search genres.
+
+style
+string (optional) Example: grunge
+Search styles.
+
+country
+string (optional) Example: canada
+Search release country.
+
+year
+string (optional) Example: 1991
+Search release year.
+
+format --HARDCODED (vinyl)
+string (optional) Example: album
+Search formats.
+
+catno
+string (optional) Example: DGCD-24425
+Search catalog number.
+
+barcode
+string (optional) Example: 7 2064-24425-2 4
+Search barcodes.
+
+track
+string (optional) Example: smells like teen spirit
+Search track titles.
+
+submitter
+string (optional) Example: milKt
+Search submitter username.
+
+contributor
+string (optional) Example: jerome99
+Search contributor usernames.
+
+*/
