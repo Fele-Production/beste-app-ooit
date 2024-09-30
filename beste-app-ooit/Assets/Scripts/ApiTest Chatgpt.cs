@@ -12,12 +12,14 @@ using Microsoft.Extensions.Http;
 
 public class ApiTestChatgpt : MonoBehaviour
 {
+    public string search;
+
     public void Start() {
         StartCoroutine(CallDiscogsAPI());
     }
 
     private IEnumerator CallDiscogsAPI() {
-        Task discogsTask = GetDiscogsData();
+        /* Task discogsTask = GetDiscogsData();
         while (!discogsTask.IsCompleted) {
             yield return null;  // Wait until the async task is done
         }
@@ -25,7 +27,9 @@ public class ApiTestChatgpt : MonoBehaviour
             Debug.LogError("Task failed: " + discogsTask.Exception);
         }
 
-        yield return TestRawHttpRequest();
+        yield return TestRawHttpRequest(); */
+
+        yield return TestRawHttpWithVar();
     }
         
 
@@ -91,26 +95,6 @@ public class ApiTestChatgpt : MonoBehaviour
         }*/
     }
 
-    private async Task PerformSearch(DiscogsClient client) {
-    Debug.Log($"SearchCriteria Artist: Taylor Swift, ReleaseTitle: 1989");
-    try {
-        var searchRes = await client.SearchAsync(new SearchCriteria {
-            Artist = "Taylor Swift",
-            ReleaseTitle = "1989"
-        });
-        
-        // Check if search result is null
-        if (searchRes == null) {
-            Debug.LogError("API call returned null. Check your query or API token.");
-        } else {
-            Debug.Log("Search successful");
-            // You can log the search results here
-        }
-        } catch (Exception ex) {
-            Debug.LogError($"Exception during API call: {ex.Message}");
-        }
-    } 
-
     private async Task TestRawHttpRequest() {
     HttpClientHandler handler = new HttpClientHandler();
     handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
@@ -121,7 +105,7 @@ public class ApiTestChatgpt : MonoBehaviour
     client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
     
     try {
-        var response = await client.GetAsync("https://api.discogs.com/database/search?artist=Taylor+Swift&release_title=1989&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+        var response = await client.GetAsync("https://api.discogs.com/database/search?1989&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
         if (response.IsSuccessStatusCode) {
             string jsonResponse = await response.Content.ReadAsStringAsync();
             Debug.Log($"Raw Response: {jsonResponse}");
@@ -131,8 +115,48 @@ public class ApiTestChatgpt : MonoBehaviour
     } catch (Exception ex) {
         Debug.LogError($"Exception in raw HTTP request: {ex.Message}");
     }
-}
+    }
 
+    private async Task TestRawHttpWithVar() {
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+        HttpClient client = new HttpClient(handler);
+
+        // Add User-Agent header
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
+        client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+
+
+        //check if Auth token is correctly configured
+        HardCodedClientConfig config = new HardCodedClientConfig();
+        if (config == null) {
+            Debug.LogError("HardCodedClientConfig is null.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(config.AuthToken)) {
+            Debug.LogError("AuthToken is null or empty.");
+            return;
+        }
+        Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
+        
+        // Check if the client is null
+        if (client == null) {
+            Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
+            return;
+        }
+        Debug.Log("DiscogsClient initialized correctly");
+
+        
+        var response = await client.GetAsync("https://api.discogs.com/database/search?" + search + "&token=" + config.AuthToken);
+        if (response.IsSuccessStatusCode) {
+            string jsonResponse = await response.Content.ReadAsStringAsync();
+            Debug.Log($"Raw Response: {jsonResponse}");
+        } else {
+            Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+        }
+    }
+     
 }
 
 public class HardCodedClientConfig : IClientConfig
