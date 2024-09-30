@@ -25,7 +25,7 @@ public class ApiTestChatgpt : MonoBehaviour
             Debug.LogError("Task failed: " + discogsTask.Exception);
         }
 
-        //yield return TestRawHttpRequest();
+        yield return TestRawHttpRequest();
     }
         
 
@@ -38,6 +38,7 @@ public class ApiTestChatgpt : MonoBehaviour
          // Add User-Agent header
         httpClient.DefaultRequestHeaders.Add("User-Agent", "PlaatFanaat/1.0");
         httpClient.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+        Debug.Log($"User-Agent: {httpClient.DefaultRequestHeaders.UserAgent}");
 
 
         //check if Auth token is correctly configured
