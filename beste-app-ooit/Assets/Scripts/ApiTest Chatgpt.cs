@@ -14,7 +14,7 @@ public class ApiTestChatgpt : MonoBehaviour
 {
     public string search;
     public string artistSearch;
-    public string ReleaseSearch;
+    public string releaseSearch;
 
     public void Start() {
         StartCoroutine(CallDiscogsAPI());
@@ -149,9 +149,9 @@ public class ApiTestChatgpt : MonoBehaviour
         }
         Debug.Log("DiscogsClient initialized correctly");
 
-        string searchUrl = 
+        //string searchUrl = $"artist={Uri.EscapeDataString(artistSearch)}&release_title={Uri.EscapeDataString(releaseSearch)}";
         
-        var response = await client.GetAsync("https://api.discogs.com/database/search?" + searchUrl + "&token=" + config.AuthToken);
+        var response = await client.GetAsync("https://api.discogs.com/database/search?" + search + "&token=" + config.AuthToken);
         if (response.IsSuccessStatusCode) {
             string jsonResponse = await response.Content.ReadAsStringAsync();
             Debug.Log($"Raw Response: {jsonResponse}");
