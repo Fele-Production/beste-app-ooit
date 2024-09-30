@@ -1,0 +1,65 @@
+{"pagination": {
+        "page": 1,
+        "pages": 10,
+        "per_page": 50,
+        "items": 496,
+        "urls": {
+            "last": "https://api.discogs.com/database/search?q=bleach&type=master&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux&page=10&per_page=50", 
+            "next": "https://api.discogs.com/database/search?q=bleach&type=master&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux&page=2&per_page=50"
+            }
+    },
+    "results": [ {
+        "country": "US",
+        "year": "1989",
+        "format": ["Vinyl", "LP", "Album", "Limited Edition"],
+        "label": ["Sub Pop", "Reciprocal Recording", "K Disc Mastering", "Greg Lee Processing"],
+        "type": "master",
+        "genre": ["Rock"],
+        "style": ["Grunge"],
+        "id": 13773,
+        "barcode": ["SP-34-A Kdisc ch L.32926", "SP-34-B Kdisc ch L.329626.X"],
+        "user_data": {
+            "in_wantlist": false,
+            "in_collection": false
+            },
+        "master_id": 13773,
+        "master_url": "https://api.discogs.com/masters/13773",
+        "uri": "/master/13773-Nirvana-Bleach",
+        "catno": "SP 34",
+        "title": "Nirvana - Bleach",
+        "thumb": "https://i.discogs.com/wyFw9Gxo2IAo79SjSyIo1flGhz44TEPz3XB8B8amYUs/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI3OTU1/NTQtMTMwMTM3OTg3/Mi5qcGVn.jpeg",
+        "cover_image": "https://i.discogs.com/WTTg74ExM5Aq0hkwV_6CWO6LCOh-2mepiT6UOVUh238/rs:fit/g:sm/q:90/h:592/w:600/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTI3OTU1/NTQtMTMwMTM3OTg3/Mi5qcGVn.jpeg",
+        "resource_url": "https://api.discogs.com/masters/13773",
+        "community": {
+            "want": 147903,
+            "have": 120536
+            }
+        }, {
+            "country": "Germany",
+            "year": "1991",
+            "format": ["CD", "Compilation"],
+            "label": ["Artlos", "Way Cool Records", "EFA", "CDT Berlin", "The Track Station", "Wildlife Studios, Ipswich"],
+            "type": "master",
+            "genre": ["Rock"],
+            "style": ["Indie Rock", "Shoegaze"],
+            "id": 148202,
+            "barcode": ["0 718750 182623", "CDT-BERLIN Gumh 003  01", "GEMA", "LC 8329", "LC 7327", "09 CD"],
+            "user_data": {
+                "in_wantlist": false,
+                "in_collection": false
+                },
+            "master_id": 148202,
+            "master_url": "https://api.discogs.com/masters/148202",
+            "uri": "/Bleach-Bleach/master/148202",
+            "catno": "RAT 012",
+            "title": "Bleach (3) - Bleach",
+            "thumb": "https://i.discogs.com/D_u9gE02TlKnQusgmQ-NUZLaxUnP3L-Y7JPhah1RJmU/rs:fit/g:sm/q:40/h:150/w:150/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU4NTkx/OC0xMTQyMDA0NDEw/LmpwZWc.jpeg",
+            "cover_image": "https://i.discogs.com/qc8v0lbFvRcNtHpAYckWpkHlHwd0-b6y-yzyU16Zvmc/rs:fit/g:sm/q:90/h:446/w:446/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTU4NTkx/OC0xMTQyMDA0NDEw/LmpwZWc.jpeg",
+            "resource_url": "https://api.discogs.com/masters/148202",
+            "community": {
+                "want": 124,
+                "have": 293
+            }
+        }
+    ]
+}
