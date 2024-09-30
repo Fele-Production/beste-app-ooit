@@ -17,51 +17,129 @@ public class ApiTestChatgpt : MonoBehaviour
     }
 
     private IEnumerator CallDiscogsAPI() {
-        yield return GetDiscogsData();
+        Task discogsTask = GetDiscogsData();
+        while (!discogsTask.IsCompleted) {
+            yield return null;  // Wait until the async task is done
+        }
+        if (discogsTask.Exception != null) {
+            Debug.LogError("Task failed: " + discogsTask.Exception);
+        }
+
+        //yield return TestRawHttpRequest();
     }
+        
 
     private async Task GetDiscogsData() {
-        Debug.Log("Get Discogs Data called");
+        
+        HttpClientHandler handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+        HttpClient httpClient = new HttpClient(handler);
 
-        HttpClient httpClient = new HttpClient(new HttpClientHandler());
-        ApiQueryBuilder apiQueryBuilder = new ApiQueryBuilder(new HardCodedClientConfig());
+         // Add User-Agent header
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "PlaatFanaat/1.0");
+        httpClient.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+
+
+        //check if Auth token is correctly configured
+        HardCodedClientConfig config = new HardCodedClientConfig();
+        if (config == null) {
+            Debug.LogError("HardCodedClientConfig is null.");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(config.AuthToken)) {
+            Debug.LogError("AuthToken is null or empty.");
+            return;
+        }
+        Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
+
+
+        ApiQueryBuilder apiQueryBuilder = new ApiQueryBuilder(config);
         DiscogsClient client = new DiscogsClient(httpClient, apiQueryBuilder);
-        Debug.Log($"Using AuthToken: {new HardCodedClientConfig().AuthToken}");
-        Debug.Log($"Client: {client}");
-        Debug.Log($"SearchCriteria Artist: Taylor Swift, ReleaseTitle: 1989");
-
-
-        if (client == null) Debug.LogError("DiscogsClient is null");
-        //if (client.SearchAsync == null) Debug.LogError("SearchAsync method is null");
-
-        //try {
-            var searchRes = await client.SearchAsync(new SearchCriteria 
-            {
-                Artist = "Taylor Swift",
-                ReleaseTitle = "1989"
-            });
-            if (searchRes == null) {
-                Debug.LogError("API call returned null. Check your query or API token.");
-            } else {
-                Debug.Log("Search result: " + searchRes);
-            }
-        /*} catch (HttpRequestException ex) {
-            Debug.LogError("HttpRequestException: " + ex.Message);
-        } catch (Exception ex) {
-            Debug.LogError("General Exception: " + ex.Message);
-        } */
+        
+        // Check if the client is null
+        if (client == null) {
+            Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
+            return;
+        }
+        Debug.Log("DiscogsClient initialized correctly");
 
         
+        //try {
+            SearchCriteria criteria = new SearchCriteria {Artist = "Taylor Swift", ReleaseTitle = "1989"}; 
+            Debug.Log($"Search Criteria: Artist={criteria.Artist}, ReleaseTitle={criteria.ReleaseTitle}");
+
+            // Step 4: Perform API Search
+
+            var searchRes = await client.SearchAsync(criteria);
+
+            // Check response
+            if (searchRes == null) {
+            Debug.LogError("API call returned null. Check your query or API token.");
+            return;
+            }
+
+            Debug.Log("Search successful. Response: " + JsonUtility.ToJson(searchRes));
+            if (searchRes.Pagination != null) {
+                Debug.Log($"Found {searchRes.Pagination.Items} items.");
+            } else {
+                Debug.LogError("Pagination is null in the search result.");
+            }
+        /*} catch (Exception ex) {
+            Debug.LogError($"Exception during API call: {ex.Message}");
+        }*/
     }
+
+    private async Task PerformSearch(DiscogsClient client) {
+    Debug.Log($"SearchCriteria Artist: Taylor Swift, ReleaseTitle: 1989");
+    try {
+        var searchRes = await client.SearchAsync(new SearchCriteria {
+            Artist = "Taylor Swift",
+            ReleaseTitle = "1989"
+        });
+        
+        // Check if search result is null
+        if (searchRes == null) {
+            Debug.LogError("API call returned null. Check your query or API token.");
+        } else {
+            Debug.Log("Search successful");
+            // You can log the search results here
+        }
+        } catch (Exception ex) {
+            Debug.LogError($"Exception during API call: {ex.Message}");
+        }
+    } 
+
+    private async Task TestRawHttpRequest() {
+    HttpClientHandler handler = new HttpClientHandler();
+    handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+    HttpClient client = new HttpClient(handler);
+
+    // Add User-Agent header
+    client.DefaultRequestHeaders.Add("User-Agent", "PlaatFanaat/1.0");
+    client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+    
+    try {
+        var response = await client.GetAsync("https://api.discogs.com/database/search?artist=Taylor+Swift&release_title=1989&token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+        if (response.IsSuccessStatusCode) {
+            string jsonResponse = await response.Content.ReadAsStringAsync();
+            Debug.Log($"Raw Response: {jsonResponse}");
+        } else {
+            Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
+        }
+    } catch (Exception ex) {
+        Debug.LogError($"Exception in raw HTTP request: {ex.Message}");
+    }
+}
 
 }
 
 public class HardCodedClientConfig : IClientConfig
     {
-        public string AuthToken => "SuycForINtHDBKeVxxSGLQSsOtkjOeGpCdKBzENj";
-
+        public string AuthToken => "QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux";
+        //public string UserAgent => "PlaatFanaat/1.0"; 
         public string BaseUrl => "https://api.discogs.com";
         
-    }
+    } 
 
 
