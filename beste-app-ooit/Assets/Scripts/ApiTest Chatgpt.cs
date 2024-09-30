@@ -1,4 +1,4 @@
-using System;
+/*using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections;
@@ -29,7 +29,7 @@ public class ApiTestChatgpt : MonoBehaviour
             Debug.LogError("Task failed: " + discogsTask.Exception);
         }
 
-        yield return TestRawHttpRequest(); */
+        yield return TestRawHttpRequest(); *
 
         yield return TestRawHttpWithVar();
     }
@@ -94,7 +94,7 @@ public class ApiTestChatgpt : MonoBehaviour
             }
         /*} catch (Exception ex) {
             Debug.LogError($"Exception during API call: {ex.Message}");
-        }*/
+        }*
     }
 
     private async Task TestRawHttpRequest() {
@@ -169,5 +169,5 @@ public class HardCodedClientConfig : IClientConfig
         public string BaseUrl => "https://api.discogs.com";
         
     } 
-
+*/
 
