@@ -3,9 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Extensions.Primitives;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class JSONREADERTEST : MonoBehaviour{
-    public TextAsset JSONfile;
+    public APItestGOATED apiTest;
+    public string JSONfile;
+    
+    void Awake() {
+        JSONfile = apiTest.finalResult;
+    }
+
+
     [System.Serializable]
     public class Userdata {
         public bool in_wantlist;
@@ -58,10 +66,8 @@ public class JSONREADERTEST : MonoBehaviour{
 
     public ResultJson jsontest = new ResultJson();
 
-    void Start() {
-        jsontest = JsonUtility.FromJson<ResultJson>(JSONfile.text);
+    void Start() { 
+        jsontest = JsonUtility.FromJson<ResultJson>(JSONfile);
         Debug.Log(jsontest.pagination.pages);
-
-
     }
 }

@@ -9,21 +9,23 @@ using UnityEngine;
 using UnityEngine.Networking;
 using ParkSquare.Discogs;
 using Microsoft.Extensions.Http;
+using Unity.VisualScripting;
 
 public class APItestGOATED : MonoBehaviour
 {
     public string search;
     public string type;
-    public void Start() {
+    public string finalResult;
+
+    void Start() {
         StartCoroutine(CallDiscogsAPI());
     }
 
-    private IEnumerator CallDiscogsAPI() {
+    public IEnumerator CallDiscogsAPI() {
         yield return TestRawHttpWithVar();
     }
-        
-
-    private async Task TestRawHttpWithVar() {
+    
+    public async Task TestRawHttpWithVar() {
         HttpClientHandler handler = new HttpClientHandler();
         handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
         HttpClient client = new HttpClient(handler);
@@ -53,15 +55,74 @@ public class APItestGOATED : MonoBehaviour
         }
         Debug.Log("DiscogsClient initialized correctly");
 
-        var searchFormat = "https://api.discogs.com/database/search?q="+search+"&type="+type;
+        var searchFormat = "https://api.discogs.com/database/search?q="+search+"&type="+type+"?page=1&per_page=5";
         var response = await client.GetAsync(searchFormat+"&token=" + config.AuthToken);
         if (response.IsSuccessStatusCode) {
             string jsonResponse = await response.Content.ReadAsStringAsync();
-            Debug.Log("https://api.discogs.com/database/search?" + search + "&token=" + config.AuthToken);
             Debug.Log($"Raw Response: {jsonResponse}");
+            finalResult = jsonResponse;
+            JSONConvert();
         } else {
             Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
         }
+        
+    }
+
+    [System.Serializable]
+    public class Userdata {
+        public bool in_wantlist;
+        public bool in_collection;
+    }
+    [System.Serializable]
+    public class Community_data {
+        public int want;
+        public int have;
+    }
+    [System.Serializable]
+    public class Master {
+        public string title;
+        public string country;
+        public string year;
+        public string[] format;
+        public string[] label;
+        public string type;
+        public int id;
+        public string[] barcode;
+        public Userdata user_data;
+        public int master_id;
+        public string master_url;
+        public string uri;
+        public string catno;
+        public string thumb;
+        public string cover_image;
+        public string resource_url;
+        public Community_data community;
+
+    }
+    [System.Serializable]
+    public class Urls {
+        public string last;
+        public string next;
+    }
+    [System.Serializable]
+    public class PagesInfo {
+        public int page;
+        public int pages;
+        public int per_page;
+        public int items;
+        public Urls urls;
+    }
+    [System.Serializable]
+    public class ResultJson {
+        public PagesInfo pagination;
+        public Master[] results;
+    }
+
+    public ResultJson jsontest = new ResultJson();
+
+    public void JSONConvert() {
+        jsontest = JsonUtility.FromJson<ResultJson>(finalResult);
+        Debug.Log(jsontest.pagination.pages);
     }
      
 }
