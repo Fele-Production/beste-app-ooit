@@ -26,7 +26,7 @@ public class UiManager : MonoBehaviour {
             curSearchPreviews.Remove(curSearchPreviews[i]);
         }
         
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < 4; i++) {
             curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false));
             curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
         }
