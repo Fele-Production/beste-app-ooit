@@ -13,79 +13,18 @@ using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
 using UnityEditor.PackageManager;
 using ParkSquare.Discogs.Dto;
+using UnityEditor.Experimental.GraphView;
+
+public class DiscogsAPIFunc : MonoBehaviour {}
+
+public class HardCodedClientConfig : IClientConfig {
+    public string AuthToken => "QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux";
+    //public string UserAgent => "PlaatFanaat/1.0"; 
+    public string BaseUrl => "https://api.discogs.com";
+} 
 
 
-public class APItestGOATED : MonoBehaviour {
-    //Var
-    public string search;   //search query
-    public string type;     //discogs type (master, release, artist, label)
-    public int page;
-    public int per_page;
-    public int master_id;
-
-
-
-    //Test API Code
-    void Start() {
-        StartCoroutine(CallDiscogsAPI());
-    }
-    //Discogs API Code
-    public IEnumerator CallDiscogsAPI() {
-        yield return TestRawHttpWithVar();
-    }
-    
-    public async Task TestRawHttpWithVar() {
-        HttpClientHandler handler = new HttpClientHandler();
-        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
-        HttpClient client = new HttpClient(handler);
-
-        // Add User-Agent header
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
-        client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
-
-
-        //check if Auth token is correctly configured
-        HardCodedClientConfig config = new HardCodedClientConfig();
-        if (config == null) {
-            Debug.LogError("HardCodedClientConfig is null.");
-            return;
-        }
-
-        if (string.IsNullOrEmpty(config.AuthToken)) {
-            Debug.LogError("AuthToken is null or empty.");
-            return;
-        }
-        Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
-        
-        // Check if the client is null
-        if (client == null) {
-            Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
-            return;
-        }
-        Debug.Log("DiscogsClient initialized correctly");
-
-        //Search Type Definitions
-        var searchFormat = "";
-        var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master?page={page}&per_page={per_page}";
-        var searchFormatRelease = $"https://api.discogs.com/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
-
-        //Select Search Type
-        if (type == "master") {searchFormat=searchFormatMaster;} //Requires: search, page, per_page
-        else if (type == "release") {searchFormat=searchFormatRelease;} //Requires: master_id, page, per_page
-        else Debug.LogError("Invalid/Unsupported Type");
-        Debug.Log(searchFormat);
-        Debug.Log(searchFormatMaster);
-        var response = await client.GetAsync(searchFormat+"&token=" + config.AuthToken);
-        if (response.IsSuccessStatusCode) {
-            string jsonResponse = await response.Content.ReadAsStringAsync();
-            Debug.Log($"Raw Response: {jsonResponse}");
-            if (type == "master") {Debug.Log(ConvertJSONtoMaster(jsonResponse).pagination.pages);} //Test if Master search works
-            if (type == "release") {Debug.Log(jsonResponse); jsontest = ConvertJSONtoRelease(jsonResponse);} //Test if Release Search works
-        } else {
-            Debug.LogError($"Error: {response.StatusCode} - {response.ReasonPhrase}");
-        }
-        
-    }
+namespace Discogs {
     //Master Class
     [System.Serializable]
     public class Userdata {
@@ -98,7 +37,7 @@ public class APItestGOATED : MonoBehaviour {
         public int have;
     }
     [System.Serializable]
-    public class Master {
+    public class MasterItem {
         public string title;
         public string country;
         public string year;
@@ -132,9 +71,9 @@ public class APItestGOATED : MonoBehaviour {
         public Urls urls;
     }
     [System.Serializable]
-    public class MasterJson {
+    public class Master {
         public PagesInfo pagination;
-        public Master[] results;
+        public MasterItem[] results;
     }
 
     //Release Class
@@ -192,35 +131,113 @@ public class APItestGOATED : MonoBehaviour {
     }
 
     [System.Serializable]
-    public class ReleaseJson {
+    public class Release {
         public PagesInfo pagination;
         public Filters filters;
         public FilterFacet[] filter_facets;
         public ReleaseVersion[] versions;
     }
 
+    public class ConvertJSON {
+        public static Master Master(string jsonMasterInput) {
+            return JsonUtility.FromJson<Master>(jsonMasterInput);
+        }
 
-
-
-    public ReleaseJson jsontest = new ReleaseJson(); //json test look nice :)
-
-    public MasterJson ConvertJSONtoMaster(string jsonMasterInput) {
-        return JsonUtility.FromJson<MasterJson>(jsonMasterInput);
+        public static Release Release(string jsonReleaseInput) {
+            return JsonUtility.FromJson<Release>(jsonReleaseInput);
+        }
     }
 
-    public ReleaseJson ConvertJSONtoRelease(string jsonReleaseInput) {
-        return JsonUtility.FromJson<ReleaseJson>(jsonReleaseInput);
-    }
-     
-}
+    public class get {
+        public static async Task<Discogs.Master> Masters(string search, int page, int per_page) {
+            //HTTP SetUp
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+            HttpClient client = new HttpClient(handler);
 
-public class HardCodedClientConfig : IClientConfig
-    {
-        public string AuthToken => "QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux";
-        //public string UserAgent => "PlaatFanaat/1.0"; 
-        public string BaseUrl => "https://api.discogs.com";
+            // Add User-Agent header
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
+            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+
+            //check if Auth token is correctly configured
+            HardCodedClientConfig config = new HardCodedClientConfig();
+            if (config == null) {
+                Debug.LogError("HardCodedClientConfig is null.");
+                return null;
+            }
+            if (string.IsNullOrEmpty(config.AuthToken)) {
+                Debug.LogError("AuthToken is null or empty.");
+                return null;
+            }
+            Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
         
-    } 
+            // Check if the client is null
+            if (client == null) {
+                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
+                return null;
+            }
+            Debug.Log("DiscogsClient initialized correctly");
+
+            //Search Type Definition
+            var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master?page={page}&per_page={per_page}";
+            //Search for Masters
+            var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + config.AuthToken);
+            if (Mresponse.IsSuccessStatusCode) {
+                string jsonMResponse = await Mresponse.Content.ReadAsStringAsync();
+                return Discogs.ConvertJSON.Master(jsonMResponse);
+            } else {
+                Debug.LogError($"Error: {Mresponse.StatusCode} - {Mresponse.ReasonPhrase}");
+                Debug.LogError("getMaster() failed");
+                return null;
+            }
+        
+        }
+
+        public static async Task<Discogs.Release> Releases(int master_id, int page, int per_page) {
+            //HTTP SetUp
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+            HttpClient client = new HttpClient(handler);
+
+            // Add User-Agent header
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
+            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+
+            //check if Auth token is correctly configured
+            HardCodedClientConfig config = new HardCodedClientConfig();
+            if (config == null) {
+                Debug.LogError("HardCodedClientConfig is null.");
+                return null;
+            }
+            if (string.IsNullOrEmpty(config.AuthToken)) {
+                Debug.LogError("AuthToken is null or empty.");
+                return null;
+            }
+            Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
+        
+            // Check if the client is null
+            if (client == null) {
+                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
+                return null;
+            }
+            Debug.Log("DiscogsClient initialized correctly");
+
+            //Search Type Definitions
+            var searchFormatRelease = $"https://api.discogs.com/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
+            //Search for Releases
+            var Rresponse = await client.GetAsync(searchFormatRelease+"&token=" + config.AuthToken);
+            if (Rresponse.IsSuccessStatusCode) {
+                string jsonRResponse = await Rresponse.Content.ReadAsStringAsync();
+                return Discogs.ConvertJSON.Release(jsonRResponse);
+            } else {
+                Debug.LogError($"Error: {Rresponse.StatusCode} - {Rresponse.ReasonPhrase}");
+                return null;
+            }
+        
+        }
+
+    }
+}
 
 
 
