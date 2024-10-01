@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using TMPro;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.Windows.Speech;
 
 public class UiManager : MonoBehaviour {
     public TMP_InputField searchPrompt;
@@ -25,8 +26,9 @@ public class UiManager : MonoBehaviour {
             curSearchPreviews.Remove(curSearchPreviews[i]);
         }
         
-        curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false)); 
-        curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false)); 
-        
+        for(int i = 0; i < 4; i++) {
+            curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false));
+            curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
+        }
     }
 }
