@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class LibraryAccesser : MonoBehaviour {
-
+    public string search;
     [SerializeField] public Discogs.Master jsontest = new();
     async void Start() {
-        jsontest = await Discogs.get.Masters("bleach",1,5);
+        jsontest = await Discogs.get.Masters(search,1,5);
     }
 
 }
