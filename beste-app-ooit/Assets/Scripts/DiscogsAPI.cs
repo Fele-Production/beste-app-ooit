@@ -176,14 +176,12 @@ namespace Discogs {
                 Debug.LogError("AuthToken is null or empty.");
                 return null;
             }
-            Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
         
             // Check if the client is null
             if (client == null) {
                 Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
                 return null;
             }
-            Debug.Log("DiscogsClient initialized correctly");
 
             //Search Type Definition
             var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master?page={page}&per_page={per_page}";
@@ -220,14 +218,12 @@ namespace Discogs {
                 Debug.LogError("AuthToken is null or empty.");
                 return null;
             }
-            Debug.Log("HardCodedClientConfig initialized correctly. AuthToken: " + config.AuthToken);
         
             // Check if the client is null
             if (client == null) {
                 Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
                 return null;
             }
-            Debug.Log("DiscogsClient initialized correctly");
 
             //Search Type Definitions
             var searchFormatRelease = $"https://api.discogs.com/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
@@ -243,17 +239,22 @@ namespace Discogs {
         
         }
     
-        public static IEnumerator Image(string urlImage, Action<Texture2D> callback) {
-            UnityWebRequest Irequest = UnityWebRequestTexture.GetTexture(urlImage);
+        public static async Task<Texture2D> Image(string urlImage) {
+            using (UnityWebRequest Irequest = UnityWebRequestTexture.GetTexture(urlImage)) {
+                var operation = Irequest.SendWebRequest();
 
-            if(Irequest.result == UnityWebRequest.Result.Success) {
-                Texture2D _downloadedImg = ((DownloadHandlerTexture)Irequest.downloadHandler).texture;
-                callback(_downloadedImg);
-            } else {
-                Debug.LogError("Image Download Failed: "+Irequest.error);
-                callback(null);
+                while (!operation.isDone) {
+                    await Task.Yield();
+                }
+
+                if (Irequest.result == UnityWebRequest.Result.Success) {
+                    Texture2D _downloadedImg = DownloadHandlerTexture.GetContent(Irequest);
+                    return _downloadedImg;
+                } else {
+                    Debug.LogError("Image Download Failed: " + Irequest.error);
+                    return null;
+                }
             }
-            return null;
         }
     }
 }

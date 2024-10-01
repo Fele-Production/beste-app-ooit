@@ -13,7 +13,7 @@ public class UiManager : MonoBehaviour {
 
     public async void Search() {
         string url = (await Discogs.get.Masters(searchPrompt.text,1,1)).results[0].cover_image;
-        StartCoroutine(Discogs.get.Image(url, callback => {if (callback != null){imgD=callback;}}));
+        imgD = await Discogs.get.Image(url);
         imgTest.sprite = Sprite.Create(imgD,new Rect(0,0,imgD.width,imgD.height), new Vector2(0,0));
     }
 }
