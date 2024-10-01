@@ -5,15 +5,28 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 using System;
+using Unity.VisualScripting;
 
 public class UiManager : MonoBehaviour {
     public TMP_InputField searchPrompt;
+    public GameObject searchPreview;
+    public List<GameObject> curSearchPreviews;
     public Image imgTest;
     public Texture2D imgD;
+    [SerializeField] public Discogs.Master jsonResult = new ();
 
     public async void Search() {
-        string url = (await Discogs.get.Masters(searchPrompt.text,1,1)).results[0].cover_image;
+        jsonResult = await Discogs.get.Masters(searchPrompt.text,1,5);
+        string url = jsonResult.results[0].cover_image;
         imgD = await Discogs.get.Image(url);
-        imgTest.sprite = Sprite.Create(imgD,new Rect(0,0,imgD.width,imgD.height), new Vector2(0,0));
+        
+        for(int i = 0; i < curSearchPreviews.Count; i++) {
+            Destroy(curSearchPreviews[i]);
+            curSearchPreviews.Remove(curSearchPreviews[i]);
+        }
+        
+        curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false)); 
+        curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false)); 
+        
     }
 }
