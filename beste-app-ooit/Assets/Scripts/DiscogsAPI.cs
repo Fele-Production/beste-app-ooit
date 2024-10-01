@@ -14,6 +14,7 @@ using System.Runtime.CompilerServices;
 using UnityEditor.PackageManager;
 using ParkSquare.Discogs.Dto;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.UIElements;
 
 public class DiscogsAPIFunc : MonoBehaviour {}
 
@@ -241,7 +242,19 @@ namespace Discogs {
             }
         
         }
+    
+        public static IEnumerator Image(string urlImage, Action<Texture2D> callback) {
+            UnityWebRequest Irequest = UnityWebRequestTexture.GetTexture(urlImage);
 
+            if(Irequest.result == UnityWebRequest.Result.Success) {
+                Texture2D _downloadedImg = ((DownloadHandlerTexture)Irequest.downloadHandler).texture;
+                callback(_downloadedImg);
+            } else {
+                Debug.LogError("Image Download Failed: "+Irequest.error);
+                callback(null);
+            }
+            return null;
+        }
     }
 }
 
