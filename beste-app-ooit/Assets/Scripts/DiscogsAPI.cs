@@ -109,9 +109,15 @@ namespace Discogs {
     }
 
     [System.Serializable]
+    public class UserStats {
+        public int in_wantlist;
+        public int in_collection;
+    }
+
+    [System.Serializable]
     public class ReleaseStats {
-        public UserData community;
-        public UserData user;
+        public UserStats community;
+        public UserStats user;
     }
 
     [System.Serializable]
@@ -137,7 +143,7 @@ namespace Discogs {
         public FilterFacet[] filter_facets;
         public ReleaseVersion[] versions;
     }
-
+    //Functions
     public class ConvertJSON {
         public static Master Master(string jsonMasterInput) {
             return JsonUtility.FromJson<Master>(jsonMasterInput);
@@ -149,7 +155,7 @@ namespace Discogs {
     }
 
     public class get {
-        public static async Task<Discogs.Master> Masters(string search, int page, int per_page) {
+        public static async Task<Master> Masters(string search, int page, int per_page) {
             //HTTP SetUp
             HttpClientHandler handler = new HttpClientHandler();
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
@@ -184,7 +190,7 @@ namespace Discogs {
             var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + config.AuthToken);
             if (Mresponse.IsSuccessStatusCode) {
                 string jsonMResponse = await Mresponse.Content.ReadAsStringAsync();
-                return Discogs.ConvertJSON.Master(jsonMResponse);
+                return ConvertJSON.Master(jsonMResponse);
             } else {
                 Debug.LogError($"Error: {Mresponse.StatusCode} - {Mresponse.ReasonPhrase}");
                 Debug.LogError("getMaster() failed");
@@ -193,7 +199,7 @@ namespace Discogs {
         
         }
 
-        public static async Task<Discogs.Release> Releases(int master_id, int page, int per_page) {
+        public static async Task<Release> Releases(int master_id, int page, int per_page) {
             //HTTP SetUp
             HttpClientHandler handler = new HttpClientHandler();
             handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
@@ -228,7 +234,7 @@ namespace Discogs {
             var Rresponse = await client.GetAsync(searchFormatRelease+"&token=" + config.AuthToken);
             if (Rresponse.IsSuccessStatusCode) {
                 string jsonRResponse = await Rresponse.Content.ReadAsStringAsync();
-                return Discogs.ConvertJSON.Release(jsonRResponse);
+                return ConvertJSON.Release(jsonRResponse);
             } else {
                 Debug.LogError($"Error: {Rresponse.StatusCode} - {Rresponse.ReasonPhrase}");
                 return null;
