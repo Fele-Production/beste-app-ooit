@@ -256,6 +256,11 @@ namespace Discogs {
                 }
             }
         }
+        public static void Funky() {
+            for (int i = 0; i<10000; i++) {
+                Debug.Log("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+            }
+        }
     }
 }
 
