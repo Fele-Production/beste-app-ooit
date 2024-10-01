@@ -256,6 +256,20 @@ namespace Discogs {
                 }
             }
         }
+        public static async Task<List<Texture2D>> ImageList(List<string> urlImages) {
+            List<Texture2D> _downloadedImgs = new List<Texture2D>();
+
+            for (int i = 0; i < urlImages.Count; i++) {
+                Texture2D texture = await Image(urlImages[i]);
+                if (texture != null) {
+                    _downloadedImgs.Add(texture);
+                } else {
+                    Debug.LogWarning($"Failed to download image at URL: {urlImages[i]}");
+                }
+                _downloadedImgs.Add(null);
+            }
+            return _downloadedImgs;
+        }
     }
 }
 
