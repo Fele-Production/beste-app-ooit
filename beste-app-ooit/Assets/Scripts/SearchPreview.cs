@@ -15,6 +15,7 @@ public class SearchPreview : MonoBehaviour
     public int curPosition;
     public int distance = 200;
     public int curDistance;
+    public int pageBuffer;
 
     void Awake() {
         uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();        
@@ -25,31 +26,34 @@ public class SearchPreview : MonoBehaviour
     {
         curDistance = curPosition * distance;
         this.transform.localPosition = new Vector3(0, 1200 - curDistance, 0);
+        pageBuffer = (uiManager.curPage-1) * uiManager.resultsPerPage;
+        Debug.Log(pageBuffer);
 
-        if(uiManager.jsonResult.results[curPosition].title != null) {
-            if(uiManager.jsonResult.results[curPosition].title.Contains(" - ")) {
-                string[] splitArray = uiManager.jsonResult.results[curPosition].title.Split(" - ");
+
+        if(uiManager.jsonResult.results[curPosition + pageBuffer].title != null) {
+            if(uiManager.jsonResult.results[curPosition + pageBuffer].title.Contains(" - ")) {
+                string[] splitArray = uiManager.jsonResult.results[curPosition + pageBuffer].title.Split(" - ");
                 string title = splitArray[1];
                 string artist = splitArray[0];
 
                 titleText.text = title;
                 artistText.text = artist;
             }
-        Texture2D curImg = uiManager.imgD[curPosition*2];
+        Texture2D curImg = uiManager.imgD[(curPosition + pageBuffer) * 2];
         imgTest.sprite = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
             
         } else {
             titleText.text = "---";
         }
 
-        if(uiManager.jsonResult.results[curPosition].year != null) {
-            yearText.text = uiManager.jsonResult.results[curPosition].year;
+        if(uiManager.jsonResult.results[curPosition + pageBuffer].year != null) {
+            yearText.text = uiManager.jsonResult.results[curPosition + pageBuffer].year;
         } else {
             yearText.text = "----";
         }
 
-        if(uiManager.jsonResult.results[curPosition].label != null) {
-            labelText.text = uiManager.jsonResult.results[curPosition].label[0];
+        if(uiManager.jsonResult.results[curPosition  + pageBuffer ].label != null) {
+            labelText.text = uiManager.jsonResult.results[curPosition + pageBuffer].label[0];
         } else {
             labelText.text = "---";
         }

@@ -7,43 +7,99 @@ using TMPro;
 using System;
 using Unity.VisualScripting;
 using UnityEngine.Windows.Speech;
+using Unity.VisualScripting.FullSerializer;
 
 public class UiManager : MonoBehaviour {
+
+    [Header("Search Settings")]
+    public int resultsPerPage;
+    public int resultsSearchedPerPage;
+
+    [Header("Search Objects")]
+    public GameObject searchMenu;
+    private GameObject searchedMenu; 
     public TMP_InputField searchPrompt;
-    public GameObject searchPreview;
+    public GameObject searchPreviewPrefab;
+    public Button nextButton;
+    public Button backButton;
+
+    [Header ("Search Other")]
     public List<GameObject> curSearchPreviews;
-    public Image imgTest;
     public List<Texture2D> imgD;
     public List<string> urls;
     [SerializeField] public Discogs.Master jsonResult = new ();
 
+    public int curPage = 1;
+    [HideInInspector] public int pageBuffer {get; private set;}
+    public bool searched = false;
+
     public async void Search() {
-        jsonResult = await Discogs.get.Masters(searchPrompt.text,1,5);
+        jsonResult = await Discogs.get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
+        Debug.Log(jsonResult.results.Length);
+        
+        curPage = 1;
+        backButton.interactable = false;
+        if(jsonResult.results.Length > resultsPerPage) { nextButton.interactable = true; } else { nextButton.interactable = false; }  
+        
+        urls.Clear();
 
-        int oldUrlsCount = urls.Count;
-        Debug.Log(oldUrlsCount);
-        for (int i = 0; i < oldUrlsCount; i++) {
-            urls.Remove(urls[0]);
-        }
-
-
-        for(int i = 0; i < 4; i++) {
-            urls.Add(jsonResult.results[i].cover_image);
+        for(int i = 0; i < jsonResult.results.Length; i++) {
+            urls.Add(jsonResult.results[i+pageBuffer].cover_image);
         }
         imgD = await Discogs.get.ImageList(urls);
 
-        int oldsearchPreviewsCount = curSearchPreviews.Count;
-        Debug.Log(oldsearchPreviewsCount);
-        
-        for(int i = 0; i < oldsearchPreviewsCount; i++) {
-            Destroy(curSearchPreviews[0]);
-            curSearchPreviews.Remove(curSearchPreviews[0]);
-            Debug.Log("removed " + i);
+        RefreshSearch();
+    }
+
+    public void NextPage() {
+        curPage++;
+        backButton.interactable = true;
+        if(jsonResult.results.Length <= curPage * resultsPerPage) {
+            nextButton.interactable = false;
+        }   
+
+        RefreshSearch();  
+    }
+
+    public void PreviousPage() {
+        curPage--;
+        nextButton.interactable = true;
+        if(curPage == 1) {
+            backButton.interactable = false;
+        }   
+
+        RefreshSearch();
+    }
+
+    
+
+    public void RefreshSearch() {
+        for(int i = 0; i < curSearchPreviews.Count; i++) {
+            Destroy(curSearchPreviews[i]);
         }
+        curSearchPreviews.Clear();
         
-        for(int i = 0; i < 4; i++) {
-            curSearchPreviews.Add(Instantiate(searchPreview, this.transform, false));
+        for(int i = 0; i < resultsPerPage; i++) {
+            curSearchPreviews.Add(Instantiate(searchPreviewPrefab, this.transform, false));
             curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
+        }
+
+        searched = true;
+    }
+
+    void Start()
+    {
+        searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
+        nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
+        backButton = searchedMenu.transform.Find("Back").GetComponent<Button>();
+    }
+
+    void Update()
+    {
+        if(searched) {
+            searchedMenu.SetActive(true);
+        } else {
+            searchedMenu.SetActive(false);
         }
     }
 }

@@ -184,7 +184,7 @@ namespace Discogs {
             }
 
             //Search Type Definition
-            var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master&format=vinyl&page={page}&per_page={per_page}";
+            var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master&page={page}&per_page={per_page}";
             //Search for Masters
             var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + config.AuthToken);
             if (Mresponse.IsSuccessStatusCode) {
