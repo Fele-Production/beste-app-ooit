@@ -20,10 +20,13 @@ public class UiManager : MonoBehaviour {
         jsonResult = await Discogs.get.Masters(searchPrompt.text,1,5);
         string url = jsonResult.results[0].cover_image;
         imgD = await Discogs.get.Image(url);
+
+        Debug.Log(curSearchPreviews.Count);
         
         for(int i = 0; i < curSearchPreviews.Count; i++) {
             Destroy(curSearchPreviews[i]);
             curSearchPreviews.Remove(curSearchPreviews[i]);
+            Debug.Log("removed " + i);
         }
         
         for(int i = 0; i < 4; i++) {
