@@ -21,9 +21,10 @@ public class UiManager : MonoBehaviour {
         string url = jsonResult.results[0].cover_image;
         imgD = await Discogs.get.Image(url);
 
-        Debug.Log(curSearchPreviews.Count);
+        int oldsearchPreviewsCount = curSearchPreviews.Count;
+        Debug.Log(oldsearchPreviewsCount);
         
-        for(int i = 0; i < curSearchPreviews.Count; i++) {
+        for(int i = 0; i < oldsearchPreviewsCount; i++) {
             Destroy(curSearchPreviews[i]);
             curSearchPreviews.Remove(curSearchPreviews[i]);
             Debug.Log("removed " + i);
