@@ -17,11 +17,7 @@ public class SearchPreview : MonoBehaviour
     public int curDistance;
 
     void Awake() {
-        
-        uiManager = GameObject.Find("Canvas").GetComponent<UiManager>(); 
-
-        
-        
+        uiManager = GameObject.Find("Canvas").GetComponent<UiManager>();        
     }
 
     // Start is called before the first frame update
@@ -39,8 +35,8 @@ public class SearchPreview : MonoBehaviour
                 titleText.text = title;
                 artistText.text = artist;
             }
-
-        imgTest.sprite = Sprite.Create(uiManager.imgD,new Rect(0,0,uiManager.imgD.width,uiManager.imgD.height), new Vector2(0,0));
+        Texture2D curImg = uiManager.imgD[curPosition*2];
+        imgTest.sprite = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
             
         } else {
             titleText.text = "---";
