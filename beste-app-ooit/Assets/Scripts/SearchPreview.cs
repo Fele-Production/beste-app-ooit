@@ -30,9 +30,9 @@ public class SearchPreview : MonoBehaviour
         Debug.Log(pageBuffer);
 
 
-        if(uiManager.jsonResult.results[curPosition + pageBuffer].title != null) {
-            if(uiManager.jsonResult.results[curPosition + pageBuffer].title.Contains(" - ")) {
-                string[] splitArray = uiManager.jsonResult.results[curPosition + pageBuffer].title.Split(" - ");
+        if(uiManager.masterResult.results[curPosition + pageBuffer].title != null) {
+            if(uiManager.masterResult.results[curPosition + pageBuffer].title.Contains(" - ")) {
+                string[] splitArray = uiManager.masterResult.results[curPosition + pageBuffer].title.Split(" - ");
                 string title = splitArray[1];
                 string artist = splitArray[0];
 
@@ -46,14 +46,14 @@ public class SearchPreview : MonoBehaviour
             titleText.text = "---";
         }
 
-        if(uiManager.jsonResult.results[curPosition + pageBuffer].year != null) {
-            yearText.text = uiManager.jsonResult.results[curPosition + pageBuffer].year;
+        if(uiManager.masterResult.results[curPosition + pageBuffer].year != null) {
+            yearText.text = uiManager.masterResult.results[curPosition + pageBuffer].year;
         } else {
             yearText.text = "----";
         }
 
-        if(uiManager.jsonResult.results[curPosition  + pageBuffer ].label != null) {
-            labelText.text = uiManager.jsonResult.results[curPosition + pageBuffer].label[0];
+        if(uiManager.masterResult.results[curPosition  + pageBuffer ].label != null) {
+            labelText.text = uiManager.masterResult.results[curPosition + pageBuffer].label[0];
         } else {
             labelText.text = "---";
         }

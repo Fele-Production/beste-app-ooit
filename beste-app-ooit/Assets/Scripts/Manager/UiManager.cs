@@ -27,24 +27,25 @@ public class UiManager : MonoBehaviour {
     public List<GameObject> curSearchPreviews;
     public List<Texture2D> imgD;
     public List<string> urls;
-    [SerializeField] public Discogs.Master jsonResult = new ();
+    [SerializeField] public Discogs.Master masterResult = new ();
+    [SerializeField] public Discogs.Release releaseResult = new ();
 
     public int curPage = 1;
     [HideInInspector] public int pageBuffer {get; private set;}
     public bool searched = false;
 
     public async void Search() {
-        jsonResult = await Discogs.get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
-        Debug.Log(jsonResult.results.Length);
+        masterResult = await Discogs.get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
+        Debug.Log(masterResult.results.Length);
         
         curPage = 1;
         backButton.interactable = false;
-        if(jsonResult.results.Length > resultsPerPage) { nextButton.interactable = true; } else { nextButton.interactable = false; }  
+        if(masterResult.results.Length > resultsPerPage) { nextButton.interactable = true; } else { nextButton.interactable = false; }  
         
         urls.Clear();
 
-        for(int i = 0; i < jsonResult.results.Length; i++) {
-            urls.Add(jsonResult.results[i+pageBuffer].cover_image);
+        for(int i = 0; i < masterResult.results.Length; i++) {
+            urls.Add(masterResult.results[i+pageBuffer].cover_image);
         }
         imgD = await Discogs.get.ImageList(urls);
 
@@ -54,7 +55,7 @@ public class UiManager : MonoBehaviour {
     public void NextPage() {
         curPage++;
         backButton.interactable = true;
-        if(jsonResult.results.Length <= curPage * resultsPerPage) {
+        if(masterResult.results.Length <= curPage * resultsPerPage) {
             nextButton.interactable = false;
         }   
 
@@ -78,13 +79,22 @@ public class UiManager : MonoBehaviour {
             Destroy(curSearchPreviews[i]);
         }
         curSearchPreviews.Clear();
-        
-        for(int i = 0; i < resultsPerPage; i++) {
+        int resultsToLoad = resultsPerPage;
+        if(resultsPerPage > (masterResult.results.Length - ((curPage-1) * resultsPerPage))) {
+            resultsToLoad = masterResult.results.Length - ((curPage-1) * resultsPerPage);
+        }
+        for(int i = 0; i < resultsToLoad; i++) {
             curSearchPreviews.Add(Instantiate(searchPreviewPrefab, this.transform, false));
             curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
         }
 
         searched = true;
+    }
+
+
+    public void SelectMaster() {
+        releaseResult = await Discogs.get.Release(masterResult.master_id, 1, resultsSearchedPerPage);
+        
     }
 
     void Start()
