@@ -196,7 +196,7 @@ namespace Discogs {
     }
 
     [System.Serializable]
-    public class Image {
+    public class ReleaseImage {
         public string type;
         public string uri;
         public string resource_url;
@@ -234,7 +234,7 @@ namespace Discogs {
         public string[] styles;
         public Track[] tracklist;
         public Artist[] extraartists;
-        public Image[] images;
+        public ReleaseImage[] images;
         public string thumb;
     }
     //Functions

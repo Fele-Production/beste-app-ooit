@@ -9,8 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine.Windows.Speech;
 using Unity.VisualScripting.FullSerializer;
 
-public class UiManager : MonoBehaviour {
-
+public class UIManager : MonoBehaviour {
     [Header("Search Settings")]
     public int resultsPerPage;
     public int resultsSearchedPerPage;
@@ -36,7 +35,6 @@ public class UiManager : MonoBehaviour {
 
     public async void Search() {
         masterResult = await Discogs.get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
-        Debug.Log(masterResult.results.Length);
         
         curPage = 1;
         backButton.interactable = false;
@@ -75,6 +73,7 @@ public class UiManager : MonoBehaviour {
     
 
     public void RefreshSearch() {
+        SendMessage("imstillalive");
         for(int i = 0; i < curSearchPreviews.Count; i++) {
             Destroy(curSearchPreviews[i]);
         }
@@ -97,8 +96,7 @@ public class UiManager : MonoBehaviour {
         
     }
 
-    void Start()
-    {
+    void Start() {
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
         nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
         backButton = searchedMenu.transform.Find("Back").GetComponent<Button>();
