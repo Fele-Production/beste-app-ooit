@@ -290,6 +290,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 218330132}
+  - component: {fileID: 218330133}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -312,6 +313,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &218330133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 218330130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70ab16f95977e66418108bbe3fafc5d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  releaseInfo:
+    id: 0
+    status: 
+    year: 0
+    resource_url: 
+    uri: 
+    artists: []
+    artists_sort: 
+    labels: []
+    companies: []
+    formats: []
+    data_quality: 
+    community:
+      have: 0
+      want: 0
+      rating:
+        count: 0
+        average: 0
+      data_quality: 
+      status: 
+    format_quantity: 0
+    master_id: 0
+    master_url: 
+    title: 
+    country: 
+    released: 
+    notes: 
+    released_formatted: 
+    identifiers: []
+    videos: []
+    genres: []
+    styles: []
+    tracklist: []
+    extraartists: []
+    images: []
+    thumb: 
 --- !u!1 &235609884
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +486,7 @@ MonoBehaviour:
   curSearchPreviews: []
   imgD: []
   urls: []
-  jsonResult:
+  masterResult:
     pagination:
       page: 0
       pages: 0
@@ -447,6 +496,17 @@ MonoBehaviour:
         last: 
         next: 
     results: []
+  releaseResult:
+    pagination:
+      page: 0
+      pages: 0
+      per_page: 0
+      items: 0
+      urls:
+        last: 
+        next: 
+    filter_facets: []
+    versions: []
   curPage: 1
   searched: 0
 --- !u!1 &403677925

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Networking;
-using ParkSquare.Discogs;
 using Microsoft.Extensions.Http;
 using Unity.VisualScripting;
 using System.Runtime.CompilerServices;
@@ -18,8 +17,8 @@ using UnityEngine.UIElements;
 
 public class DiscogsAPIFunc : MonoBehaviour {}
 
-public class HardCodedClientConfig : IClientConfig {
-    public string AuthToken => "QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux";
+public class HardCodedClientConfig {
+    public string AuthToken => "ouFwPdyXIKjiYOTIIBrUliiYTKZfujQXCMVejGco";
     //public string UserAgent => "PlaatFanaat/1.0"; 
     public string BaseUrl => "https://api.discogs.com";
 } 
@@ -33,7 +32,7 @@ namespace Discogs {
         public bool in_collection;
     }
     [System.Serializable]
-    public class Community_data {
+    public class CommunityData {
         public int want;
         public int have;
     }
@@ -55,7 +54,7 @@ namespace Discogs {
         public string thumb;
         public string cover_image;
         public string resource_url;
-        public Community_data community;
+        public CommunityData community;
 
     }
     [System.Serializable]
@@ -78,22 +77,6 @@ namespace Discogs {
     }
 
     //Release Class
-    [System.Serializable]
-    public class AppliedFilters {
-        public string[] format;
-    }
-    
-    [System.Serializable]
-    public class AvailableFilters {
-
-    }
-
-    [System.Serializable]
-    public class Filters {
-        public AppliedFilters applied;
-        public AvailableFilters available;
-    }
-
     [System.Serializable]
     public class FilterFacetComponent {
         public string title;
@@ -140,28 +123,123 @@ namespace Discogs {
     [System.Serializable]
     public class Release {
         public PagesInfo pagination;
-        public Filters filters;
         public FilterFacet[] filter_facets;
         public ReleaseVersion[] versions;
     }
+    
+    //Release Info
+    [System.Serializable]
+    public class Artist {
+        public string name;
+        public string anv;
+        public string join; //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
+        public string role;
+        public string tracks;
+        public int id;
+        public string resource_url;
+        public string thumbnail_url;
+    }
 
+    [System.Serializable]
+    public class Company {
+        public string name;
+        public string catno;
+        public string entity_type;
+        public string entity_type_name;
+        public int id;
+        public string resource_url;
+        public string thumbnail_url;
+    }
+
+    [System.Serializable]
+    public class Format {
+        public string name;
+        public string qty;
+        public string[] descriptions;
+    } 
+    [System.Serializable]
+    public class Rating {
+        public int count;
+        public float average;
+    }
+    [System.Serializable]
+    public class CommunityDataAdvanced {
+        public int have;
+        public int want;
+        public Rating rating;
+        public string data_quality;
+        public string status;
+    }
+    [System.Serializable]
+    public class Identifier {
+        public string type;
+        public string value;
+        public string description;
+    }
+
+    [System.Serializable]
+    public class Video {
+        public string uri;
+        public string title;
+        public string description;
+        public int duration;
+        public bool embed;
+    }
+
+    [System.Serializable]
+    public class Track {
+        public string position; //[disc][numer] A1
+        public string type_;
+        public string title;
+        public Artist[] extraartists;
+        public string duration;
+    }
+
+    [System.Serializable]
+    public class Image {
+        public string type;
+        public string uri;
+        public string resource_url;
+        public string uri150;
+        public int width;
+        public int height;
+    }
 
     [System.Serializable]
     public class ReleaseInfo {
-
+        public int id;
+        public string status;
+        public int year;
+        public string resource_url;
+        public string uri;
+        public Artist[] artists;
+        public string artists_sort;
+        public Company[] labels;
+        //Series[] die altijd leeg is?
+        public Company[] companies;
+        public Format[] formats;
+        public string data_quality;
+        public CommunityDataAdvanced community;
+        public int format_quantity;
+        public int master_id;
+        public string master_url;
+        public string title;
+        public string country;
+        public string released; //1989-08-08
+        public string notes;
+        public string released_formatted; //08 Aug 1989
+        public Identifier[] identifiers;
+        public Video[] videos;
+        public string[] genres;
+        public string[] styles;
+        public Track[] tracklist;
+        public Artist[] extraartists;
+        public Image[] images;
+        public string thumb;
     }
     //Functions
-    public class ConvertJSON {
-        public static Master Master(string jsonMasterInput) {
-            return JsonUtility.FromJson<Master>(jsonMasterInput);
-        }
-
-        public static Release Release(string jsonReleaseInput) {
-            return JsonUtility.FromJson<Release>(jsonReleaseInput);
-        }
-    }
-
     public class get {
+        //Discogs Getters
         public static async Task<Master> Masters(string search, int page, int per_page) {
             //HTTP SetUp
             HttpClientHandler handler = new HttpClientHandler();
@@ -195,7 +273,7 @@ namespace Discogs {
             var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + config.AuthToken);
             if (Mresponse.IsSuccessStatusCode) {
                 string jsonMResponse = await Mresponse.Content.ReadAsStringAsync();
-                return ConvertJSON.Master(jsonMResponse);
+                return JsonUtility.FromJson<Master>(jsonMResponse);
             } else {
                 Debug.LogError($"Error: {Mresponse.StatusCode} - {Mresponse.ReasonPhrase}");
                 Debug.LogError("getMaster() failed");
@@ -237,7 +315,7 @@ namespace Discogs {
             var Rresponse = await client.GetAsync(searchFormatRelease+"&token=" + config.AuthToken);
             if (Rresponse.IsSuccessStatusCode) {
                 string jsonRResponse = await Rresponse.Content.ReadAsStringAsync();
-                return ConvertJSON.Release(jsonRResponse);
+                return JsonUtility.FromJson<Release>(jsonRResponse);;
             } else {
                 Debug.LogError($"Error: {Rresponse.StatusCode} - {Rresponse.ReasonPhrase}");
                 return null;
@@ -275,17 +353,18 @@ namespace Discogs {
             //Search Type Definition
             var searchFormatReleaseInfo = $"https://api.discogs.com/releases/{release_id}";
             //Search for Masters
-            var RIresponse = await client.GetAsync(searchFormatReleaseInfo+"&token=" + config.AuthToken);
+            var RIresponse = await client.GetAsync(searchFormatReleaseInfo+"?token=" + config.AuthToken);
             if (RIresponse.IsSuccessStatusCode) {
                 string jsonRIResponse = await RIresponse.Content.ReadAsStringAsync();
-                Debug.Log(jsonRIResponse);
-                return null;
+                return JsonUtility.FromJson<ReleaseInfo>(jsonRIResponse);
             } else {
                 Debug.LogError($"Error: {RIresponse.StatusCode} - {RIresponse.ReasonPhrase}");
                 Debug.LogError("getReleaseInfo() failed");
                 return null;
             }
         }
+        
+        //Image Getters
         public static async Task<Texture2D> Image(string urlImage) {
             using (UnityWebRequest Irequest = UnityWebRequestTexture.GetTexture(urlImage)) {
                 var operation = Irequest.SendWebRequest();
