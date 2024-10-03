@@ -144,6 +144,12 @@ namespace Discogs {
         public FilterFacet[] filter_facets;
         public ReleaseVersion[] versions;
     }
+
+
+    [System.Serializable]
+    public class ReleaseInfo {
+
+    }
     //Functions
     public class ConvertJSON {
         public static Master Master(string jsonMasterInput) {
@@ -239,6 +245,47 @@ namespace Discogs {
         
         }
     
+        public static async Task<ReleaseInfo> ReleaseInfo(int release_id) {
+            //HTTP SetUp
+            HttpClientHandler handler = new HttpClientHandler();
+            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true; // For debugging SSL issues
+            HttpClient client = new HttpClient(handler);
+
+            // Add User-Agent header
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
+            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+
+            //check if Auth token is correctly configured
+            HardCodedClientConfig config = new HardCodedClientConfig();
+            if (config == null) {
+                Debug.LogError("HardCodedClientConfig is null.");
+                return null;
+            }
+            if (string.IsNullOrEmpty(config.AuthToken)) {
+                Debug.LogError("AuthToken is null or empty.");
+                return null;
+            }
+        
+            // Check if the client is null
+            if (client == null) {
+                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
+                return null;
+            }
+
+            //Search Type Definition
+            var searchFormatReleaseInfo = $"https://api.discogs.com/releases/{release_id}";
+            //Search for Masters
+            var RIresponse = await client.GetAsync(searchFormatReleaseInfo+"&token=" + config.AuthToken);
+            if (RIresponse.IsSuccessStatusCode) {
+                string jsonRIResponse = await RIresponse.Content.ReadAsStringAsync();
+                Debug.Log(jsonRIResponse);
+                return null;
+            } else {
+                Debug.LogError($"Error: {RIresponse.StatusCode} - {RIresponse.ReasonPhrase}");
+                Debug.LogError("getReleaseInfo() failed");
+                return null;
+            }
+        }
         public static async Task<Texture2D> Image(string urlImage) {
             using (UnityWebRequest Irequest = UnityWebRequestTexture.GetTexture(urlImage)) {
                 var operation = Irequest.SendWebRequest();
