@@ -92,8 +92,8 @@ public class UiManager : MonoBehaviour {
     }
 
 
-    public void SelectMaster() {
-        releaseResult = await Discogs.get.Release(masterResult.master_id, 1, resultsSearchedPerPage);
+    public async void SelectMaster(int _position) {
+        releaseResult = await Discogs.get.Releases(masterResult.results[_position + (curPage*resultsPerPage)].master_id, 1, resultsSearchedPerPage);
         
     }
 

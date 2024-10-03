@@ -60,6 +60,10 @@ public class SearchPreview : MonoBehaviour
         
     }
 
+    public void SelectMaster() {
+        uiManager.SelectMaster(curPosition);
+    }
+
     // Update is called once per frame
     void Update()
     {
