@@ -124,7 +124,7 @@ public class UIManager : MonoBehaviour {
         
         urls.Clear();
 
-        for(int i = 0; i < masterResult.results.Length; i++) {
+        for(int i = 0; i < releaseResult.versions.Length; i++) {
             urls.Add(releaseResult.versions[i+pageBuffer].thumb);
         }
         imgD = await Discogs.Get.ImageList(urls);
