@@ -197,7 +197,12 @@ namespace Discogs {
             public int width;
             public int height;
         }
-    
+
+        //Release Library
+        [System.Serializable]
+        public class UserTheme {
+            //Add whatever the fuck you can customize
+        }
     }
 
     //Important Classes
@@ -248,9 +253,10 @@ namespace Discogs {
     }
 
     //Class for Saved Releases
-    public class ReleaseLibrary {
+    public class UserLibrary {
         public List<ReleaseInfo> Owned = new();
         public List<ReleaseInfo> Wishlist = new();
+        public ClassComponents.UserTheme Theme;
     }
     //Functions
     public class Get {
@@ -416,36 +422,50 @@ namespace Discogs {
 
     //Saved Info
     public class Library {
-        public static string libPath = Application.persistentDataPath+"/Library.lox"; //l(evi) o(cean) (feli)x
+        public static string libPath = Application.persistentDataPath+"/UserData.lox"; //l(evi) o(cean) (feli)x
 
         public static void Add(ReleaseInfo releaseToSave) {
-            ReleaseLibrary _saveLibrary = Library.Load();
+            UserLibrary _saveLibrary = Library.Load();
             _saveLibrary.Owned.Add(releaseToSave);
             File.WriteAllText(libPath,JsonUtility.ToJson(_saveLibrary,true));
         }
         
         public static void Remove (ReleaseInfo releaseToRemove) {
-            ReleaseLibrary _removeLibrary = Library.Load();
+            UserLibrary _removeLibrary = Library.Load();
             _removeLibrary.Owned.Remove(releaseToRemove);
             File.WriteAllText(libPath,JsonUtility.ToJson(_removeLibrary,true));
         }
 
-        public static ReleaseLibrary Load() {
+        public static UserLibrary Load() {
             string _LibraryStr;
-            ReleaseLibrary _Library;
+            UserLibrary _Library;
             if (File.Exists(libPath)) {
                 _LibraryStr = File.ReadAllText(libPath);
             } else {
                 _LibraryStr = "";
             }
-            if (_LibraryStr.IsConvertibleTo<ReleaseLibrary>(true)) {
-                _Library = JsonUtility.FromJson<ReleaseLibrary>(_LibraryStr);
+            if (_LibraryStr.IsConvertibleTo<UserLibrary>(true)) {
+                _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
             } else {
-                _Library = new ReleaseLibrary();
+                _Library = new UserLibrary();
             }
             return _Library;
         }
-    
+
+        public class Wishlist {
+
+            public static void Add(ReleaseInfo releaseToSave) {
+                UserLibrary _saveWishlist = Library.Load();
+                _saveWishlist.Wishlist.Add(releaseToSave);
+                File.WriteAllText(libPath,JsonUtility.ToJson(_saveWishlist,true));
+            }
+        
+            public static void Remove (ReleaseInfo releaseToRemove) {
+                UserLibrary _removeWishlist = Library.Load();
+                _removeWishlist.Wishlist.Remove(releaseToRemove);
+                File.WriteAllText(libPath,JsonUtility.ToJson(_removeWishlist,true));
+            }
+        }
     }
 
 }
