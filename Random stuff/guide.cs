@@ -80,14 +80,14 @@ Discogs
                     in_wantlist (int)
                     in_collection (int)
 
-    ReleaseInfo
+    ReleaseInfo (type)
         id (int)
         status (string)
         year (int)
         resource_url (string)
         uri (string)
         artists[]
-            namme (string)
+            name (string)
             anv (string)
             join (string) //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
             role (string)
@@ -127,10 +127,69 @@ Discogs
                 data_quality (string)
                 status (string)
             format_quantity (int)
-            
+            master_id (int)
+            master_url (string)
+            title (string)
+            country (string)
+            released (string) //yyyy-mm-dd e.g. 1989-08-08
+            notes (string)
+            released_formatted (string) // dd month yyyy e.g 08 Aug 1989
+            identifiers[]
+                type (string)
+                value (string)
+                description (string)
+            videos[]
+                uri (string)
+                title (string)
+                description (string)
+                duration (int)
+                embed (bool)
+            genres (string[])
+            styles (string[])
+            tracklist[]
+                position (string) //[side][nummer] e.g. A1
+                type_ (string)
+                title (string)
+                extraartists[]
+                    name (string)
+                    anv (string)
+                    join (string) //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
+                    role (string)
+                    tracks (string)
+                    id (int)
+                    resource_url (string)
+                    thumbnail_url (string)
+                duration (string)
+            extraartists[]
+                name (string)
+                anv (string)
+                join (string) //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
+                role (string)
+                tracks (string)
+                id (int)
+                resource_url (string)
+                thumbnail_url (string)
+            images[]
+                type (string)
+                uri (string)
+                resource_url (string)
+                uri150 (string) //150 px versie
+                width (int)
+                height (int)
+            thumb (string)
 
-    get
+    ReleaseLibrary (type)
+        Owned (List<ReleaseInfo>)
+        Wishlist (List<ReleaseInfo>)
+
+    Get
         Masters(search [string], page [int], per_page [int]) (function, returns Master)
         Releases(master_id [int], page [int], per_page [int]) (function, returns Release)
         Image(urlImage [string]) (function, returns Texture2D)
         ImageList(urlImages [List<string>]) (function, returns List<Texture2D>)
+
+    Library
+        libPath (static string)
+        Add (ReleaseInfo releaseToSave) (function)
+        Remove (ReleaseInfo releaseToRemove) (function)
+        Load (void) (function, returns ReleaseLibrary)

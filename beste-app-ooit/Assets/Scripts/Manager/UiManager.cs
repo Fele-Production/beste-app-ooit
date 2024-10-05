@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour {
     public bool searched = false;
 
     public async void Search() {
-        masterResult = await Discogs.get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
+        masterResult = await Discogs.Get.Masters(searchPrompt.text,1, resultsSearchedPerPage);
         
         curPage = 1;
         backButton.interactable = false;
@@ -45,7 +45,7 @@ public class UIManager : MonoBehaviour {
         for(int i = 0; i < masterResult.results.Length; i++) {
             urls.Add(masterResult.results[i+pageBuffer].cover_image);
         }
-        imgD = await Discogs.get.ImageList(urls);
+        imgD = await Discogs.Get.ImageList(urls);
 
         RefreshSearch();
     }
@@ -92,7 +92,7 @@ public class UIManager : MonoBehaviour {
 
 
     public async void SelectMaster(int _position) {
-        releaseResult = await Discogs.get.Releases(masterResult.results[_position + (curPage*resultsPerPage)].master_id, 1, resultsSearchedPerPage);
+        releaseResult = await Discogs.Get.Releases(masterResult.results[_position + (curPage*resultsPerPage)].master_id, 1, resultsSearchedPerPage);
         
     }
 
