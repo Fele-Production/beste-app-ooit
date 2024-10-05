@@ -16,11 +16,8 @@ public class Fantassimo : MonoBehaviour {
     public Image fixedImg;
     private List<Image> imgs = new List<Image>();
     private float[] coloure = {0f,255f,255f};
-
-    void Start() {
-        Time.fixedDeltaTime = 10f/9f/255f;
-        fixedImg.enabled = true;
-    } 
+    public bool greenlit = false;
+    [HideInInspector] public bool Enabled = false;
 
     public void AddImage(Image newIm) {
         imgs.Add(newIm);
@@ -29,26 +26,39 @@ public class Fantassimo : MonoBehaviour {
         imgs.Clear();
     }
 
-    void FixedUpdate() {
-        if ((y%2)==0) {
-            coloure[x%3]++;
-            if ((coloure[x%3]>=255)) {
-                coloure[x%3] = 255f;
-                x++;
-                y++;
-            }
+    void Update() {
+        if (Library.Load().Theme.Fantassimo==true||greenlit==true) {
+            Time.fixedDeltaTime = 10f/9f/255f;
+            Enabled = true;
         } else {
-            coloure[x%3]--;
-            if ((coloure[x%3]<=0)) {
-                coloure[x%3] = 0f;
-                x++;
-                y++;
-            }
+            Time.fixedDeltaTime = 1000f;
+            Enabled = false;
         }
-        fixedImg.color = new Color(coloure[0]/255,coloure[1]/255,coloure[2]/255);
-        if (imgs.Count>0) {
-            foreach (var img in imgs) {
-                img.color = new Color(coloure[0]/255,coloure[1]/255,coloure[2]/255);
+    }
+
+
+    void FixedUpdate() {
+        if (Enabled) {
+            if ((y%2)==0) {
+                coloure[x%3]++;
+                if (coloure[x%3]>=255) {
+                    coloure[x%3] = 255f;
+                    x++;
+                    y++;
+                }
+            } else {
+                coloure[x%3]--;
+                if (coloure[x%3]<=0) {
+                coloure[x%3] = 0f;
+                    x++;
+                    y++;
+                }
+            }
+            fixedImg.color = new Color(coloure[0]/255,coloure[1]/255,coloure[2]/255);
+            if (imgs.Count>0) {
+                foreach (var img in imgs) {
+                    img.color = new Color(coloure[0]/255,coloure[1]/255,coloure[2]/255);
+                }
             }
         }
     }
