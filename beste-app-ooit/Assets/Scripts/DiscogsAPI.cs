@@ -201,6 +201,7 @@ namespace Discogs {
         //Release Library
         [System.Serializable]
         public class UserTheme {
+            public bool Fantassimo = false;
             //Add whatever the fuck you can customize
         }
     }
@@ -253,10 +254,11 @@ namespace Discogs {
     }
 
     //Class for Saved Releases
+    [System.Serializable]
     public class UserLibrary {
         public List<ReleaseInfo> Owned = new();
         public List<ReleaseInfo> Wishlist = new();
-        public ClassComponents.UserTheme Theme;
+        public ClassComponents.UserTheme Theme = new();
     }
     //Functions
     public class Get {
@@ -425,13 +427,13 @@ namespace Discogs {
         public static string libPath = Application.persistentDataPath+"/UserData.lox"; //l(evi) o(cean) (feli)x
 
         public static void Add(ReleaseInfo releaseToSave) {
-            UserLibrary _saveLibrary = Library.Load();
+            UserLibrary _saveLibrary = Load();
             _saveLibrary.Owned.Add(releaseToSave);
             File.WriteAllText(libPath,JsonUtility.ToJson(_saveLibrary,true));
         }
         
         public static void Remove (ReleaseInfo releaseToRemove) {
-            UserLibrary _removeLibrary = Library.Load();
+            UserLibrary _removeLibrary = Load();
             _removeLibrary.Owned.Remove(releaseToRemove);
             File.WriteAllText(libPath,JsonUtility.ToJson(_removeLibrary,true));
         }
@@ -450,6 +452,16 @@ namespace Discogs {
                 _Library = new UserLibrary();
             }
             return _Library;
+        }
+
+        public static void HardSave(UserLibrary _saveLibrary) {
+            File.WriteAllText(libPath,JsonUtility.ToJson(_saveLibrary,true));
+        }
+        
+        public static void SaveTheme(ClassComponents.UserTheme newTheme) {
+            UserLibrary _themeLibrary = Load();
+            _themeLibrary.Theme = newTheme;
+            File.WriteAllText(libPath,JsonUtility.ToJson(_themeLibrary,true));
         }
 
         public class Wishlist {
