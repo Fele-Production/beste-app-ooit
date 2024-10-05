@@ -187,6 +187,7 @@ Discogs
     Get
         Masters(search [string], page [int], per_page [int]) (function, returns Master)
         Releases(master_id [int], page [int], per_page [int]) (function, returns Release)
+        ReleaseInfo(release_id [int]) (function, returns ReleaseInfo)
         Image(urlImage [string]) (function, returns Texture2D)
         ImageList(urlImages [List<string>]) (function, returns List<Texture2D>)
 
