@@ -132,7 +132,7 @@ namespace Discogs {
     public class Artist {
         public string name;
         public string anv;
-        public string join; //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
+        public string join; 
         public string role;
         public string tracks;
         public int id;
@@ -188,7 +188,7 @@ namespace Discogs {
 
     [System.Serializable]
     public class Track {
-        public string position; //[disc][numer] A1
+        public string position;
         public string type_;
         public string title;
         public Artist[] extraartists;
@@ -215,7 +215,7 @@ namespace Discogs {
         public Artist[] artists;
         public string artists_sort;
         public Company[] labels;
-        //Series[] die altijd leeg is?
+        //Series[]
         public Company[] companies;
         public Format[] formats;
         public string data_quality;
@@ -237,6 +237,7 @@ namespace Discogs {
         public ReleaseImage[] images;
         public string thumb;
     }
+    
     //Functions
     public class get {
         //Discogs Getters
@@ -382,6 +383,7 @@ namespace Discogs {
                 }
             }
         }
+        
         public static async Task<List<Texture2D>> ImageList(List<string> urlImages) {
             List<Texture2D> _downloadedImgs = new List<Texture2D>();
 

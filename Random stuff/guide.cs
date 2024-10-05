@@ -80,9 +80,55 @@ Discogs
                     in_wantlist (int)
                     in_collection (int)
 
-    ConvertJSON
-        Master(jsonMasterInput [string]) (function, returns Master)
-        Release(jsonReleaseInput [string]) (function, returns Release)
+    ReleaseInfo
+        id (int)
+        status (string)
+        year (int)
+        resource_url (string)
+        uri (string)
+        artists[]
+            namme (string)
+            anv (string)
+            join (string) //Als er een andere is staat hier het teken waarme zee samen gevoegd worden bijv /
+            role (string)
+            tracks (string)
+            id (int)
+            resource_url (string)
+            thumbnail_url (string)
+        artists_sort (string)
+        labels[]
+            name (string)
+            catno (string)
+            entity_type (string)
+            entity_type_name (string)
+            id (int)
+            resource_url (string)
+            thumbnail_url (string)
+        //series[] --0 idee wat dit is het is tot nu toe altijd leeg, zit dus niet in de class
+        companies[]
+            name (string)
+            catno (string)
+            entity_type (string)
+            entity_type_name (string)
+            id (int)
+            resource_url (string)
+            thumbnail_url (string)
+        formats[]
+            name (string)
+            qty (string)
+            descriptions (string[])
+            data_quality (string)
+            community
+                have (int)
+                want (int)
+                rating
+                    count (int)
+                    average (float)
+                data_quality (string)
+                status (string)
+            format_quantity (int)
+            
+
     get
         Masters(search [string], page [int], per_page [int]) (function, returns Master)
         Releases(master_id [int], page [int], per_page [int]) (function, returns Release)
