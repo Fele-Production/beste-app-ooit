@@ -178,9 +178,11 @@ Discogs
                 height (int)
             thumb (string)
 
-    ReleaseLibrary (type)
+    UserLibrary (type)
         Owned (List<ReleaseInfo>)
         Wishlist (List<ReleaseInfo>)
+        Theme
+            //nog geen inhoud
 
     Get
         Masters(search [string], page [int], per_page [int]) (function, returns Master)
@@ -189,7 +191,10 @@ Discogs
         ImageList(urlImages [List<string>]) (function, returns List<Texture2D>)
 
     Library
-        libPath (static string)
+        libPath (static string) // C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit\(File Naam)
         Add (ReleaseInfo releaseToSave) (function)
         Remove (ReleaseInfo releaseToRemove) (function)
-        Load (void) (function, returns ReleaseLibrary)
+        Load (void) (function, returns UserLibrary)
+        Wishlist
+            Add (ReleaseInfo releaseToSave) (function)
+            Remove (ReleaseInfo releaseToRemove) (function)
