@@ -30,6 +30,7 @@ public class UIManager : MonoBehaviour {
     public List<Texture2D> imgD;
     public List<string> urls;
     public int curPage = 1;
+    public string curType = "master";
     public float searchingAnimDelay;
     [HideInInspector] public int pageBuffer {get; private set;}
     public bool searched = false;
@@ -39,9 +40,9 @@ public class UIManager : MonoBehaviour {
     [SerializeField] public Discogs.Release releaseResult = new ();
 
     public async void SearchMaster() {
+        curType = "master";
         StartCoroutine(SearchingAnimation());
         masterResult = await Discogs.Get.Masters(searchPrompt.text,1, resultsPerPage);
-        StopCoroutine(SearchingAnimation());
         
         curPage = 1;
         backButton.interactable = false;
@@ -54,31 +55,39 @@ public class UIManager : MonoBehaviour {
         }
         imgD = await Discogs.Get.ImageList(urls);
 
-        RefreshSearch("master");
+        RefreshSearch();
     }
 
-    public void NextPage(string _type) {
+    public void NextPage() {
         curPage++;
         backButton.interactable = true;
-        if(masterResult.results.Length <= curPage * resultsPerPage) {
-            nextButton.interactable = false;
-        }   
 
-        RefreshSearch(_type);  
+        if(curType == "master") {
+            if(masterResult.results.Length <= curPage * resultsPerPage) {
+                nextButton.interactable = false;
+            } 
+        } else if(curType == "release") {
+            if(releaseResult.versions.Length <= curPage * resultsPerPage) {
+                nextButton.interactable = false;
+            }
+        }
+             
+
+        RefreshSearch();  
     }
 
-    public void PreviousPage(string _type) {
+    public void PreviousPage() {
         curPage--;
         nextButton.interactable = true;
         if(curPage == 1) {
             backButton.interactable = false;
         }   
 
-        RefreshSearch(_type);
+        RefreshSearch();
     }
 
 
-    public void RefreshSearch(string type) {
+    public void RefreshSearch() {
         SendMessage("imstillalive");
         for(int i = 0; i < curSearchPreviews.Count; i++) {
             Destroy(curSearchPreviews[i]);
@@ -86,24 +95,29 @@ public class UIManager : MonoBehaviour {
 
         searched = true;
         curSearchPreviews.Clear();
+        StopCoroutine(SearchingAnimation());
         int resultsToLoad = resultsPerPage;
-        if(resultsPerPage > (masterResult.results.Length - ((curPage-1) * resultsPerPage))) {
-            resultsToLoad = masterResult.results.Length - ((curPage-1) * resultsPerPage);
-        }
-        for(int i = 0; i < resultsToLoad; i++) {
 
-            if(type == "master") {
+        if(curType == "master") {
+            if(resultsPerPage > (masterResult.results.Length - ((curPage-1) * resultsPerPage))) {
+                resultsToLoad = masterResult.results.Length - ((curPage-1) * resultsPerPage);
+            }
+            for(int i = 0; i < resultsToLoad; i++) {
                 curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
                 curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
-            } else if(type == "release") {
-                curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
-                curSearchPreviews[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
+                
             }
+        } else if (curType == "release") {
+            if(resultsPerPage > (releaseResult.versions.Length - ((curPage-1) * resultsPerPage))) {
+                resultsToLoad = releaseResult.versions.Length - ((curPage-1) * resultsPerPage);
+            }
+            for(int i = 0; i < resultsToLoad; i++) {
+                    curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
+                    curSearchPreviews[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
+                }
             
         }
-        
-    }
-
+    }     
 
     public void GetMasterID(int _position) {
         curMasterID = masterResult.results[_position + ((curPage-1)*resultsPerPage)].master_id;
@@ -112,11 +126,13 @@ public class UIManager : MonoBehaviour {
     }
 
     public async void SearchRelease() {
+        confirmReleaseMenu.SetActive(false);
         StartCoroutine(SearchingAnimation());
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
-        confirmReleaseMenu.SetActive(false);
+        
+        curType = "release";
   
-        StopCoroutine(SearchingAnimation());
+        
         
         curPage = 1;
         backButton.interactable = false;
@@ -129,7 +145,7 @@ public class UIManager : MonoBehaviour {
         }
         imgD = await Discogs.Get.ImageList(urls);
 
-        RefreshSearch("release");
+        RefreshSearch();
     }
 
 
