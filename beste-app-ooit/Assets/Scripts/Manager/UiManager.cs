@@ -42,7 +42,7 @@ public class UIManager : MonoBehaviour {
     public async void SearchMaster() {
         curType = "master";
         StartCoroutine(SearchingAnimation());
-        masterResult = await Discogs.Get.Masters(searchPrompt.text,1, resultsPerPage);
+        masterResult = await Discogs.Get.Masters(searchPrompt.text,1, searchResultsPerPage);
         
         curPage = 1;
         backButton.interactable = false;

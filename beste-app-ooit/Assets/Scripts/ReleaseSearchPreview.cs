@@ -9,6 +9,8 @@ public class ReleaseSearchPreview : MonoBehaviour
  public UIManager uiManager;
     public TMP_Text titleText;
     public TMP_Text yearText;
+    public TMP_Text countryText;
+    public TMP_Text editionText;
     public Image imgTest;
     public int curPosition;
     public int distance = 200;
@@ -40,6 +42,21 @@ public class ReleaseSearchPreview : MonoBehaviour
                 yearText.text = uiManager.releaseResult.versions[curPosition + pageBuffer].released;
             } else {
                 yearText.text = "----";
+            } 
+
+            if(uiManager.releaseResult.versions[curPosition + pageBuffer].country != null) {
+                countryText.text = uiManager.releaseResult.versions[curPosition + pageBuffer].country;
+            } else {
+                countryText.text = "---";
+            } 
+
+            if(uiManager.releaseResult.versions[curPosition + pageBuffer].format != null) {
+                string[] splitArray = uiManager.releaseResult.versions[curPosition + pageBuffer].format.Split(", ");
+                if(splitArray.Length >= 3) {
+                    editionText.text = splitArray[2];
+                } else {
+                    editionText.text = "Standard";
+                }
             }
         }
         
