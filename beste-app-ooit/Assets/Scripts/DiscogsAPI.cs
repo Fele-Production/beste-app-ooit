@@ -17,16 +17,23 @@ using UnityEngine.UIElements;
 using UnityEditor.Timeline.Actions;
 using System.Xml.Linq;
 
-public class DiscogsAPIFunc : MonoBehaviour {}
-
-public class ClientConfig {
-    public string AuthToken => "ouFwPdyXIKjiYOTIIBrUliiYTKZfujQXCMVejGco";
-    //public string UserAgent => "PlaatFanaat/1.0"; 
-    public string BaseUrl => "https://api.discogs.com";
-} 
-
 
 namespace Discogs {
+    public static class GlobalVariables {
+        //public readonly static string declarationofindependenceoftheunitedstatesofamerica = "theunanimousdeclarationofthethirteenunitedstatesofamericawheninthecourseofhumaneventsitbecomesnecessaryforonepeopletodissolvethepoliticalbandswhichhaveconnectedthemwithanotherandtoassumeamongthepowersoftheearththeseparateandequalstationtowhichthelawsofnatureandofnaturesgodentitlethemadecentrespecttotheopinionsofmankindrequiresthattheyshoulddeclarethecauseswhichimpelthemtotheseparationweholdthesetruthstobeselfevidentthatallmenarecreatedequalthattheyareendowedbytheircreatorwithcertainunalienablerightsthatamongthesearelifelibertyandthepursuitofhappinessthattosecuretheserightsgovernmentsareinstitutedamongmenderivingtheirjustpowersfromtheconsentofthegovernedthatwheneveranyformofgovernmentbecomesdestructiveoftheseendsitistherightofthepeopletoalterortoabolishitandtoinstitutenewgovernmentlayingitsfoundationonsuchprinciplesandorganizingitspowersinsuchformastothemshallseemmostlikelytoeffecttheirsafetyandhappinessprudenceindeedwilldictatethatgovernmentslongestablishedshouldnotbechangedforlightandtransientcausesandaccordinglyallexperiencehathshewnthatmankindaremoredisposedtosufferwhileevilsaresufferablethantorightthemselvesbyabolishingtheformstowhichtheyareaccustomedbutwhenalongtrainofabusesandusurpationspursuinginvariablythesameobjectevincesadesigntoreducethemunderabsolutedespotismitistheirrightitistheirdutytothrowoffsuchgovernmentandtoprovidenewguardsfortheirfuturesecuritysuchhasbeenthepatientsufferanceofthesecoloniesandsuchisnowthenecessitywhichconstrainsthemtoaltertheirformersystemsofgovernmentthehistoryofthepresentkingofgreatbritainisahistoryofrepeatedinjuriesandusurpationsallhavingindirectobjecttheestablishmentofanabsolutetyrannyoverthesestatestoprovethisletfactsbesubmittedtoacandidworldhehasrefusedhisassenttolawsthemostwholesomeandnecessaryforthepublicgoodhehasforbiddenhisgovernorstopasslawsofimmediateandpressingimportanceunlesssuspendedintheiroperationtillhisassentshouldbeobtainedandwhensosuspendedhehasutterlyneglectedtoattendtothemhehasrefusedtopassotherlawsfortheaccommodationoflargedistrictsofpeopleunlessthosepeoplewouldrelinquishtherightofrepresentationinthelegislaturearightinestimabletothemandformidabletotyrantsonlyhehascalledtogetherlegislativebodiesatplacesunusualuncomfortableanddistantfromthedepositoryoftheirpublicrecordsforthesolepurposeoffatiguingthemintocompliancewithhismeasureshehasdissolvedrepresentativehousesrepeatedlyforopposingwithmanlyfirmnesshisinvasionsontherightsofthepeoplehehasrefusedforalongtimeaftersuchdissolutionstocauseotherstobeelectedwherebythelegislativepowersincapableofannihilationhavereturnedtothepeopleatlargefortheirexercisethestateremaininginthemeantimeexposedtoallthedangersofinvasionfromwithoutandconvulsionswithinhehasendeavouredtopreventthepopulationofthesestatesforthatpurposeobstructingthelawsfornaturalizationofforeignersrefusingtopassotherstoencouragetheirmigrationshitherandraisingtheconditionsofnewappropriationsoflandshehasobstructedtheadministrationofjusticebyrefusinghisassenttolawsforestablishingjudiciarypowershehasmadejudgesdependentonhiswillaloneforthetenureoftheirofficesandtheamountandpaymentoftheirsalarieshehaserectedamultitudeofnewofficesandsenthitherswarmsofofficerstoharrassourpeopleandeatouttheirsubstancehehaskeptamongusintimesofpeacestandingarmieswithouttheconsentofourlegislatureshehasaffectedtorenderthemilitaryindependentofandsuperiortothecivilpowerhehascombinedwithotherstosubjectustoajurisdictionforeigntoourconstitutionandunacknowledgedbyourlawsgivinghisassenttotheiractsofpretendedlegislationforquarteringlargebodiesofarmedtroopsamongusforprotectingthembyamocktrialfrompunishmentforanymurderswhichtheyshouldcommitontheinhabitantsofthesestatesforcuttingoffourtradewithallpartsoftheworldforimposingtaxesonuswithoutourconsentfordeprivingusinmanycasesofthebenefitsoftrialbyjuryfortransportingusbeyondseastobetriedforpretendedoffencesforabolishingthefreesystemofenglishlawsinaneighbouringprovinceestablishingthereinanarbitrarygovernmentandenlargingitsboundariessoastorenderitatonceanexampleandfitinstrumentforintroducingthesameabsoluteruleintothesecoloniesfortakingawayourchartersabolishingourmostvaluablelawsandalteringfundamentallytheformsofourgovernmentsforsuspendingourownlegislaturesanddeclaringthemselvesinvestedwithpowertolegislateforusinallcaseswhatsoeverhehasabdicatedgovernmentherebydeclaringusoutofhisprotectionandwagingwaragainstushehasplunderedourseasravagedourcoastsburntourtownsanddestroyedthelivesofourpeopleheisatthistimetransportinglargearmiesofforeignmercenariestocompleattheworksofdeathdesolationandtyrannyalreadybegunwithcircumstancesofcruelty&perfidyscarcelyparalleledinthemostbarbarousagesandtotallyunworthytheheadofacivilizednationhehasconstrainedourfellowcitizenstakencaptiveonthehighseastobeararmsagainsttheircountrytobecometheexecutionersoftheirfriendsandbrethrenortofallthemselvesbytheirhandshehasexciteddomesticinsurrectionsamongstusandhasendeavouredtobringontheinhabitantsofourfrontiersthemercilessindiansavageswhoseknownruleofwarfareisanundistinguisheddestructionofallagessexesandconditionsineverystageoftheseoppressionswehavepetitionedforredressinthemosthumbletermsourrepeatedpetitionshavebeenansweredonlybyrepeatedinjuryaprincewhosecharacteristhusmarkedbyeveryactwhichmaydefineatyrantisunfittobetherulerofafreepeoplenorhavewebeenwantinginattentionstoourbrittishbrethrenwehavewarnedthemfromtimetotimeofattemptsbytheirlegislaturetoextendanunwarrantablejurisdictionoveruswehaveremindedthemofthecircumstancesofouremigrationandsettlementherewehaveappealedtotheirnativejusticeandmagnanimityandwehaveconjuredthembythetiesofourcommonkindredtodisavowtheseusurpationswhichwouldinevitablyinterruptourconnectionsandcorrespondencetheytoohavebeendeaftothevoiceofjusticeandofconsanguinitywemustthereforeacquiesceinthenecessitywhichdenouncesourseparationandholdthemasweholdtherestofmankindenemiesinwarinpeacefriendswethereforetherepresentativesoftheunitedstatesofamericaingeneralcongressassembledappealingtothesupremejudgeoftheworldfortherectitudeofourintentionsdointhenameandbyauthorityofthegoodpeopleofthesecoloniessolemnlypublishanddeclarethattheseunitedcoloniesareandofrightoughttobefreeandindependentstatesthattheyareabsolvedfromallallegiancetothebritishcrownandthatallpoliticalconnectionbetweenthemandthestateofgreatbritainisandoughttobetotallydissolvedandthatasfreeandindependentstatestheyhavefullpowertolevywarconcludepeacecontractalliancesestablishcommerceandtodoallotheractsandthingswhichindependentstatesmayofrightdoandforthesupportofthisdeclarationwithafirmrelianceontheprotectionofdivineprovidencewemutuallypledgetoeachotherourlivesourfortunesandoursacredhonor";
+        //public readonly static string FileExtension = "theunanimousdeclarationofthethirteenunitedstatesofamericawheninthecourseofhumaneventsitbecomesnecessaryforonepeopletodissolvethepoliticalbandswhichhaveconnectedthemwithanothe";
+        public readonly static string FileExtension = "skibidi";
+        public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
+        public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
+        public readonly static string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
+    }
+
+    public static class ClientConfig {
+        public static string AuthToken => "ouFwPdyXIKjiYOTIIBrUliiYTKZfujQXCMVejGco";
+        public static string UserAgent => "PlaatFanaat/0.1"; 
+        public static string BaseUrl => "https://api.discogs.com";
+    } 
+
     public class ClassComponents {
         //Master Class Components
         [System.Serializable]
@@ -204,6 +211,10 @@ namespace Discogs {
             public bool Fantassimo = false;
             //Add whatever the fuck you can customize
         }
+        public class UserSettings {
+            public bool PerformanceMode = false;
+            //Again whatever the fuck
+        }
     }
 
     //Important Classes
@@ -233,7 +244,6 @@ namespace Discogs {
         //Series[]
         public ClassComponents.Company[] companies;
         public ClassComponents.Format[] formats;
-        public string data_quality;
         public ClassComponents.CommunityDataAdvanced community;
         public int format_quantity;
         public int master_id;
@@ -258,10 +268,24 @@ namespace Discogs {
     public class UserLibrary {
         public List<ReleaseInfo> Owned = new();
         public List<ReleaseInfo> Wishlist = new();
-        public ClassComponents.UserTheme Theme = new();
     }
+    //Class for Game Data
+    [System.Serializable]
+    public class GameData {
+        public List<ReleaseInfo> Owned = new();
+        public List<ReleaseInfo> Wishlist = new();
+        public float Experience;
+    }
+
+    [System.Serializable]
+    public class UserSettings {
+        public ClassComponents.UserTheme Theme = new();
+        public ClassComponents.UserSettings Settings = new();
+    }
+
+
     //Functions
-    public class Get {
+    public static class Get {
         //Discogs Getters
         public static async Task<Master> Masters(string search, int page, int per_page) {
             //HTTP SetUp
@@ -270,30 +294,19 @@ namespace Discogs {
             HttpClient client = new HttpClient(handler);
 
             // Add User-Agent header
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
-            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(ClientConfig.UserAgent);
+            client.DefaultRequestHeaders.Add("Authorization", $"Discogs token={ClientConfig.AuthToken}");
 
-            //check if Auth token is correctly configured
-            ClientConfig config = new ClientConfig();
-            if (config == null) {
-                Debug.LogError("HardCodedClientConfig is null.");
-                return null;
-            }
-            if (string.IsNullOrEmpty(config.AuthToken)) {
+            //check if Auth token is correctly ClientConfigured
+            if (string.IsNullOrEmpty(ClientConfig.AuthToken)) {
                 Debug.LogError("AuthToken is null or empty.");
-                return null;
-            }
-        
-            // Check if the client is null
-            if (client == null) {
-                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
                 return null;
             }
 
             //Search Type Definition
-            var searchFormatMaster = $"https://api.discogs.com/database/search?q={search}&type=master&page={page}&per_page={per_page}";
+            var searchFormatMaster = $"{ClientConfig.BaseUrl}/database/search?q={search}&type=master&page={page}&per_page={per_page}";
             //Search for Masters
-            var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + config.AuthToken);
+            var Mresponse = await client.GetAsync(searchFormatMaster+"&token=" + ClientConfig.AuthToken);
             if (Mresponse.IsSuccessStatusCode) {
                 string jsonMResponse = await Mresponse.Content.ReadAsStringAsync();
                 return JsonUtility.FromJson<Master>(jsonMResponse);
@@ -312,33 +325,22 @@ namespace Discogs {
             HttpClient client = new HttpClient(handler);
 
             // Add User-Agent header
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
-            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(ClientConfig.UserAgent);
+            client.DefaultRequestHeaders.Add("Authorization", $"Discogs token={ClientConfig.AuthToken}");
 
-            //check if Auth token is correctly configured
-            ClientConfig config = new ClientConfig();
-            if (config == null) {
-                Debug.LogError("HardCodedClientConfig is null.");
-                return null;
-            }
-            if (string.IsNullOrEmpty(config.AuthToken)) {
+            //check if Auth token is correctly ClientConfigured
+            if (string.IsNullOrEmpty(ClientConfig.AuthToken)) {
                 Debug.LogError("AuthToken is null or empty.");
-                return null;
-            }
-        
-            // Check if the client is null
-            if (client == null) {
-                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
                 return null;
             }
 
             //Search Type Definitions
-            var searchFormatRelease = $"https://api.discogs.com/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
+            var searchFormatRelease = $"{ClientConfig.BaseUrl}/masters/{master_id}/versions?format=Vinyl&page={page}&per_page={per_page}";
             //Search for Releases
-            var Rresponse = await client.GetAsync(searchFormatRelease+"&token=" + config.AuthToken);
+            var Rresponse = await client.GetAsync(searchFormatRelease+"&token=" + ClientConfig.AuthToken);
             if (Rresponse.IsSuccessStatusCode) {
                 string jsonRResponse = await Rresponse.Content.ReadAsStringAsync();
-                return JsonUtility.FromJson<Release>(jsonRResponse);;
+                return JsonUtility.FromJson<Release>(jsonRResponse);
             } else {
                 Debug.LogError($"Error: {Rresponse.StatusCode} - {Rresponse.ReasonPhrase}");
                 return null;
@@ -353,30 +355,19 @@ namespace Discogs {
             HttpClient client = new HttpClient(handler);
 
             // Add User-Agent header
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("PlaatFanaat/1.0");
-            client.DefaultRequestHeaders.Add("Authorization", "Discogs token=QQyCaJSIXCsCErdlhaXQMSoEXYOCORMtOYOSqbux");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd(ClientConfig.UserAgent);
+            client.DefaultRequestHeaders.Add("Authorization", $"Discogs token={ClientConfig.AuthToken}");
 
-            //check if Auth token is correctly configured
-            ClientConfig config = new ClientConfig();
-            if (config == null) {
-                Debug.LogError("HardCodedClientConfig is null.");
-                return null;
-            }
-            if (string.IsNullOrEmpty(config.AuthToken)) {
+            //check if Auth token is correctly ClientConfigured
+            if (string.IsNullOrEmpty(ClientConfig.AuthToken)) {
                 Debug.LogError("AuthToken is null or empty.");
-                return null;
-            }
-        
-            // Check if the client is null
-            if (client == null) {
-                Debug.LogError("DiscogsClient is null. Check if the client was created correctly.");
                 return null;
             }
 
             //Search Type Definition
-            var searchFormatReleaseInfo = $"https://api.discogs.com/releases/{release_id}";
+            var searchFormatReleaseInfo = $"{ClientConfig.BaseUrl}/releases/{release_id}";
             //Search for Masters
-            var RIresponse = await client.GetAsync(searchFormatReleaseInfo+"?token=" + config.AuthToken);
+            var RIresponse = await client.GetAsync(searchFormatReleaseInfo+"?token=" + ClientConfig.AuthToken);
             if (RIresponse.IsSuccessStatusCode) {
                 string jsonRIResponse = await RIresponse.Content.ReadAsStringAsync();
                 return JsonUtility.FromJson<ReleaseInfo>(jsonRIResponse);
@@ -423,28 +414,27 @@ namespace Discogs {
     }
 
     //Saved Info
-    public class Library {
-        public static string libPath = Application.persistentDataPath+"/UserData.lox"; //l(evi) o(cean) (feli)x
-
+    public static class Library {
         public static void Add(ReleaseInfo releaseToSave) {
-            UserLibrary _saveLibrary = Load();
+            UserLibrary _saveLibrary = Library.Load();
             _saveLibrary.Owned.Add(releaseToSave);
-            File.WriteAllText(libPath,JsonUtility.ToJson(_saveLibrary,true));
+            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveLibrary,true));
         }
         
         public static void Remove (ReleaseInfo releaseToRemove) {
-            UserLibrary _removeLibrary = Load();
+            UserLibrary _removeLibrary = Library.Load();
             _removeLibrary.Owned.Remove(releaseToRemove);
-            File.WriteAllText(libPath,JsonUtility.ToJson(_removeLibrary,true));
+            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeLibrary,true));
         }
 
         public static UserLibrary Load() {
             string _LibraryStr;
             UserLibrary _Library;
-            if (File.Exists(libPath)) {
-                _LibraryStr = File.ReadAllText(libPath);
+            if (File.Exists(GlobalVariables.libPath)) {
+                _LibraryStr = File.ReadAllText(GlobalVariables.libPath);
             } else {
                 _LibraryStr = "";
+                File.Create(GlobalVariables.libPath);
             }
             if (_LibraryStr.IsConvertibleTo<UserLibrary>(true)) {
                 _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
@@ -455,55 +445,108 @@ namespace Discogs {
         }
 
         public static void HardSave(UserLibrary _saveLibrary) {
-            File.WriteAllText(libPath,JsonUtility.ToJson(_saveLibrary,true));
+            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveLibrary,true));
         }
         
-        public static void SaveTheme(ClassComponents.UserTheme newTheme) {
-            UserLibrary _themeLibrary = Load();
-            _themeLibrary.Theme = newTheme;
-            File.WriteAllText(libPath,JsonUtility.ToJson(_themeLibrary,true));
-        }
 
-        public class Wishlist {
+        public static class Wishlist {
 
             public static void Add(ReleaseInfo releaseToSave) {
                 UserLibrary _saveWishlist = Library.Load();
                 _saveWishlist.Wishlist.Add(releaseToSave);
-                File.WriteAllText(libPath,JsonUtility.ToJson(_saveWishlist,true));
+                File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveWishlist,true));
             }
         
             public static void Remove (ReleaseInfo releaseToRemove) {
                 UserLibrary _removeWishlist = Library.Load();
                 _removeWishlist.Wishlist.Remove(releaseToRemove);
-                File.WriteAllText(libPath,JsonUtility.ToJson(_removeWishlist,true));
+                File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeWishlist,true));
             }
         }
     }
 
-}
+    public static class Game {
 
+        public static void Add(ReleaseInfo releaseToSave) {
+            GameData _saveGameData = Game.Load();
+            _saveGameData.Owned.Add(releaseToSave);
+            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveGameData,true));
+        }
+        
+        public static void Remove (ReleaseInfo releaseToRemove) {
+            GameData _removeGameData = Game.Load();
+            _removeGameData.Owned.Remove(releaseToRemove);
+            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeGameData,true));
+        }
 
-/*
-   public static void WriteString() {
-       //Write some text to the test.txt file
-       StreamWriter writer = new StreamWriter(path, true);
-       writer.WriteLine("Test");
-        writer.Close();
-       StreamReader reader = new StreamReader(path);
-       //Print the text from the file
-       Debug.Log(reader.ReadToEnd());
-       reader.Close();
+        public static GameData Load() {
+            string _GameDataStr;
+            GameData _GameData;
+            if (File.Exists(GlobalVariables.gamePath)) {
+                _GameDataStr = File.ReadAllText(GlobalVariables.gamePath);
+            } else {
+                _GameDataStr = "";
+                File.Create(GlobalVariables.gamePath);
+            }
+            if (_GameDataStr.IsConvertibleTo<GameData>(true)) {
+                _GameData = JsonUtility.FromJson<GameData>(_GameDataStr);
+            } else {
+                _GameData = new GameData();
+            }
+            return _GameData;
+        }
+
+        public static void HardSave(GameData _saveGameData) {
+            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveGameData,true));
+        }
+
+        public static class Wishlist {
+
+            public static void Add(ReleaseInfo releaseToSave) {
+                GameData _saveWishlist = Game.Load();
+                _saveWishlist.Wishlist.Add(releaseToSave);
+                    File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveWishlist,true));
+            }
+        
+            public static void Remove (ReleaseInfo releaseToRemove) {
+                GameData _removeWishlist = Game.Load();
+                _removeWishlist.Wishlist.Remove(releaseToRemove);
+                File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeWishlist,true));
+            }
+        }
     }
-   public static void ReadString()
-   {
-       string path = Application.persistentDataPath + "/test.txt";
-       //Read the text from directly from the test.txt file
-       StreamReader reader = new StreamReader(path);
-       Debug.Log(reader.ReadToEnd());
-       reader.Close();
-   }
 
- */
+    public static class Settings {
+        public static UserSettings Load() {
+            string _SettingsStr;
+            UserSettings _Settings;
+            if (File.Exists(GlobalVariables.setPath)) {
+                _SettingsStr = File.ReadAllText(GlobalVariables.setPath);
+            } else {
+                _SettingsStr = "";
+                File.Create(GlobalVariables.setPath);
+            }
+            if (_SettingsStr.IsConvertibleTo<UserSettings>(true)) {
+                _Settings = JsonUtility.FromJson<UserSettings>(_SettingsStr);
+            } else {
+                _Settings = new UserSettings();
+            }
+            return _Settings;
+        }
+        public static void SaveTheme(bool? IFantassimo) {
+            UserSettings _themeSettings = Load();
+            if (IFantassimo.HasValue) {_themeSettings.Theme.Fantassimo = IFantassimo.Value;}
+            File.WriteAllText(GlobalVariables.setPath,JsonUtility.ToJson(_themeSettings,true));
+        }
+
+        public static void SaveSettings(bool? IPerformanceMode) {
+            UserSettings _Settings = Load();
+            if (IPerformanceMode.HasValue) {_Settings.Settings.PerformanceMode = IPerformanceMode.Value;}
+            File.WriteAllText(GlobalVariables.setPath,JsonUtility.ToJson(_Settings,true));
+        }
+    }
+
+}
 
 
 

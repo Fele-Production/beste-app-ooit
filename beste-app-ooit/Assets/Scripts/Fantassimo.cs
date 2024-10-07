@@ -14,8 +14,8 @@ public class Fantassimo : MonoBehaviour {
     private int x = 0;
     private int y = 0;
     public Image fixedImg;
-    private List<Image> imgs = new List<Image>();
-    private float[] coloure = {0f,255f,255f};
+    private readonly List<Image> imgs = new List<Image>();
+    private readonly float[] coloure = {0f,255f,255f};
     public bool greenlit = false;
     [HideInInspector] public bool Enabled = false;
 
@@ -27,7 +27,7 @@ public class Fantassimo : MonoBehaviour {
     }
 
     void Update() {
-        if (Library.Load().Theme.Fantassimo==true||greenlit==true) {
+        if (greenlit) {
             Time.fixedDeltaTime = 10f/9f/255f;
             Enabled = true;
         } else {

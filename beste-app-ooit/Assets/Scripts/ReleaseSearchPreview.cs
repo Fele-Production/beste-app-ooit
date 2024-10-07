@@ -21,7 +21,6 @@ public class ReleaseSearchPreview : MonoBehaviour
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();        
     }
 
-    // Start is called before the first frame update
     void Start() {
         curDistance = curPosition * distance;
         this.transform.localPosition = new Vector3(0, 1200 - curDistance, 0);

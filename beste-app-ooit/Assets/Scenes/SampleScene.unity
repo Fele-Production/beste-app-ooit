@@ -403,7 +403,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 218330130}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 394bd514c6b4ea4458761ea326e8772d, type: 3}
+  m_Script: {fileID: 11500000, guid: 072193cec4f50c745b107f35224594f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &235609884
@@ -526,6 +526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resultsPerPage: 4
   searchResultsPerPage: 20
+  PerfMode: 1
   searchMenu: {fileID: 164309170}
   confirmReleaseMenu: {fileID: 192792362}
   searchPrompt: {fileID: 403677927}
@@ -541,6 +542,7 @@ MonoBehaviour:
   curType: master
   searchingAnimDelay: 0.5
   searched: 0
+  discoScript: {fileID: 235609890}
   masterResult:
     pagination:
       page: 0

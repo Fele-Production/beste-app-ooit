@@ -8,11 +8,14 @@ using System;
 using Unity.VisualScripting;
 using UnityEngine.Windows.Speech;
 using Unity.VisualScripting.FullSerializer;
+using System.Threading.Tasks;
+using Discogs;
 
 public class UIManager : MonoBehaviour {
     [Header("Search Settings")]
     public int resultsPerPage;
     public int searchResultsPerPage;
+    [SerializeField] public bool PerfMode;
 
     [Header("Search Objects")]
     public GameObject searchMenu;
@@ -36,6 +39,8 @@ public class UIManager : MonoBehaviour {
     public bool searched = false;
     private int curMasterID;
 
+    [Header ("Theme Scripts")]
+    public Fantassimo discoScript;
     [SerializeField] public Discogs.Master masterResult = new ();
     [SerializeField] public Discogs.Release releaseResult = new ();
 
@@ -140,8 +145,14 @@ public class UIManager : MonoBehaviour {
         
         urls.Clear();
 
-        for(int i = 0; i < releaseResult.versions.Length; i++) {
-            urls.Add(releaseResult.versions[i+pageBuffer].thumb);
+        if (Discogs.Settings.Load().Settings.PerformanceMode||PerfMode) {
+            for(int i = 0; i < releaseResult.versions.Length; i++) {
+                urls.Add(releaseResult.versions[i+pageBuffer].thumb);
+            }
+        } else { //wip werkt nog niet hou PerfMode dus aan
+            for(int i = 0; i < releaseResult.versions.Length; i++) {
+                urls.Add((await Get.ReleaseInfo(releaseResult.versions[i+pageBuffer].id)).images[0].uri);
+            }
         }
         imgD = await Discogs.Get.ImageList(urls);
 
@@ -166,17 +177,22 @@ public class UIManager : MonoBehaviour {
     }
 
     void Start() {
+        //Initialize Data Files
+        Library.Load();
+        Game.Load();
+        Settings.Load();
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
         nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
         backButton = searchedMenu.transform.Find("Back").GetComponent<Button>();
     }
 
-    void Update()
-    {
+    void Update() {
+        UserSettings userSettings = Settings.Load();
         if(searched) {
             searchedMenu.SetActive(true);
         } else {
             searchedMenu.SetActive(false);
         }
+        discoScript.greenlit = userSettings.Theme.Fantassimo;
     }
 }
