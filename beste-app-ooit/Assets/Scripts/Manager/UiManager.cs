@@ -1,14 +1,11 @@
+using System;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
-using System;
-using Unity.VisualScripting;
-using UnityEngine.Windows.Speech;
-using Unity.VisualScripting.FullSerializer;
-using System.Threading.Tasks;
 using Discogs;
 
 public class UIManager : MonoBehaviour {
@@ -18,61 +15,35 @@ public class UIManager : MonoBehaviour {
     [SerializeField] public bool PerfMode;
 
     [Header("Search Objects")]
+    public SearchManager searchManager;
     public GameObject searchMenu;
     public GameObject confirmReleaseMenu;
-    private GameObject searchedMenu; 
+    public GameObject saveReleaseMenu;
+    public GameObject searchedMenu; 
     public TMP_InputField searchPrompt;
     public TMP_Text searchingText;
     public GameObject searchMasterPreviewPrefab;
     public GameObject searchReleasePreviewPrefab;
     public Button nextButton;
     public Button backButton;
+    public List<GameObject> curSearchPreviews;
 
     [Header ("Search Other")]
-    public List<GameObject> curSearchPreviews;
-    public List<Texture2D> imgD;
-    public List<string> urls;
-    public int curPage = 1;
-    public string curType = "master";
     public float searchingAnimDelay;
-    [HideInInspector] public int pageBuffer {get; private set;}
-    public bool searched = false;
-    private int curMasterID;
 
     [Header ("Theme Scripts")]
     public Fantassimo discoScript;
-    [SerializeField] public Discogs.Master masterResult = new ();
-    [SerializeField] public Discogs.Release releaseResult = new ();
-
-    public async void SearchMaster() {
-        curType = "master";
-        StartCoroutine(SearchingAnimation());
-        masterResult = await Discogs.Get.Masters(searchPrompt.text,1, searchResultsPerPage);
-        
-        curPage = 1;
-        backButton.interactable = false;
-        if(masterResult.results.Length > resultsPerPage) { nextButton.interactable = true; } else { nextButton.interactable = false; }  
-        
-        urls.Clear();
-
-        for(int i = 0; i < masterResult.results.Length; i++) {
-            urls.Add(masterResult.results[i+pageBuffer].cover_image);
-        }
-        imgD = await Discogs.Get.ImageList(urls);
-
-        RefreshSearch();
-    }
 
     public void NextPage() {
-        curPage++;
+        searchManager.curPage++;
         backButton.interactable = true;
 
-        if(curType == "master") {
-            if(masterResult.results.Length <= curPage * resultsPerPage) {
+        if(searchManager.curType == "master") {
+            if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
                 nextButton.interactable = false;
             } 
-        } else if(curType == "release") {
-            if(releaseResult.versions.Length <= curPage * resultsPerPage) {
+        } else if(searchManager.curType == "release") {
+            if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
                 nextButton.interactable = false;
             }
         }
@@ -82,9 +53,9 @@ public class UIManager : MonoBehaviour {
     }
 
     public void PreviousPage() {
-        curPage--;
+        searchManager.curPage--;
         nextButton.interactable = true;
-        if(curPage == 1) {
+        if(searchManager.curPage == 1) {
             backButton.interactable = false;
         }   
 
@@ -98,23 +69,23 @@ public class UIManager : MonoBehaviour {
             Destroy(curSearchPreviews[i]);
         }
 
-        searched = true;
+        searchManager.searched = true;
         curSearchPreviews.Clear();
         StopCoroutine(SearchingAnimation());
         int resultsToLoad = resultsPerPage;
 
-        if(curType == "master") {
-            if(resultsPerPage > (masterResult.results.Length - ((curPage-1) * resultsPerPage))) {
-                resultsToLoad = masterResult.results.Length - ((curPage-1) * resultsPerPage);
+        if(searchManager.curType == "master") {
+            if(resultsPerPage > (searchManager.masterResult.results.Length - ((searchManager.curPage-1) * resultsPerPage))) {
+                resultsToLoad = searchManager.masterResult.results.Length - ((searchManager.curPage-1) * resultsPerPage);
             }
             for(int i = 0; i < resultsToLoad; i++) {
                 curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
                 curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
                 
             }
-        } else if (curType == "release") {
-            if(resultsPerPage > (releaseResult.versions.Length - ((curPage-1) * resultsPerPage))) {
-                resultsToLoad = releaseResult.versions.Length - ((curPage-1) * resultsPerPage);
+        } else if (searchManager.curType == "release") {
+            if(resultsPerPage > (searchManager.releaseResult.versions.Length - ((searchManager.curPage-1) * resultsPerPage))) {
+                resultsToLoad = searchManager.releaseResult.versions.Length - ((searchManager.curPage-1) * resultsPerPage);
             }
             for(int i = 0; i < resultsToLoad; i++) {
                     curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
@@ -124,48 +95,9 @@ public class UIManager : MonoBehaviour {
         }
     }     
 
-    public void GetMasterID(int _position) {
-        curMasterID = masterResult.results[_position + ((curPage-1)*resultsPerPage)].master_id;
-        
-        confirmReleaseMenu.SetActive(true);
-    }
-
-    public async void SearchRelease() {
-        confirmReleaseMenu.SetActive(false);
-        StartCoroutine(SearchingAnimation());
-        releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
-        
-        curType = "release";
-  
-        
-        
-        curPage = 1;
-        backButton.interactable = false;
-        if(releaseResult.versions.Length > resultsPerPage) { nextButton.interactable = true; } else { nextButton.interactable = false; }  
-        
-        urls.Clear();
-
-        if (Discogs.Settings.Load().Settings.PerformanceMode||PerfMode) {
-            for(int i = 0; i < releaseResult.versions.Length; i++) {
-                urls.Add(releaseResult.versions[i+pageBuffer].thumb);
-            }
-        } else { //wip werkt nog niet hou PerfMode dus aan
-            for(int i = 0; i < releaseResult.versions.Length; i++) {
-                urls.Add((await Get.ReleaseInfo(releaseResult.versions[i+pageBuffer].id)).images[0].uri);
-            }
-        }
-        imgD = await Discogs.Get.ImageList(urls);
-
-        RefreshSearch();
-    }
-
-
-
-
-    IEnumerator SearchingAnimation() {
-        Debug.Log("Started Coroutine");
+    public IEnumerator SearchingAnimation() {
         searchingText.enabled = true;
-        while (!searched) {
+        while (!searchManager.searched) {
             searchingText.text = "Searching.. ";
             yield return new WaitForSeconds(searchingAnimDelay);
             searchingText.text = "Searching ..";
@@ -177,10 +109,7 @@ public class UIManager : MonoBehaviour {
     }
 
     void Start() {
-        //Initialize Data Files
-        Library.Load();
-        Game.Load();
-        Settings.Load();
+        
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
         nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
         backButton = searchedMenu.transform.Find("Back").GetComponent<Button>();
@@ -188,11 +117,6 @@ public class UIManager : MonoBehaviour {
 
     void Update() {
         UserSettings userSettings = Settings.Load();
-        if(searched) {
-            searchedMenu.SetActive(true);
-        } else {
-            searchedMenu.SetActive(false);
-        }
         discoScript.greenlit = userSettings.Theme.Fantassimo;
     }
 }

@@ -6,7 +6,7 @@ using TMPro;
 
 public class SearchPreview : MonoBehaviour
 {
-    public UIManager uiManager;
+    public SearchManager searchManager;
     public TMP_Text titleText;
     public TMP_Text artistText;
     public TMP_Text yearText;
@@ -18,55 +18,50 @@ public class SearchPreview : MonoBehaviour
     public int pageBuffer;
 
     void Awake() {
-        uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();        
+        searchManager = GameObject.Find("Canvas").GetComponent<SearchManager>();        
     }
 
     // Start is called before the first frame update
     void Start() {
         curDistance = curPosition * distance;
         this.transform.localPosition = new Vector3(0, 750 - curDistance, 0);
-        pageBuffer = (uiManager.curPage-1) * uiManager.resultsPerPage;
+        pageBuffer = (searchManager.curPage-1) * searchManager.resultsPerPage;
 
         
-        if (uiManager.masterResult.results.Length != 0) {
-            if(uiManager.masterResult.results[curPosition + pageBuffer].title != null) {
-                if(uiManager.masterResult.results[curPosition + pageBuffer].title.Contains(" - ")) {
-                    string[] splitArray = uiManager.masterResult.results[curPosition + pageBuffer].title.Split(" - ");
+        if (searchManager.masterResult.results.Length != 0) {
+            if(searchManager.masterResult.results[curPosition + pageBuffer].title != null) {
+                if(searchManager.masterResult.results[curPosition + pageBuffer].title.Contains(" - ")) {
+                    string[] splitArray = searchManager.masterResult.results[curPosition + pageBuffer].title.Split(" - ");
                     string title = splitArray[1];
                     string artist = splitArray[0];
 
                     titleText.text = title;
                     artistText.text = artist;
                 }
-            Texture2D curImg = uiManager.imgD[(curPosition + pageBuffer) * 2];
+            Texture2D curImg = searchManager.imgD[(curPosition + pageBuffer) * 2];
             imgTest.sprite = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
             
             } else {
                 titleText.text = "---";
             }
 
-            if(uiManager.masterResult.results[curPosition + pageBuffer].year != null) {
-                yearText.text = uiManager.masterResult.results[curPosition + pageBuffer].year;
+            if(searchManager.masterResult.results[curPosition + pageBuffer].year != null) {
+                yearText.text = searchManager.masterResult.results[curPosition + pageBuffer].year;
             } else {
                 yearText.text = "----";
             }
 
-            if(uiManager.masterResult.results[curPosition  + pageBuffer ].label != null) {
-                labelText.text = uiManager.masterResult.results[curPosition + pageBuffer].label[0];
+            if(searchManager.masterResult.results[curPosition  + pageBuffer ].label != null) {
+                labelText.text = searchManager.masterResult.results[curPosition + pageBuffer].label[0];
             } else {
                 labelText.text = "---";
             }
-        }
-        
+        }     
     }
 
     public void SelectMaster() {
-        uiManager.GetMasterID(curPosition);
+        searchManager.GetMasterID(curPosition);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }
