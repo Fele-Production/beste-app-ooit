@@ -21,7 +21,6 @@ using System.Xml.Linq;
 namespace Discogs {
     public static class GlobalVariables {
         //public readonly static string declarationofindependenceoftheunitedstatesofamerica = "theunanimousdeclarationofthethirteenunitedstatesofamericawheninthecourseofhumaneventsitbecomesnecessaryforonepeopletodissolvethepoliticalbandswhichhaveconnectedthemwithanotherandtoassumeamongthepowersoftheearththeseparateandequalstationtowhichthelawsofnatureandofnaturesgodentitlethemadecentrespecttotheopinionsofmankindrequiresthattheyshoulddeclarethecauseswhichimpelthemtotheseparationweholdthesetruthstobeselfevidentthatallmenarecreatedequalthattheyareendowedbytheircreatorwithcertainunalienablerightsthatamongthesearelifelibertyandthepursuitofhappinessthattosecuretheserightsgovernmentsareinstitutedamongmenderivingtheirjustpowersfromtheconsentofthegovernedthatwheneveranyformofgovernmentbecomesdestructiveoftheseendsitistherightofthepeopletoalterortoabolishitandtoinstitutenewgovernmentlayingitsfoundationonsuchprinciplesandorganizingitspowersinsuchformastothemshallseemmostlikelytoeffecttheirsafetyandhappinessprudenceindeedwilldictatethatgovernmentslongestablishedshouldnotbechangedforlightandtransientcausesandaccordinglyallexperiencehathshewnthatmankindaremoredisposedtosufferwhileevilsaresufferablethantorightthemselvesbyabolishingtheformstowhichtheyareaccustomedbutwhenalongtrainofabusesandusurpationspursuinginvariablythesameobjectevincesadesigntoreducethemunderabsolutedespotismitistheirrightitistheirdutytothrowoffsuchgovernmentandtoprovidenewguardsfortheirfuturesecuritysuchhasbeenthepatientsufferanceofthesecoloniesandsuchisnowthenecessitywhichconstrainsthemtoaltertheirformersystemsofgovernmentthehistoryofthepresentkingofgreatbritainisahistoryofrepeatedinjuriesandusurpationsallhavingindirectobjecttheestablishmentofanabsolutetyrannyoverthesestatestoprovethisletfactsbesubmittedtoacandidworldhehasrefusedhisassenttolawsthemostwholesomeandnecessaryforthepublicgoodhehasforbiddenhisgovernorstopasslawsofimmediateandpressingimportanceunlesssuspendedintheiroperationtillhisassentshouldbeobtainedandwhensosuspendedhehasutterlyneglectedtoattendtothemhehasrefusedtopassotherlawsfortheaccommodationoflargedistrictsofpeopleunlessthosepeoplewouldrelinquishtherightofrepresentationinthelegislaturearightinestimabletothemandformidabletotyrantsonlyhehascalledtogetherlegislativebodiesatplacesunusualuncomfortableanddistantfromthedepositoryoftheirpublicrecordsforthesolepurposeoffatiguingthemintocompliancewithhismeasureshehasdissolvedrepresentativehousesrepeatedlyforopposingwithmanlyfirmnesshisinvasionsontherightsofthepeoplehehasrefusedforalongtimeaftersuchdissolutionstocauseotherstobeelectedwherebythelegislativepowersincapableofannihilationhavereturnedtothepeopleatlargefortheirexercisethestateremaininginthemeantimeexposedtoallthedangersofinvasionfromwithoutandconvulsionswithinhehasendeavouredtopreventthepopulationofthesestatesforthatpurposeobstructingthelawsfornaturalizationofforeignersrefusingtopassotherstoencouragetheirmigrationshitherandraisingtheconditionsofnewappropriationsoflandshehasobstructedtheadministrationofjusticebyrefusinghisassenttolawsforestablishingjudiciarypowershehasmadejudgesdependentonhiswillaloneforthetenureoftheirofficesandtheamountandpaymentoftheirsalarieshehaserectedamultitudeofnewofficesandsenthitherswarmsofofficerstoharrassourpeopleandeatouttheirsubstancehehaskeptamongusintimesofpeacestandingarmieswithouttheconsentofourlegislatureshehasaffectedtorenderthemilitaryindependentofandsuperiortothecivilpowerhehascombinedwithotherstosubjectustoajurisdictionforeigntoourconstitutionandunacknowledgedbyourlawsgivinghisassenttotheiractsofpretendedlegislationforquarteringlargebodiesofarmedtroopsamongusforprotectingthembyamocktrialfrompunishmentforanymurderswhichtheyshouldcommitontheinhabitantsofthesestatesforcuttingoffourtradewithallpartsoftheworldforimposingtaxesonuswithoutourconsentfordeprivingusinmanycasesofthebenefitsoftrialbyjuryfortransportingusbeyondseastobetriedforpretendedoffencesforabolishingthefreesystemofenglishlawsinaneighbouringprovinceestablishingthereinanarbitrarygovernmentandenlargingitsboundariessoastorenderitatonceanexampleandfitinstrumentforintroducingthesameabsoluteruleintothesecoloniesfortakingawayourchartersabolishingourmostvaluablelawsandalteringfundamentallytheformsofourgovernmentsforsuspendingourownlegislaturesanddeclaringthemselvesinvestedwithpowertolegislateforusinallcaseswhatsoeverhehasabdicatedgovernmentherebydeclaringusoutofhisprotectionandwagingwaragainstushehasplunderedourseasravagedourcoastsburntourtownsanddestroyedthelivesofourpeopleheisatthistimetransportinglargearmiesofforeignmercenariestocompleattheworksofdeathdesolationandtyrannyalreadybegunwithcircumstancesofcruelty&perfidyscarcelyparalleledinthemostbarbarousagesandtotallyunworthytheheadofacivilizednationhehasconstrainedourfellowcitizenstakencaptiveonthehighseastobeararmsagainsttheircountrytobecometheexecutionersoftheirfriendsandbrethrenortofallthemselvesbytheirhandshehasexciteddomesticinsurrectionsamongstusandhasendeavouredtobringontheinhabitantsofourfrontiersthemercilessindiansavageswhoseknownruleofwarfareisanundistinguisheddestructionofallagessexesandconditionsineverystageoftheseoppressionswehavepetitionedforredressinthemosthumbletermsourrepeatedpetitionshavebeenansweredonlybyrepeatedinjuryaprincewhosecharacteristhusmarkedbyeveryactwhichmaydefineatyrantisunfittobetherulerofafreepeoplenorhavewebeenwantinginattentionstoourbrittishbrethrenwehavewarnedthemfromtimetotimeofattemptsbytheirlegislaturetoextendanunwarrantablejurisdictionoveruswehaveremindedthemofthecircumstancesofouremigrationandsettlementherewehaveappealedtotheirnativejusticeandmagnanimityandwehaveconjuredthembythetiesofourcommonkindredtodisavowtheseusurpationswhichwouldinevitablyinterruptourconnectionsandcorrespondencetheytoohavebeendeaftothevoiceofjusticeandofconsanguinitywemustthereforeacquiesceinthenecessitywhichdenouncesourseparationandholdthemasweholdtherestofmankindenemiesinwarinpeacefriendswethereforetherepresentativesoftheunitedstatesofamericaingeneralcongressassembledappealingtothesupremejudgeoftheworldfortherectitudeofourintentionsdointhenameandbyauthorityofthegoodpeopleofthesecoloniessolemnlypublishanddeclarethattheseunitedcoloniesareandofrightoughttobefreeandindependentstatesthattheyareabsolvedfromallallegiancetothebritishcrownandthatallpoliticalconnectionbetweenthemandthestateofgreatbritainisandoughttobetotallydissolvedandthatasfreeandindependentstatestheyhavefullpowertolevywarconcludepeacecontractalliancesestablishcommerceandtodoallotheractsandthingswhichindependentstatesmayofrightdoandforthesupportofthisdeclarationwithafirmrelianceontheprotectionofdivineprovidencewemutuallypledgetoeachotherourlivesourfortunesandoursacredhonor";
-        //public readonly static string FileExtension = "theunanimousdeclarationofthethirteenunitedstatesofamericawheninthecourseofhumaneventsitbecomesnecessaryforonepeopletodissolvethepoliticalbandswhichhaveconnectedthemwithanothe";
         public readonly static string FileExtension = "skibidi";
         public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
         public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
@@ -263,17 +262,36 @@ namespace Discogs {
         public string thumb;
     }
 
+    [System.Serializable]
+    public class ReleaseInfoOptimized {
+        public int id;
+        public int year;
+        public ClassComponents.Artist[] artists;
+        public string artists_sort;
+        public ClassComponents.Company[] labels;
+        public ClassComponents.Format[] formats;
+        public int master_id;
+        public string title;
+        public string country;
+        public string released; //1989-08-08
+        public string notes;
+        public string released_formatted; //08 Aug 1989
+        public string[] genres;
+        public string[] styles;
+        public ClassComponents.ReleaseImage image;
+    }
+
     //Class for Saved Releases
     [System.Serializable]
     public class UserLibrary {
-        public List<ReleaseInfo> Owned = new();
-        public List<ReleaseInfo> Wishlist = new();
+        public List<ReleaseInfoOptimized> Owned = new();
+        public List<ReleaseInfoOptimized> Wishlist = new();
     }
     //Class for Game Data
     [System.Serializable]
     public class GameData {
-        public List<ReleaseInfo> Owned = new();
-        public List<ReleaseInfo> Wishlist = new();
+        public List<ReleaseInfoOptimized> Owned = new();
+        public List<ReleaseInfoOptimized> Wishlist = new();
         public float Experience;
     }
 
@@ -417,13 +435,13 @@ namespace Discogs {
     public static class Library {
         public static void Add(ReleaseInfo releaseToSave) {
             UserLibrary _saveLibrary = Library.Load();
-            _saveLibrary.Owned.Add(releaseToSave);
+            _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(releaseToSave));
             File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveLibrary,true));
         }
         
         public static void Remove (ReleaseInfo releaseToRemove) {
             UserLibrary _removeLibrary = Library.Load();
-            _removeLibrary.Owned.Remove(releaseToRemove);
+            _removeLibrary.Owned.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
             File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeLibrary,true));
         }
 
@@ -453,13 +471,13 @@ namespace Discogs {
 
             public static void Add(ReleaseInfo releaseToSave) {
                 UserLibrary _saveWishlist = Library.Load();
-                _saveWishlist.Wishlist.Add(releaseToSave);
+                _saveWishlist.Wishlist.Add(Convert.OptimizeReleaseInfo(releaseToSave));
                 File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveWishlist,true));
             }
         
             public static void Remove (ReleaseInfo releaseToRemove) {
                 UserLibrary _removeWishlist = Library.Load();
-                _removeWishlist.Wishlist.Remove(releaseToRemove);
+                _removeWishlist.Wishlist.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
                 File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeWishlist,true));
             }
         }
@@ -469,13 +487,13 @@ namespace Discogs {
 
         public static void Add(ReleaseInfo releaseToSave) {
             GameData _saveGameData = Game.Load();
-            _saveGameData.Owned.Add(releaseToSave);
+            _saveGameData.Owned.Add(Convert.OptimizeReleaseInfo(releaseToSave));
             File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveGameData,true));
         }
         
         public static void Remove (ReleaseInfo releaseToRemove) {
             GameData _removeGameData = Game.Load();
-            _removeGameData.Owned.Remove(releaseToRemove);
+            _removeGameData.Owned.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
             File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeGameData,true));
         }
 
@@ -504,13 +522,13 @@ namespace Discogs {
 
             public static void Add(ReleaseInfo releaseToSave) {
                 GameData _saveWishlist = Game.Load();
-                _saveWishlist.Wishlist.Add(releaseToSave);
+                _saveWishlist.Wishlist.Add(Convert.OptimizeReleaseInfo(releaseToSave));
                     File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveWishlist,true));
             }
         
             public static void Remove (ReleaseInfo releaseToRemove) {
                 GameData _removeWishlist = Game.Load();
-                _removeWishlist.Wishlist.Remove(releaseToRemove);
+                _removeWishlist.Wishlist.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
                 File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeWishlist,true));
             }
         }
@@ -546,6 +564,13 @@ namespace Discogs {
         }
     }
 
+    public static class Convert {
+        public static ReleaseInfoOptimized OptimizeReleaseInfo(ReleaseInfo releaseInfoInput) {
+            ReleaseInfoOptimized _releaseInfoInputOpt = JsonUtility.FromJson<ReleaseInfoOptimized>(JsonUtility.ToJson(releaseInfoInput));
+            _releaseInfoInputOpt.image = releaseInfoInput.images[0];
+            return _releaseInfoInputOpt;
+        }
+    }
 }
 
 

@@ -32,10 +32,6 @@ public class GameManager : MonoBehaviour
         Settings.Load();
     }
 
-    public void SaveRelease(ReleaseInfo _releaseInfo) {
-        Discogs.Library.Add(_releaseInfo);
-    }
-
     public void RefreshLibrary() {
         library = Library.Load();
         

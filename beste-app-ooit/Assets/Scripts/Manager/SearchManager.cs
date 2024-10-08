@@ -87,7 +87,7 @@ public class SearchManager : MonoBehaviour
 
     public async void SaveRelease() {
         releaseInfo = await Get.ReleaseInfo(curReleaseID);
-        GameManager.instance.SaveRelease(releaseInfo);
+        Library.Add(releaseInfo);
     }
 
 
