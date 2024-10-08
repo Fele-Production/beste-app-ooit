@@ -24,7 +24,7 @@ public class SearchPreview : MonoBehaviour
     // Start is called before the first frame update
     void Start() {
         curDistance = curPosition * distance;
-        this.transform.localPosition = new Vector3(0, 1200 - curDistance, 0);
+        this.transform.localPosition = new Vector3(0, 750 - curDistance, 0);
         pageBuffer = (uiManager.curPage-1) * uiManager.resultsPerPage;
 
         
