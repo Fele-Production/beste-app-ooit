@@ -9,6 +9,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
     public static UserLibrary library;
+    public GameObject albumPrefab;
+    public List<GameObject> curAlbums;
+    public int albumPerPage;
+    public int curPage;
 
     void Awake()
     {
@@ -34,5 +38,17 @@ public class GameManager : MonoBehaviour
 
     public void RefreshLibrary() {
         library = Library.Load();
-    }
+        
+        for(int i = 0; i < curAlbums.Count; i++) {
+            Destroy(curAlbums[i]);
+        }
+
+        curAlbums.Clear();
+        int resultsToLoad = albumPerPage;
+
+        for(int i = 0; i < library.Owned.Count; i++) {
+            curAlbums.Add(Instantiate(albumPrefab, this.transform.Find("SearchResults"), false));
+            curAlbums[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
+        }         
+    } 
 }
