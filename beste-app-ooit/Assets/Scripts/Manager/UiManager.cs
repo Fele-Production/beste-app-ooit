@@ -108,11 +108,14 @@ public class UIManager : MonoBehaviour {
     public IEnumerator SearchingAnimation() {
         searchingText.enabled = true;
         while (!searchManager.searched) {
-            searchingText.text = "Searching.. ";
+            searchingText.text = "Searching. ";
+            if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
-            searchingText.text = "Searching ..";
+            searchingText.text = "Searching..";
+            if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
-            searchingText.text = "Searching. .";
+            searchingText.text = "Searching...";
+            if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
         }
         searchingText.enabled = false;
