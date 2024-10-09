@@ -463,12 +463,24 @@ namespace Discogs {
                 _LibraryStr = "";
                 File.Create(GlobalVariables.libPath);
             }
-            if (_LibraryStr.IsConvertibleTo<UserLibrary>(true)) {
+            try {
                 _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
-            } else {
-                _Library = new UserLibrary();
+            }
+            catch (Exception) {
+                Debug.LogError("Trying to convert incompatible JSON to UserLibrary, returning new()");
+                return new UserLibrary();
             }
             return _Library;
+        }
+        public static string LoadStr() {
+            string _LibraryStr;
+            if (File.Exists(GlobalVariables.libPath)) {
+                _LibraryStr = File.ReadAllText(GlobalVariables.libPath);
+            } else {
+                _LibraryStr = "";
+                File.Create(GlobalVariables.libPath);
+            }
+            return _LibraryStr;
         }
 
         public static void HardSave(UserLibrary _saveLibrary) {
@@ -515,10 +527,12 @@ namespace Discogs {
                 _GameDataStr = "";
                 File.Create(GlobalVariables.gamePath);
             }
-            if (_GameDataStr.IsConvertibleTo<GameData>(true)) {
+            try {
                 _GameData = JsonUtility.FromJson<GameData>(_GameDataStr);
-            } else {
-                _GameData = new GameData();
+            }
+            catch (Exception) {
+                Debug.LogError("Trying to convert incompatible JSON to GameData, returning new()");
+                return new GameData();
             }
             return _GameData;
         }
@@ -553,10 +567,12 @@ namespace Discogs {
                 _SettingsStr = "";
                 File.Create(GlobalVariables.setPath);
             }
-            if (_SettingsStr.IsConvertibleTo<UserSettings>(true)) {
+            try {
                 _Settings = JsonUtility.FromJson<UserSettings>(_SettingsStr);
-            } else {
-                _Settings = new UserSettings();
+            }
+            catch (Exception) {
+                Debug.Log("Trying to convert incompatible JSON to UserLibrary, returning new()");
+                return new UserSettings();
             }
             return _Settings;
         }
