@@ -7,6 +7,8 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using TMPro;
 using Discogs;
+using JetBrains.Annotations;
+using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour {
     [Header("Search Settings")]
@@ -31,8 +33,12 @@ public class UIManager : MonoBehaviour {
     [Header ("Search Other")]
     public float searchingAnimDelay;
 
-    [Header ("Theme Scripts")]
+    [Header ("Theme Actors")]
     public Fantassimo discoScript;
+    public Image backdropImage;
+    [HideInInspector] List<Texture2D> BackdropOptions = new();
+    [HideInInspector] int currentBackdrop = -1;
+    [SerializeField] public UserSettings userSettings = new();
 
     public void NextPage() {
         searchManager.curPage++;
@@ -62,7 +68,7 @@ public class UIManager : MonoBehaviour {
         RefreshSearch();
     }
 
-    public void RefreshLibrary() {
+    public static void RefreshLibrary() {
         GameManager.instance.RefreshLibrary();
     }
 
@@ -113,6 +119,9 @@ public class UIManager : MonoBehaviour {
     }
 
     void Start() {
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BLUE BACKDROP aka ORIGINAL pixil-frame-0 (12).png"));
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BEIGE BACKDROP pixil-frame-0 (11).png"));
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/GREEN BACKDROP pixil-frame-0 (10).png"));
         
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
         nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
@@ -120,7 +129,11 @@ public class UIManager : MonoBehaviour {
     }
 
     void Update() {
-        UserSettings userSettings = Settings.Load();
+        //UserSettings userSettings = Settings.Load();
         discoScript.greenlit = userSettings.Theme.Fantassimo;
+        if (currentBackdrop!=userSettings.Theme.Backdrop) {
+            backdropImage.sprite = Sprite.Create(BackdropOptions[userSettings.Theme.Backdrop],new Rect(0,0,BackdropOptions[userSettings.Theme.Backdrop].width,BackdropOptions[userSettings.Theme.Backdrop].height), new Vector2(0,0));
+            currentBackdrop = userSettings.Theme.Backdrop;
+        }
     }
 }

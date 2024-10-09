@@ -621,6 +621,11 @@ MonoBehaviour:
   curSearchPreviews: []
   searchingAnimDelay: 0.5
   discoScript: {fileID: 235609890}
+  backdropImage: {fileID: 235609891}
+  userSettings:
+    Theme:
+      Fantassimo: 0
+      Backdrop: 0
 --- !u!114 &235609890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3615,6 +3620,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34c3642cb5e456347bbab2aa18b462fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  library:
+    Owned: []
+    Wishlist: []
   albumPrefab: {fileID: 2509398218060414059, guid: a660b4309b62e0f48be542d38eb0980f, type: 3}
   curAlbums: []
   albumPerPage: 0
