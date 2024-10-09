@@ -8,7 +8,7 @@ using UnityEngine.Scripting;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    public static UserLibrary library;
+    public UserLibrary library;
     public GameObject albumPrefab;
     public List<GameObject> curAlbums;
     public int albumPerPage;
@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
         library = Library.Load();
         Game.Load();
         Settings.Load();
+        RefreshLibrary();
     }
 
     public void RefreshLibrary() {

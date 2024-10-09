@@ -221,8 +221,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4242126144007786020}
   - component: {fileID: 5380557191036696925}
+  - component: {fileID: 5203744076928841136}
   m_Layer: 0
-  m_Name: Album Preview
+  m_Name: Small Album Preview
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -259,6 +260,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2509398218060414059}
   m_CullTransparentMesh: 1
+--- !u!114 &5203744076928841136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2509398218060414059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39c1b00533f36c42b002a94e5861231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  titleText: {fileID: 5438822331071228365}
+  artistText: {fileID: 1354401304848816453}
+  cover: {fileID: 2978974593052175308}
+  curPosition: 0
+  distance: 0
+  curDistance: 0
 --- !u!1 &5942033700077462441
 GameObject:
   m_ObjectHideFlags: 0

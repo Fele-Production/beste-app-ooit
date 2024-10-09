@@ -55,11 +55,8 @@ public class SearchManager : MonoBehaviour
         uiManager.RefreshSearch();
     }
 
-    
-
     public async void SearchRelease() {
         Debug.Log("Searching Releases...");
-        uiManager.confirmReleaseMenu.SetActive(false);
         uiManager.StartCoroutine(uiManager.SearchingAnimation());
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
         Debug.Log("Finished Searching for releases");
@@ -86,10 +83,15 @@ public class SearchManager : MonoBehaviour
     }
 
     public async void SaveRelease() {
+        
+        UserLibrary oldLibrary = GameManager.instance.library;
         releaseInfo = await Get.ReleaseInfo(curReleaseID);
         Library.Add(releaseInfo);
-    }
 
+        if(oldLibrary != GameManager.instance.library) { 
+            GameManager.instance.RefreshLibrary();
+        }   
+    }
 
     public void GetMasterID(int _position) {
         curMasterID = masterResult.results[_position + ((curPage-1)*resultsPerPage)].master_id;
@@ -102,7 +104,6 @@ public class SearchManager : MonoBehaviour
         
         uiManager.saveReleaseMenu.SetActive(true);
     }
-
 
     void Update() {
         if(searched) {
