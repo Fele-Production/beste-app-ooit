@@ -26,7 +26,8 @@ public class SearchPreview : MonoBehaviour
         curDistance = curPosition * distance;
         this.transform.localPosition = new Vector3(0, 750 - curDistance, 0);
         pageBuffer = (searchManager.curPage-1) * searchManager.resultsPerPage;
-
+        GameObject textsParent = transform.Find("Texts").gameObject;
+        textsParent.GetComponent<VerticalLayoutGroup>().spacing = 5;
         
         if (searchManager.masterResult.results.Length != 0) {
             if(searchManager.masterResult.results[curPosition + pageBuffer].title != null) {
