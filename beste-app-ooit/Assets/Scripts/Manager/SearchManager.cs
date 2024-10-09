@@ -68,15 +68,15 @@ public class SearchManager : MonoBehaviour
         
         urls.Clear();
 
-        if (Discogs.Settings.Load().Settings.PerformanceMode||PerfMode) {
+        //if (/*Discogs.Settings.Load().Settings.PerformanceMode||PerfMode) { */ 
             for(int i = 0; i < releaseResult.versions.Length; i++) {
                 urls.Add(releaseResult.versions[i+pageBuffer].thumb);
             }
-        } else { //wip werkt nog niet hou PerfMode dus aan
+        /*} else { //wip werkt nog niet hou PerfMode dus aan 
             for(int i = 0; i < releaseResult.versions.Length; i++) {
                 urls.Add((await Get.ReleaseInfo(releaseResult.versions[i+pageBuffer].id)).images[0].uri);
             }
-        }
+        }*/
         imgD = await Discogs.Get.ImageList(urls);
 
         uiManager.RefreshSearch();
@@ -87,8 +87,10 @@ public class SearchManager : MonoBehaviour
         UserLibrary oldLibrary = GameManager.instance.library;
         releaseInfo = await Get.ReleaseInfo(curReleaseID);
         Library.Add(releaseInfo);
+        UserLibrary curLibrary = Library.Load();
 
-        if(oldLibrary != GameManager.instance.library) { 
+        if(oldLibrary != curLibrary) {
+            Debug.Log("Library hasnt changed"); 
             GameManager.instance.RefreshLibrary();
         }   
     }

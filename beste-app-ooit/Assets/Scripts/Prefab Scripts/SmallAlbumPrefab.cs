@@ -18,12 +18,12 @@ public class SmallAlbumPrefab : MonoBehaviour
     public int curPosition;
     public int distance;
     public int curDistance;
-
-    public async void Awake() {
-        string url = GameManager.instance.library.Owned[curPosition].image.resource_url;
+    public string url;
+    
+    public async void Start() {
+        url = GameManager.instance.library.Owned[curPosition].image.resource_url;
         Texture2D _texture = await Discogs.Get.Image(url);
         cover.sprite = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
-
 
         if (GameManager.instance.library.Owned.Count != 0) {
             if(GameManager.instance.library.Owned[curPosition].title != null) {
@@ -33,7 +33,7 @@ public class SmallAlbumPrefab : MonoBehaviour
                 titleText.text = "---";
             }
         }
-    
+
     }
 
 }
