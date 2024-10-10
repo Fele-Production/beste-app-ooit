@@ -6,16 +6,22 @@ using TMPro;
 
 public class SearchPreview : MonoBehaviour
 {
+    [Header("Settings")]
+    public int curPosition;
+    public float invokeDelay;
+    public int distance = 200;
+    public int curDistance;
+    public int pageBuffer;
+
+    [Header("Other")   ]
     public SearchManager searchManager;
     public TMP_Text titleText;
     public TMP_Text artistText;
     public TMP_Text yearText;
     public TMP_Text labelText;
     public Image imgTest;
-    public int curPosition;
-    public int distance = 200;
-    public int curDistance;
-    public int pageBuffer;
+    public VerticalLayoutGroup verticalLayoutGroup;
+    
 
     void Awake() {
         searchManager = GameObject.Find("Canvas").GetComponent<SearchManager>();        
@@ -26,8 +32,8 @@ public class SearchPreview : MonoBehaviour
         curDistance = curPosition * distance;
         this.transform.localPosition = new Vector3(0, 750 - curDistance, 0);
         pageBuffer = (searchManager.curPage-1) * searchManager.resultsPerPage;
-        GameObject textsParent = transform.Find("Texts").gameObject;
-        textsParent.GetComponent<VerticalLayoutGroup>().spacing = 5;
+       
+
         
         if (searchManager.masterResult.results.Length != 0) {
             if(searchManager.masterResult.results[curPosition + pageBuffer].title != null) {
@@ -57,9 +63,15 @@ public class SearchPreview : MonoBehaviour
             } else {
                 labelText.text = "---";
             }
+
+            Invoke("VerticalLayoutOn", invokeDelay);
         }     
     }
 
+
+    private void VerticalLayoutOn() {
+        verticalLayoutGroup.enabled = true;
+    }
     public void SelectMaster() {
         searchManager.GetMasterID(curPosition);
     }
