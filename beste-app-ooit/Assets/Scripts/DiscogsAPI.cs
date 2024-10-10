@@ -463,11 +463,10 @@ namespace Discogs {
                 _LibraryStr = "";
                 File.Create(GlobalVariables.libPath);
             }
-            try {
-                _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
-            }
-            catch (Exception) {
-                Debug.LogError("Trying to convert incompatible JSON to UserLibrary, returning new()");
+            _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
+            UserLibrary _EmptyLib = new();
+            if (_Library == null || _Library == _EmptyLib) {
+                Debug.LogWarning("Trying to convert incompatible JSON to GameData, returning new()");
                 return new UserLibrary();
             }
             return _Library;
@@ -527,11 +526,10 @@ namespace Discogs {
                 _GameDataStr = "";
                 File.Create(GlobalVariables.gamePath);
             }
-            try {
-                _GameData = JsonUtility.FromJson<GameData>(_GameDataStr);
-            }
-            catch (Exception) {
-                Debug.LogError("Trying to convert incompatible JSON to GameData, returning new()");
+            _GameData = JsonUtility.FromJson<GameData>(_GameDataStr);
+            GameData _EmptyGame = new();
+            if (_GameData == null || _GameData == _EmptyGame) {
+                Debug.LogWarning("Trying to convert incompatible JSON to UserLibrary, returning new()");
                 return new GameData();
             }
             return _GameData;
@@ -567,11 +565,10 @@ namespace Discogs {
                 _SettingsStr = "";
                 File.Create(GlobalVariables.setPath);
             }
-            try {
-                _Settings = JsonUtility.FromJson<UserSettings>(_SettingsStr);
-            }
-            catch (Exception) {
-                Debug.Log("Trying to convert incompatible JSON to UserLibrary, returning new()");
+            _Settings = JsonUtility.FromJson<UserSettings>(_SettingsStr);
+            UserSettings _EmptySet = new();
+            if (_Settings == null || _Settings == _EmptySet) {
+                Debug.LogWarning("Trying to convert incompatible JSON to UserSettings, returning new()");
                 return new UserSettings();
             }
             return _Settings;
