@@ -28,7 +28,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         //Initialize Data Files
-        library = Library.Load();
         Game.Load();
         Settings.Load();
         Debug.Log("Loaded everything");
