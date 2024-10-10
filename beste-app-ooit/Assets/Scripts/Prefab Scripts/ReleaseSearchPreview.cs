@@ -6,16 +6,24 @@ using TMPro;
 
 public class ReleaseSearchPreview : MonoBehaviour
 {
+    [Header("Settings")]
+    public float invokeDelay;
+    public int distance = 200;
+    
+
+    [Header("Variables")]
+    public int curPosition;
+    public int curDistance;
+    public int pageBuffer;
+
+    [Header("Objects")]
     public SearchManager searchManager;
     public TMP_Text titleText;
     public TMP_Text yearText;
     public TMP_Text countryText;
     public TMP_Text editionText;
     public Image imgTest;
-    public int curPosition;
-    public int distance;
-    public int curDistance;
-    public int pageBuffer;
+    public VerticalLayoutGroup verticalLayoutGroup;
 
     void Awake() {
         searchManager = GameObject.Find("Canvas").GetComponent<SearchManager>();        
@@ -57,7 +65,16 @@ public class ReleaseSearchPreview : MonoBehaviour
                     editionText.text = "Standard";
                 }
             }
+
+            StartCoroutine("VerticalLayoutRefresh");
         }   
+    }
+
+    private IEnumerator VerticalLayoutRefresh() {
+        yield return new WaitForSeconds(invokeDelay);
+        verticalLayoutGroup.enabled = false;
+        yield return new WaitForSeconds(invokeDelay);
+        verticalLayoutGroup.enabled = true;
     }
 
     public void SelectRelease() {

@@ -12,13 +12,21 @@ using Discogs;
 
 public class SmallAlbumPrefab : MonoBehaviour
 {
+    [Header("Settings")]
+    public int distance;
+    public float invokeDelay;
+
+    [Header("Variables")]
+    public int curPosition;
+    public int curDistance;
+    public string url;
+
+    [Header("Objects")]
     public TMP_Text titleText;
     public TMP_Text artistText;
     public Image cover;
-    public int curPosition;
-    public int distance;
-    public int curDistance;
-    public string url;
+    public VerticalLayoutGroup textLayoutGroup;
+    
     
     public async void Start() {
         url = GameManager.instance.library.Owned[curPosition].image.resource_url;
@@ -32,8 +40,16 @@ public class SmallAlbumPrefab : MonoBehaviour
                 } else {
                 titleText.text = "---";
             }
-        }
 
+            StartCoroutine("VerticalLayoutRefresh");
+        }
+    }
+
+    private IEnumerator VerticalLayoutRefresh() {
+        yield return new WaitForSeconds(invokeDelay);
+        textLayoutGroup.enabled = false;
+        yield return new WaitForSeconds(invokeDelay);
+        textLayoutGroup.enabled = true;
     }
 
 }

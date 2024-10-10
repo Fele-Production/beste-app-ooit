@@ -3,13 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.VisualScripting;
 
 public class SearchPreview : MonoBehaviour
 {
     [Header("Settings")]
-    public int curPosition;
     public float invokeDelay;
     public int distance = 200;
+    
+
+    [Header("Variables")]
+    public int curPosition;
     public int curDistance;
     public int pageBuffer;
 
@@ -64,14 +68,18 @@ public class SearchPreview : MonoBehaviour
                 labelText.text = "---";
             }
 
-            Invoke("VerticalLayoutOn", invokeDelay);
+            StartCoroutine("VerticalLayoutRefresh");
         }     
     }
 
 
-    private void VerticalLayoutOn() {
+    private IEnumerator VerticalLayoutRefresh() {
+        yield return new WaitForSeconds(invokeDelay);
+        verticalLayoutGroup.enabled = false;
+        yield return new WaitForSeconds(invokeDelay);
         verticalLayoutGroup.enabled = true;
     }
+
     public void SelectMaster() {
         searchManager.GetMasterID(curPosition);
     }

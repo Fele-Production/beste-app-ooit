@@ -832,16 +832,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d999ab73de3d4fc48bb25e2696545693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invokeDelay: 0
+  distance: 450
+  curPosition: 0
+  curDistance: 0
+  pageBuffer: 0
   searchManager: {fileID: 0}
   titleText: {fileID: 5281188373118188535}
   yearText: {fileID: 7305994710681778109}
   countryText: {fileID: 2069071379656852240}
   editionText: {fileID: 3487911139889627802}
   imgTest: {fileID: 4821591108017417421}
-  curPosition: 0
-  distance: 450
-  curDistance: 0
-  pageBuffer: 0
+  verticalLayoutGroup: {fileID: 7882987193444192638}
 --- !u!222 &3653248688819921059
 CanvasRenderer:
   m_ObjectHideFlags: 0
