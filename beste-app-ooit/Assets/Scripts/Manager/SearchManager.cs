@@ -26,8 +26,9 @@ public class SearchManager : MonoBehaviour
     public float searchingAnimDelay;
     [HideInInspector] public int pageBuffer {get; private set;}
     public bool searched = false;
-    private int curMasterID;
-    private int curReleaseID;
+    [SerializeField] private int curMasterID;
+    [SerializeField] private int curReleaseID;
+    [SerializeField] private Sprite curCoverImg;
 
     [Header ("Search Results")]
     [SerializeField] public Discogs.Master masterResult = new ();
@@ -90,9 +91,12 @@ public class SearchManager : MonoBehaviour
         UserLibrary curLibrary = Library.Load();
 
         if(oldLibrary != curLibrary) {
-            Debug.Log("Library hasnt changed"); 
-            GameManager.instance.RefreshLibrary();
-        }   
+            
+            GameManager.instance.AddLibrary(curCoverImg); 
+        } else {
+            Debug.LogWarning("Library hasn't changed"); 
+        }
+        
     }
 
     public void GetMasterID(int _position) {
@@ -101,9 +105,11 @@ public class SearchManager : MonoBehaviour
         uiManager.confirmReleaseMenu.SetActive(true);
     }
 
-    public void GetReleaseID(int _position) {
+    public void GetReleaseID(int _position, Sprite _sprite) {
         curReleaseID = releaseResult.versions[_position + ((curPage-1)*resultsPerPage)].id;
-        
+        curCoverImg = _sprite;
+
+
         uiManager.saveReleaseMenu.SetActive(true);
     }
 

@@ -32,11 +32,12 @@ public class GameManager : MonoBehaviour
         Game.Load();
         Settings.Load();
         Debug.Log("Loaded everything");
-        RefreshLibrary();
+        InitializeLibrary();
     }
 
-    public void RefreshLibrary() {
+    public void InitializeLibrary() {
         library = Library.Load();
+        Debug.Log(library.Owned.Count);
 
         if(albumChild == null) {
             albumChild = GameObject.Find("AlbumsContent");
@@ -52,10 +53,20 @@ public class GameManager : MonoBehaviour
         for(int i = 0; i < library.Owned.Count; i++) {
             curAlbums.Add(Instantiate(albumPrefab, albumChild.transform, false));
             curAlbums[i].GetComponent<SmallAlbumPrefab>().curPosition = i; 
-        }         
-    } 
+        }
+    }
+
+    public void AddLibrary(Sprite _sprite) {
+        library = Library.Load();
+        curAlbums.Add(Instantiate(albumPrefab, albumChild.transform, false));
+        SmallAlbumPrefab curSmallAlbumPrefab = curAlbums[curAlbums.Count - 1].GetComponent<SmallAlbumPrefab>();
+        curSmallAlbumPrefab.curPosition = curAlbums.Count-1;
+        //curSmallAlbumPrefab.coverImage = _sprite;
+    }
+
 
     public void SelectAlbum(int _index, Sprite _sprite) {
+        bigAlbumPreview.enabled = true;
         bigAlbumPreview.gameObject.SetActive(true);
         bigAlbumPreview.curIndex = _index;
         bigAlbumPreview.curSprite = _sprite;

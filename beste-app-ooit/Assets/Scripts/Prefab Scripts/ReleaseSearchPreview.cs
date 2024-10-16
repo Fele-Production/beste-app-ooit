@@ -15,6 +15,7 @@ public class ReleaseSearchPreview : MonoBehaviour
     public int curPosition;
     public int curDistance;
     public int pageBuffer;
+    private Sprite coverImage;
 
     [Header("Objects")]
     public SearchManager searchManager;
@@ -39,7 +40,8 @@ public class ReleaseSearchPreview : MonoBehaviour
             if(searchManager.releaseResult.versions[curPosition + pageBuffer].title != null) {
                     titleText.text = searchManager.releaseResult.versions[curPosition + pageBuffer].title;
             Texture2D curImg = searchManager.imgD[(curPosition + pageBuffer) * 2];
-            imgTest.sprite = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
+            coverImage = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
+            imgTest.sprite = coverImage;
             
             } else {
                 titleText.text = "---";
@@ -78,6 +80,6 @@ public class ReleaseSearchPreview : MonoBehaviour
     }
 
     public void SelectRelease() {
-        searchManager.GetReleaseID(curPosition);
+        searchManager.GetReleaseID(curPosition, coverImage);
     }
 }

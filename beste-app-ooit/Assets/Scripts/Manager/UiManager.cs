@@ -68,11 +68,6 @@ public class UIManager : MonoBehaviour {
         RefreshSearch();
     }
 
-    public static void RefreshLibrary() {
-        GameManager.instance.RefreshLibrary();
-    }
-
-
     public void RefreshSearch() {
         SendMessage("imstillalive");
         for(int i = 0; i < curSearchPreviews.Count; i++) {

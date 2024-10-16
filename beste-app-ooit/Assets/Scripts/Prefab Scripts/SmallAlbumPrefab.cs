@@ -27,13 +27,16 @@ public class SmallAlbumPrefab : MonoBehaviour
     public Image cover;
     public VerticalLayoutGroup textLayoutGroup;
 
-    private Sprite coverImage;
+    public Sprite coverImage;
     
     
     public async void Start() {
-        url = GameManager.instance.library.Owned[curPosition].image.resource_url;
-        Texture2D _texture = await Discogs.Get.Image(url);
-        coverImage = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
+        if(coverImage == null) {
+            url = GameManager.instance.library.Owned[curPosition].image.resource_url;
+            Texture2D _texture = await Discogs.Get.Image(url);
+            coverImage = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
+        }
+        
         cover.sprite = coverImage;
 
         if (GameManager.instance.library.Owned.Count != 0) {
