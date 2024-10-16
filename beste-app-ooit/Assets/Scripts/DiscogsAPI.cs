@@ -1,21 +1,13 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Networking;
-using Microsoft.Extensions.Http;
-using Unity.VisualScripting;
-using System.Runtime.CompilerServices;
-using UnityEditor.PackageManager;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.UIElements;
-using UnityEditor.Timeline.Actions;
-using System.Xml.Linq;
+
+
 
 
 namespace Discogs {
@@ -204,17 +196,29 @@ namespace Discogs {
             public int height;
         }
 
-        //Release Library
+        //Settings/Theme Components
         [System.Serializable]
         public class UserTheme {
             public bool Fantassimo = false;
             public int Backdrop = 0; //0=blue 1=beige 2=green
             //Add whatever the fuck you can customize
         }
+
+        [System.Serializable]
         public class UserSettings {
             public bool PerformanceMode = false;
             //Again whatever the fuck
         }
+    }
+
+    //Settings/Theme Components
+    public class InputTheme {
+        public bool? Fantassimo;
+        public int? Backdrop;
+    }
+
+    public class InputSettings {
+        public bool? PerformanceMode;
     }
 
     //Important Classes
@@ -288,12 +292,28 @@ namespace Discogs {
     public class UserLibrary {
         public List<ReleaseInfoOptimized> Owned = new();
         public List<ReleaseInfoOptimized> Wishlist = new();
+
+        public bool Contains(ReleaseInfo relCheck,bool InWishlist = false) {
+            if (!InWishlist) {
+                foreach (var rel in Owned) {
+                    if (rel.id == relCheck.id) {
+                        return true;
+                    }
+                }
+                return false;
+            } else {
+                foreach (var rel in Wishlist) {
+                    if (rel.id == relCheck.id) {
+                        return true;
+                        }
+                    }
+                return false;
+            }
+        }
     }
     //Class for Game Data
     [System.Serializable]
-    public class GameData {
-        public List<ReleaseInfoOptimized> Owned = new();
-        public List<ReleaseInfoOptimized> Wishlist = new();
+    public class GameData : UserLibrary {
         public float Experience;
     }
 
@@ -302,6 +322,7 @@ namespace Discogs {
         public ClassComponents.UserTheme Theme = new();
         public ClassComponents.UserSettings Settings = new();
     }
+
 
 
     //Functions
@@ -442,136 +463,79 @@ namespace Discogs {
 
     //Saved Info
     public static class Library {
-        public static void Add(ReleaseInfo releaseToSave) {
-            UserLibrary _saveLibrary = Library.Load();
-            _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(releaseToSave));
-            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveLibrary,true));
+        public static void Add(ReleaseInfo releaseToSave,bool multiples_allowed = false) {
+            FileModification.Add<UserLibrary>(GlobalVariables.libPath,false,releaseToSave,multiples_allowed);
         }
-        
-        public static void Remove (ReleaseInfo releaseToRemove) {
-            UserLibrary _removeLibrary = Library.Load();
-            _removeLibrary.Owned.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
-            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeLibrary,true));
+        public static void Remove(int releaseToRemoveID) {
+            FileModification.Remove<UserLibrary>(GlobalVariables.libPath,false,releaseToRemoveID);
         }
-
         public static UserLibrary Load() {
-            string _LibraryStr;
-            UserLibrary _Library;
-            if (File.Exists(GlobalVariables.libPath)) {
-                _LibraryStr = File.ReadAllText(GlobalVariables.libPath);
-            } else {
-                _LibraryStr = "";
-                File.Create(GlobalVariables.libPath);
-            }
-            _Library = JsonUtility.FromJson<UserLibrary>(_LibraryStr);
-            UserLibrary _EmptyLib = new();
-            if (_Library == null || _Library == _EmptyLib) {
-                Debug.LogWarning("Trying to convert incompatible JSON to GameData, returning new()");
-                return new UserLibrary();
-            }
-            return _Library;
+            return FileModification.Load<UserLibrary>(GlobalVariables.libPath);
         }
         public static string LoadStr() {
-            string _LibraryStr;
-            if (File.Exists(GlobalVariables.libPath)) {
-                _LibraryStr = File.ReadAllText(GlobalVariables.libPath);
-            } else {
-                _LibraryStr = "";
-                File.Create(GlobalVariables.libPath);
-            }
-            return _LibraryStr;
+            return FileModification.LoadStr(GlobalVariables.libPath);
         }
-
-        public static void HardSave(UserLibrary _saveLibrary) {
-            File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveLibrary,true));
+        public static void HardSave(UserLibrary libraryToSave) {
+            FileModification.HardSave(GlobalVariables.libPath,libraryToSave);
         }
-        
+        public static bool Contains(ReleaseInfo relToCheck) {
+            return FileModification.Contains(Load().Owned,relToCheck);
+        }
 
         public static class Wishlist {
-
-            public static void Add(ReleaseInfo releaseToSave) {
-                UserLibrary _saveWishlist = Library.Load();
-                _saveWishlist.Wishlist.Add(Convert.OptimizeReleaseInfo(releaseToSave));
-                File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_saveWishlist,true));
+            public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+            FileModification.Add<UserLibrary>(GlobalVariables.libPath,true,releaseToSave,multiples_allowed);
             }
-        
-            public static void Remove (ReleaseInfo releaseToRemove) {
-                UserLibrary _removeWishlist = Library.Load();
-                _removeWishlist.Wishlist.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
-                File.WriteAllText(GlobalVariables.libPath,JsonUtility.ToJson(_removeWishlist,true));
+
+            public static void Remove(int releaseToRemoveID) {
+                FileModification.Remove<UserLibrary>(GlobalVariables.libPath,true,releaseToRemoveID);
+            }
+
+            public static bool Contains(ReleaseInfo relToCheck) {
+                return FileModification.Contains(Load().Wishlist,relToCheck);
             }
         }
+        
     }
 
     public static class Game {
-
-        public static void Add(ReleaseInfo releaseToSave) {
-            GameData _saveGameData = Game.Load();
-            _saveGameData.Owned.Add(Convert.OptimizeReleaseInfo(releaseToSave));
-            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveGameData,true));
+        public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+            FileModification.Add<GameData>(GlobalVariables.gamePath,false,releaseToSave, multiples_allowed);
         }
-        
-        public static void Remove (ReleaseInfo releaseToRemove) {
-            GameData _removeGameData = Game.Load();
-            _removeGameData.Owned.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
-            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeGameData,true));
+        public static void Remove(int releaseToRemoveID) {
+            FileModification.Remove<GameData>(GlobalVariables.gamePath,false,releaseToRemoveID);
         }
-
         public static GameData Load() {
-            string _GameDataStr;
-            GameData _GameData;
-            if (File.Exists(GlobalVariables.gamePath)) {
-                _GameDataStr = File.ReadAllText(GlobalVariables.gamePath);
-            } else {
-                _GameDataStr = "";
-                File.Create(GlobalVariables.gamePath);
-            }
-            _GameData = JsonUtility.FromJson<GameData>(_GameDataStr);
-            GameData _EmptyGame = new();
-            if (_GameData == null || _GameData == _EmptyGame) {
-                Debug.LogWarning("Trying to convert incompatible JSON to UserLibrary, returning new()");
-                return new GameData();
-            }
-            return _GameData;
+            return FileModification.Load<GameData>(GlobalVariables.gamePath);
         }
-
-        public static void HardSave(GameData _saveGameData) {
-            File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveGameData,true));
+        public static string LoadStr() {
+            return FileModification.LoadStr(GlobalVariables.gamePath);
+        }
+        public static void HardSave(GameData libraryToSave) {
+            FileModification.HardSave(GlobalVariables.gamePath,libraryToSave);
+        }
+        public static bool Contains(ReleaseInfo relToCheck) {
+            return FileModification.Contains(Load().Owned,relToCheck);
         }
 
         public static class Wishlist {
-
-            public static void Add(ReleaseInfo releaseToSave) {
-                GameData _saveWishlist = Game.Load();
-                _saveWishlist.Wishlist.Add(Convert.OptimizeReleaseInfo(releaseToSave));
-                    File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_saveWishlist,true));
+            public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+            FileModification.Add<GameData>(GlobalVariables.gamePath,true,releaseToSave, multiples_allowed);
             }
-        
-            public static void Remove (ReleaseInfo releaseToRemove) {
-                GameData _removeWishlist = Game.Load();
-                _removeWishlist.Wishlist.Remove(Convert.OptimizeReleaseInfo(releaseToRemove));
-                File.WriteAllText(GlobalVariables.gamePath,JsonUtility.ToJson(_removeWishlist,true));
+            public static void Remove(int releaseToRemoveID) {
+                FileModification.Remove<GameData>(GlobalVariables.gamePath,true,releaseToRemoveID);
+            }
+
+            public static bool Contains(ReleaseInfo relToCheck) {
+                return FileModification.Contains(Load().Wishlist,relToCheck);
             }
         }
+        
     }
-
+    
     public static class Settings {
         public static UserSettings Load() {
-            string _SettingsStr;
-            UserSettings _Settings;
-            if (File.Exists(GlobalVariables.setPath)) {
-                _SettingsStr = File.ReadAllText(GlobalVariables.setPath);
-            } else {
-                _SettingsStr = "";
-                File.Create(GlobalVariables.setPath);
-            }
-            _Settings = JsonUtility.FromJson<UserSettings>(_SettingsStr);
-            UserSettings _EmptySet = new();
-            if (_Settings == null || _Settings == _EmptySet) {
-                Debug.LogWarning("Trying to convert incompatible JSON to UserSettings, returning new()");
-                return new UserSettings();
-            }
-            return _Settings;
+            return FileModification.Load<UserSettings>(GlobalVariables.setPath);
         }
         public static void SaveTheme(bool? IFantassimo, int? IBackdrop) {
             UserSettings _themeSettings = Load(); 
@@ -593,6 +557,140 @@ namespace Discogs {
             _releaseInfoInputOpt.image = releaseInfoInput.images[0];
             return _releaseInfoInputOpt;
         }
+    }
+
+    public static class FileModification {
+        public static void Add<inputType>(string path, bool Wishlist, ReleaseInfo itemToSave, bool multiples_allowed) where inputType : UserLibrary,new() {
+            inputType _saveLibrary = Load<inputType>(path);
+            if (!Wishlist) {
+                if (_saveLibrary.Contains(itemToSave)) {
+                    if (multiples_allowed) {
+                        _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                    }
+                } else {
+                    _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                }
+            } else {
+                if (_saveLibrary.Contains(itemToSave)) {
+                    if (multiples_allowed) {
+                        _saveLibrary.Wishlist.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                    }
+                } else {
+                    _saveLibrary.Wishlist.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                }
+            }
+            HardSave(path,_saveLibrary);
+        }
+        
+        public static void Remove<inputType>(string path, bool Wishlist, int releaseToRemoveID) where inputType : UserLibrary,new() {
+            inputType _removeLibrary = Load<inputType>(path);
+            if (!Wishlist) {
+                foreach (ReleaseInfoOptimized rel in _removeLibrary.Owned) {
+                    if (rel.id == releaseToRemoveID) {
+                        _removeLibrary.Owned.Remove(rel);
+                        break;
+                    }
+                }
+            } else {
+                foreach (ReleaseInfoOptimized rel in _removeLibrary.Wishlist) {
+                    if (rel.id == releaseToRemoveID) {
+                        _removeLibrary.Wishlist.Remove(rel);
+                        break;
+                    }
+                }
+            }
+            HardSave(path,_removeLibrary);
+        }
+
+        public static inputType Load<inputType>(string path) where inputType : class, new(){
+            string _LibraryStr;
+            inputType _Library;
+            if ((typeof(inputType) != typeof(UserLibrary))&&(typeof(inputType) != typeof(GameData))&&(typeof(inputType) != typeof(UserSettings))) {
+                Debug.LogError($"Invalid Type for Template: {typeof(inputType).Name}");
+                return default;
+            }
+            
+            if (File.Exists(path)) {
+                _LibraryStr = File.ReadAllText(path);
+            } else {
+                _LibraryStr = "";
+                File.Create(path);
+            }
+            _Library = JsonUtility.FromJson<inputType>(_LibraryStr);
+            if (_Library == null) {
+                Debug.LogWarning($"Trying to convert incompatible JSON to {typeof(inputType)}, returning new()");
+                return new inputType();
+            }
+            return _Library;
+        }
+        
+        public static string LoadStr(string path) {
+            string _LibraryStr;
+            if (File.Exists(path)) {
+                _LibraryStr = File.ReadAllText(path);
+            } else {
+                _LibraryStr = "";
+                File.Create(path);
+            }
+            return _LibraryStr;
+        }
+
+        public static void HardSave(string path,object _saveLibrary) {
+            File.WriteAllText(path,JsonUtility.ToJson(_saveLibrary,true));
+        }
+        
+        public static bool Contains(List<ReleaseInfoOptimized> rels,ReleaseInfo relCheck) {
+            foreach (var rel in rels) {
+                if (rel.id == relCheck.id) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        private static void ConditionalSave<inputType>(string path, bool Theme, inputType inputClass) where inputType : class,new(){ //WIP
+            UserSettings saveLib = Load<UserSettings>(path);
+            Type classType = typeof(inputType);
+
+            if (!Theme) {
+                foreach (var field in classType.GetFields()) {
+                    var fieldValue = field.GetValue(inputClass);
+                    if (field.GetValue(inputClass) != null) {
+                        field.SetValue(saveLib.Settings, fieldValue);
+                    }
+                }
+            } else {
+                foreach (var field in classType.GetFields()) {
+                    var fieldValue = field.GetValue(inputClass);
+                    if (fieldValue != null) {
+                        field.SetValue(saveLib.Theme, fieldValue);
+                    }
+                }
+            }
+
+            HardSave(path,saveLib);
+        }
+        
+        /*
+        public static void Add() {
+            FileModification.Add();
+        }
+        public static void Remove() {
+            FileModification.Remove();
+        }
+        public static UserLibrary Load() {
+            return FileModification.Load();
+        }
+        public static string LoadStr() {
+            return FileModification.LoadStr();
+        }
+        public static void HardSave() {
+            FileModification.HardSave();
+        }
+        public static bool Contains() {
+            return FileModification.Contains();
+        }
+        */
     }
 }
 
