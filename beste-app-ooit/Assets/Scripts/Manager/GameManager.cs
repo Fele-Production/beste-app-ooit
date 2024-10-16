@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public UserLibrary library;
     public GameObject albumPrefab;
     public GameObject albumChild;
+    public BigAlbumPreview bigAlbumPreview;
     public List<GameObject> curAlbums;
     public int albumPerPage;
     public int curPage;
@@ -53,4 +54,10 @@ public class GameManager : MonoBehaviour
             curAlbums[i].GetComponent<SmallAlbumPrefab>().curPosition = i; 
         }         
     } 
+
+    public void SelectAlbum(int _index, Sprite _sprite) {
+        bigAlbumPreview.gameObject.SetActive(true);
+        bigAlbumPreview.curIndex = _index;
+        bigAlbumPreview.curSprite = _sprite;
+    }
 }
