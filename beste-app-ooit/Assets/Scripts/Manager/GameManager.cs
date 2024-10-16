@@ -37,7 +37,6 @@ public class GameManager : MonoBehaviour
 
     public void InitializeLibrary() {
         library = Library.Load();
-        Debug.Log(library.Owned.Count);
 
         if(albumChild == null) {
             albumChild = GameObject.Find("AlbumsContent");
