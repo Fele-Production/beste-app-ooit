@@ -17,6 +17,7 @@ public class BigAlbumPreview : MonoBehaviour
 
     [Header("Objects")]
     public GameObject content;
+    public RectTransform contentTransform;
     public Image cover;
     public TMP_Text titleText;
     public TMP_Text artistText;
@@ -59,7 +60,7 @@ public class BigAlbumPreview : MonoBehaviour
             }
         }
         content.SetActive(true);
-        StartCoroutine(LayoutRefresh());
+        
 
         for(int i = 0; i < curTracks.Count; i++) {
             Destroy(curTracks[i]);
@@ -72,23 +73,42 @@ public class BigAlbumPreview : MonoBehaviour
             _trackPrefab.curTrackIndex = i;
 
         }
+        
+        RefreshLayout();
+        //StartCoroutine(LayoutRefresh());
+    }
+
+    private void RefreshLayout() {
+        // Force the layout updates in the correct order
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(tracksVerticalLayout.GetComponent<RectTransform>()); // Rebuild tracks first
+        //LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
+
+        // If the above doesn't work, try using the following lines instead
+        tracksVerticalLayout.CalculateLayoutInputHorizontal();
+        tracksVerticalLayout.CalculateLayoutInputVertical();
+        contentVerticalLayout.CalculateLayoutInputHorizontal();
+        contentVerticalLayout.CalculateLayoutInputVertical();
     }
 
     private IEnumerator LayoutRefresh() {
-        yield return new WaitForSeconds(layoutDelay);
+        // Disable layout components to force recalculation
+        trackSizeFitter.enabled = false;
+        tracksVerticalLayout.enabled = false;
         contentSizeFitter.enabled = false;
         contentVerticalLayout.enabled = false;
 
-        trackSizeFitter.enabled = false;
-        tracksVerticalLayout.enabled = false;
-        yield return new WaitForSeconds(layoutDelay);
+        yield return null; // Wait for one frame to ensure all layout changes are applied
+
+        // Enable layout components and force layout rebuild
+        trackSizeFitter.enabled = true;
+        tracksVerticalLayout.enabled = true;
         contentSizeFitter.enabled = true;
         contentVerticalLayout.enabled = true;
 
-        trackSizeFitter.enabled = true;
-        tracksVerticalLayout.enabled = true;
-
-        
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(tracksVerticalLayout.GetComponent<RectTransform>()); // Rebuild tracks first
+        yield return null; // Ensure the child recalculates before the parent
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
     }
 
     private void OnDisable()
