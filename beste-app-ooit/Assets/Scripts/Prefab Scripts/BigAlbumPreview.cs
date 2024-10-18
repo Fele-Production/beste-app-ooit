@@ -4,6 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 using Discogs;
+using System;
 
 
 public class BigAlbumPreview : MonoBehaviour
@@ -14,6 +15,8 @@ public class BigAlbumPreview : MonoBehaviour
 
     [Header("Variables")]
     public int curIndex;
+    private int discCount;
+    private string genre;
 
     [Header("Objects")]
     public GameObject content;
@@ -21,6 +24,7 @@ public class BigAlbumPreview : MonoBehaviour
     public Image cover;
     public TMP_Text titleText;
     public TMP_Text artistText;
+    public TMP_Text otherInfo;
     public VerticalLayoutGroup contentVerticalLayout;
     public VerticalLayoutGroup tracksVerticalLayout;
     public ContentSizeFitter contentSizeFitter;
@@ -58,24 +62,58 @@ public class BigAlbumPreview : MonoBehaviour
             } else {
                 artistText.text = "---";
             }
-        }
-        content.SetActive(true);
-        
 
-        for(int i = 0; i < curTracks.Count; i++) {
-            Destroy(curTracks[i]);
-        }
-        curTracks.Clear();
-        for (int i = 0; i < curLibrary.Owned[curIndex].tracklist.Length; i++) {
-            curTracks.Add(Instantiate(trackPrefab, content.transform.Find("Tracks")));
-            TrackPrefab _trackPrefab = curTracks[i].GetComponent<TrackPrefab>();
-            _trackPrefab.curAlbumIndex = curIndex;
-            _trackPrefab.curTrackIndex = i;
+            for(int i = 0; i < curTracks.Count; i++) {
+                Destroy(curTracks[i]);
+            }
 
-        }
+            if(curLibrary.Owned[curIndex].tracklist != null) {
+                discCount = CheckDiscCount(curLibrary);
+                Debug.Log(discCount);
+            
+
+            curTracks.Clear();
+            for (int i = 0; i < curLibrary.Owned[curIndex].tracklist.Length; i++) {
+                curTracks.Add(Instantiate(trackPrefab, content.transform.Find("Tracks")));
+                TrackPrefab _trackPrefab = curTracks[i].GetComponent<TrackPrefab>();
+                _trackPrefab.curAlbumIndex = curIndex;
+                _trackPrefab.curTrackIndex = i;
+
+            }
+            }
+
+            if(curLibrary.Owned[curIndex].genres[0] != null) {
+                genre = curLibrary.Owned[curIndex].genres[0];
+            } else {
+                genre = "";
+            }
+
+            otherInfo.text = genre + " || " + "Discs: " + discCount; 
+            
         
         StartCoroutine(RefreshLayout());
         //StartCoroutine(LayoutRefresh());
+
+        }
+        content.SetActive(true);    
+    }
+
+    private int CheckDiscCount(UserLibrary curLibrary) {
+        int start = 'A';
+        char letter = 'A';
+        for (int i = 0; i <  curLibrary.Owned[curIndex].tracklist.Length; i++) {
+            letter = curLibrary.Owned[curIndex].tracklist[i].position.ToCharArray()[0];
+            if(!(letter >= 'A' && letter <= 'Z' || letter >= 'a' && letter <= 'z')) {
+                return 0;
+            }
+
+            start = 'A';
+            if(letter >= 'a' && letter <= 'z') {
+                start = 'a';
+            }
+        }
+        int discCount = (int)(((letter - start + 1) / 2) + 0.5f);
+        return discCount;
     }
 
     private IEnumerator RefreshLayout() {
