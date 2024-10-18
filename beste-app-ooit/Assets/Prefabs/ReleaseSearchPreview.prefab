@@ -843,7 +843,7 @@ MonoBehaviour:
   countryText: {fileID: 2069071379656852240}
   editionText: {fileID: 3487911139889627802}
   imgTest: {fileID: 4821591108017417421}
-  verticalLayoutGroup: {fileID: 7882987193444192638}
+  contentTransform: {fileID: 4358254960153380453}
 --- !u!222 &3653248688819921059
 CanvasRenderer:
   m_ObjectHideFlags: 0

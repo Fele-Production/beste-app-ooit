@@ -74,40 +74,15 @@ public class BigAlbumPreview : MonoBehaviour
 
         }
         
-        RefreshLayout();
+        StartCoroutine(RefreshLayout());
         //StartCoroutine(LayoutRefresh());
     }
 
-    private void RefreshLayout() {
-        // Force the layout updates in the correct order
-        //LayoutRebuilder.ForceRebuildLayoutImmediate(tracksVerticalLayout.GetComponent<RectTransform>()); // Rebuild tracks first
-        //LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
+    private IEnumerator RefreshLayout() {
 
-        // If the above doesn't work, try using the following lines instead
-        tracksVerticalLayout.CalculateLayoutInputHorizontal();
-        tracksVerticalLayout.CalculateLayoutInputVertical();
-        contentVerticalLayout.CalculateLayoutInputHorizontal();
-        contentVerticalLayout.CalculateLayoutInputVertical();
-    }
-
-    private IEnumerator LayoutRefresh() {
-        // Disable layout components to force recalculation
-        trackSizeFitter.enabled = false;
-        tracksVerticalLayout.enabled = false;
-        contentSizeFitter.enabled = false;
-        contentVerticalLayout.enabled = false;
-
-        yield return null; // Wait for one frame to ensure all layout changes are applied
-
-        // Enable layout components and force layout rebuild
-        trackSizeFitter.enabled = true;
-        tracksVerticalLayout.enabled = true;
-        contentSizeFitter.enabled = true;
-        contentVerticalLayout.enabled = true;
-
+        yield return new WaitForEndOfFrame(); 
         // Force the layout updates in the correct order
         LayoutRebuilder.ForceRebuildLayoutImmediate(tracksVerticalLayout.GetComponent<RectTransform>()); // Rebuild tracks first
-        yield return null; // Ensure the child recalculates before the parent
         LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
     }
 

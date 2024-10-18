@@ -25,7 +25,7 @@ public class SmallAlbumPrefab : MonoBehaviour
     public TMP_Text titleText;
     public TMP_Text artistText;
     public Image cover;
-    public VerticalLayoutGroup textLayoutGroup;
+    public RectTransform contentTransform;
 
     public Sprite coverImage;
     
@@ -52,10 +52,9 @@ public class SmallAlbumPrefab : MonoBehaviour
     }
 
     private IEnumerator VerticalLayoutRefresh() {
-        yield return new WaitForSeconds(invokeDelay);
-        textLayoutGroup.enabled = false;
-        yield return new WaitForSeconds(invokeDelay);
-        textLayoutGroup.enabled = true;
+        yield return new WaitForEndOfFrame(); 
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
     }
 
     public void SelectAlbum() {

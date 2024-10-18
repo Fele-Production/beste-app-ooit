@@ -279,7 +279,8 @@ MonoBehaviour:
   titleText: {fileID: 5438822331071228365}
   artistText: {fileID: 1354401304848816453}
   cover: {fileID: 2978974593052175308}
-  textLayoutGroup: {fileID: 4726876981167033594}
+  contentTransform: {fileID: 3799431529160037437}
+  coverImage: {fileID: 0}
 --- !u!1 &5549805431102620479
 GameObject:
   m_ObjectHideFlags: 0

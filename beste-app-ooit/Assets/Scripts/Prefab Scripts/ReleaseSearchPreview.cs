@@ -24,7 +24,7 @@ public class ReleaseSearchPreview : MonoBehaviour
     public TMP_Text countryText;
     public TMP_Text editionText;
     public Image imgTest;
-    public VerticalLayoutGroup verticalLayoutGroup;
+    public RectTransform contentTransform;
 
     void Awake() {
         searchManager = GameObject.Find("Canvas").GetComponent<SearchManager>();        
@@ -73,10 +73,9 @@ public class ReleaseSearchPreview : MonoBehaviour
     }
 
     private IEnumerator VerticalLayoutRefresh() {
-        yield return new WaitForSeconds(invokeDelay);
-        verticalLayoutGroup.enabled = false;
-        yield return new WaitForSeconds(invokeDelay);
-        verticalLayoutGroup.enabled = true;
+        yield return new WaitForEndOfFrame(); 
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
     }
 
     public void SelectRelease() {

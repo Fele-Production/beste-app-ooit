@@ -24,7 +24,7 @@ public class SearchPreview : MonoBehaviour
     public TMP_Text yearText;
     public TMP_Text labelText;
     public Image imgTest;
-    public VerticalLayoutGroup verticalLayoutGroup;
+    public RectTransform contentTransform;
     
 
     void Awake() {
@@ -74,10 +74,9 @@ public class SearchPreview : MonoBehaviour
 
 
     private IEnumerator VerticalLayoutRefresh() {
-        yield return new WaitForSeconds(invokeDelay);
-        verticalLayoutGroup.enabled = false;
-        yield return new WaitForSeconds(invokeDelay);
-        verticalLayoutGroup.enabled = true;
+        yield return new WaitForEndOfFrame(); 
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
     }
 
     public void SelectMaster() {
