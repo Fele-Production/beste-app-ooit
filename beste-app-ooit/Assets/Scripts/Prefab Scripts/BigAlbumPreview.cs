@@ -72,14 +72,14 @@ public class BigAlbumPreview : MonoBehaviour
                 Debug.Log(discCount);
             
 
-            curTracks.Clear();
-            for (int i = 0; i < curLibrary.Owned[curIndex].tracklist.Length; i++) {
-                curTracks.Add(Instantiate(trackPrefab, content.transform.Find("Tracks")));
-                TrackPrefab _trackPrefab = curTracks[i].GetComponent<TrackPrefab>();
-                _trackPrefab.curAlbumIndex = curIndex;
-                _trackPrefab.curTrackIndex = i;
+                curTracks.Clear();
+                for (int i = 0; i < curLibrary.Owned[curIndex].tracklist.Length; i++) {
+                    curTracks.Add(Instantiate(trackPrefab, content.transform.Find("Tracks")));
+                    TrackPrefab _trackPrefab = curTracks[i].GetComponent<TrackPrefab>();
+                    _trackPrefab.curAlbumIndex = curIndex;
+                    _trackPrefab.curTrackIndex = i;
 
-            }
+                }
             }
 
             if(curLibrary.Owned[curIndex].genres[0] != null) {

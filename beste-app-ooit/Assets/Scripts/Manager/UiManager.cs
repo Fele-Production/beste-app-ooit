@@ -116,6 +116,12 @@ public class UIManager : MonoBehaviour {
         searchingText.enabled = false;
     }
 
+    public IEnumerator LayoutRefresh(RectTransform _content) {
+        yield return new WaitForEndOfFrame(); 
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_content); // Rebuild parent (album content)
+    }
+
     void Start() {
         BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BLUE BACKDROP aka ORIGINAL pixil-frame-0 (12).png"));
         BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BEIGE BACKDROP pixil-frame-0 (11).png"));

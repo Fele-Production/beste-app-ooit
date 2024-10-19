@@ -67,7 +67,12 @@ public class GameManager : MonoBehaviour
 
     public void AddLibrary(Sprite _sprite) {
         library = Library.Load();
-        curAlbums.Add(Instantiate(albumPrefab, albumContent1.transform, false));
+        if((curAlbums.Count+1) % 2 == 0) {
+            curAlbums.Add(Instantiate(albumPrefab, albumContent1.transform, false));
+        } else {
+            curAlbums.Add(Instantiate(albumPrefab, albumContent2.transform, false));
+        }
+        
         SmallAlbumPrefab curSmallAlbumPrefab = curAlbums[curAlbums.Count - 1].GetComponent<SmallAlbumPrefab>();
         curSmallAlbumPrefab.curIndex = curAlbums.Count-1;
         //curSmallAlbumPrefab.coverImage = _sprite;
