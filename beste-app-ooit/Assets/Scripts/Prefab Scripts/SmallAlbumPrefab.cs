@@ -17,7 +17,7 @@ public class SmallAlbumPrefab : MonoBehaviour
     public float invokeDelay;
 
     [Header("Variables")]
-    public int curPosition;
+    public int curIndex;
     public int curDistance;
     public string url;
 
@@ -32,7 +32,7 @@ public class SmallAlbumPrefab : MonoBehaviour
     
     public async void Start() {
         if(coverImage == null) {
-            url = GameManager.instance.library.Owned[curPosition].image.resource_url;
+            url = GameManager.instance.library.Owned[curIndex].image.resource_url;
             Texture2D _texture = await Discogs.Get.Image(url);
             coverImage = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
         }
@@ -40,9 +40,9 @@ public class SmallAlbumPrefab : MonoBehaviour
         cover.sprite = coverImage;
 
         if (GameManager.instance.library.Owned.Count != 0) {
-            if(GameManager.instance.library.Owned[curPosition].title != null) {
-                    titleText.text = GameManager.instance.library.Owned[curPosition].title;
-                    artistText.text = GameManager.instance.library.Owned[curPosition].artists[0].name;
+            if(GameManager.instance.library.Owned[curIndex].title != null) {
+                    titleText.text = GameManager.instance.library.Owned[curIndex].title;
+                    artistText.text = GameManager.instance.library.Owned[curIndex].artists[0].name;
                 } else {
                 titleText.text = "---";
             }
@@ -58,7 +58,7 @@ public class SmallAlbumPrefab : MonoBehaviour
     }
 
     public void SelectAlbum() {
-        GameManager.instance.SelectAlbum(curPosition, coverImage);
+        GameManager.instance.SelectAlbum(curIndex, coverImage);
     }
 
 }
