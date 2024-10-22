@@ -4,11 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Networking;
 using TMPro;
 using Discogs;
-using JetBrains.Annotations;
-using Unity.VisualScripting;
 
 public class UIManager : MonoBehaviour {
     [Header("Search Settings")]
@@ -100,6 +97,12 @@ public class UIManager : MonoBehaviour {
         }
     }     
 
+    public void RefreshHome() {
+        if(GameManager.instance.libraryChanged == true) {
+            GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
+            GameManager.instance.libraryChanged = false;
+        }
+    }
     public IEnumerator SearchingAnimation() {
         searchingText.enabled = true;
         while (!searchManager.searched) {
@@ -114,12 +117,6 @@ public class UIManager : MonoBehaviour {
             yield return new WaitForSeconds(searchingAnimDelay);
         }
         searchingText.enabled = false;
-    }
-
-    public IEnumerator LayoutRefresh(RectTransform _content) {
-        yield return new WaitForEndOfFrame(); 
-        // Force the layout updates in the correct order
-        LayoutRebuilder.ForceRebuildLayoutImmediate(_content); // Rebuild parent (album content)
     }
 
     void Start() {

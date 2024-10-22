@@ -226,8 +226,8 @@ MonoBehaviour:
   text: {fileID: 774711930742424245}
   contentTransform: {fileID: 4242126144007786020}
   textRectTransform: {fileID: 2289698188903136902}
+  albumContentTransform: {fileID: 0}
   preferredHeight: 0
-  divider: 2
 --- !u!114 &4045545371897011289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -290,8 +290,8 @@ GameObject:
   - component: {fileID: 5203744076928841136}
   - component: {fileID: 3819352910050741957}
   - component: {fileID: 1940292489221724552}
-  - component: {fileID: 5506944458210191345}
   - component: {fileID: 6866106297984393782}
+  - component: {fileID: 7762026474548099796}
   m_Layer: 0
   m_Name: Small Album Preview
   m_TagString: Untagged
@@ -344,7 +344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   distance: 0
   invokeDelay: 0
-  curPosition: 0
+  curIndex: 0
   curDistance: 0
   url: 
   titleText: {fileID: 774711930742424245}
@@ -392,51 +392,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!61 &5506944458210191345
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2509398218060414059}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 0, y: 0}
-    newSize: {x: 0, y: 0}
-    adaptiveTilingThreshold: 0
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
 --- !u!114 &6866106297984393782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +448,26 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7762026474548099796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2509398218060414059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: 1
+  m_LayoutPriority: 1
 --- !u!1 &7558715329378363720
 GameObject:
   m_ObjectHideFlags: 0

@@ -3,19 +3,28 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using Discogs;
-using UnityEngine.Scripting;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
-    public UserLibrary library;
+
+    [Header("Variables")]
+    public int albumPerPage;
+    public int curPage;
+    public float invokeDelay;
+    public bool libraryChanged;
+    [HideInInspector] public bool crRunning {get; private set;}
+
+    [Header("Objects")]
     public GameObject albumPrefab;
     public GameObject albumContent1;
     public GameObject albumContent2;
     public BigAlbumPreview bigAlbumPreview;
     public List<GameObject> curAlbums;
-    public int albumPerPage;
-    public int curPage;
+
+    public UserLibrary library;
+    
+    public static GameManager instance;
 
     void Awake()
     {
@@ -51,7 +60,6 @@ public class GameManager : MonoBehaviour
         }
 
         curAlbums.Clear();
-        int resultsToLoad = albumPerPage;
 
         for(int i = 0; i < library.Owned.Count; i++) {
 
@@ -63,11 +71,15 @@ public class GameManager : MonoBehaviour
             
             curAlbums[i].GetComponent<SmallAlbumPrefab>().curIndex = i; 
         }
+
+        Invoke("HomeCoroutineStart", invokeDelay);
     }
 
     public void AddLibrary(Sprite _sprite) {
         library = Library.Load();
-        if((curAlbums.Count+1) % 2 == 0) {
+        libraryChanged = true;
+
+        if(curAlbums.Count % 2 == 0) {
             curAlbums.Add(Instantiate(albumPrefab, albumContent1.transform, false));
         } else {
             curAlbums.Add(Instantiate(albumPrefab, albumContent2.transform, false));
@@ -78,11 +90,49 @@ public class GameManager : MonoBehaviour
         //curSmallAlbumPrefab.coverImage = _sprite;
     }
 
+    public void RemoveLibrary(int _index) {
+        library = Library.Load();
+        Destroy(curAlbums[_index]);
+        curAlbums.RemoveAt(_index);
+
+        for (int i = _index; i < curAlbums.Count; i++) {
+            curAlbums[i].GetComponent<SmallAlbumPrefab>().curIndex--;
+        }
+
+        StartCoroutine(HomeLayoutRefresh());
+    }
+
 
     public void SelectAlbum(int _index, Sprite _sprite) {
         bigAlbumPreview.enabled = true;
         bigAlbumPreview.gameObject.SetActive(true);
         bigAlbumPreview.curIndex = _index;
         bigAlbumPreview.curSprite = _sprite;
+    }
+
+    private void HomeCoroutineStart() {
+        StartCoroutine(HomeLayoutRefresh());
+    }
+
+    public IEnumerator HomeLayoutRefresh() {
+        crRunning = true;
+
+        Debug.Log("Refreshing Home...");
+        yield return new WaitForEndOfFrame();
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent1.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent2.GetComponent<RectTransform>());
+
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent1.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent2.GetComponent<RectTransform>());
+
+        crRunning = false;
+    }
+    
+    public IEnumerator LayoutRefresh(RectTransform _content) {
+        yield return new WaitForEndOfFrame(); 
+        // Force the layout updates in the correct order
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_content); // Rebuild parent (album content)
     }
 }

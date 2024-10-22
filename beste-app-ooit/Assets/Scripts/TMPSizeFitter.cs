@@ -19,9 +19,12 @@ public class TMPSizeFitter : MonoBehaviour
             return;
         }
         textRectTransform.sizeDelta = new Vector2(textRectTransform.sizeDelta.x, preferredHeight); 
-        //contentTransform.position = new Vector3(contentTransform.position.x, contentTransform.position.y + (deltaHeight / divider), contentTransform.position.z); 
 
-        StartCoroutine(VerticalLayoutRefresh());
+        if(GameManager.instance.crRunning == false) {
+            GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
+        } 
+
+        //StartCoroutine(VerticalLayoutRefresh());
     }
 
     private IEnumerator VerticalLayoutRefresh() {
@@ -46,10 +49,8 @@ public class TMPSizeFitter : MonoBehaviour
     }
 
     private void Update() {
-        Debug.Log(text.preferredHeight);
         if(preferredHeight != text.preferredHeight) {
             preferredHeight = text.preferredHeight;
-            Debug.Log(text.preferredHeight);
             SetHeight();
         }
     }

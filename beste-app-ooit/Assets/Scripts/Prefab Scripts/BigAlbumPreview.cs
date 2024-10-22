@@ -91,9 +91,8 @@ public class BigAlbumPreview : MonoBehaviour
             otherInfo.text = genre + " || " + "Discs: " + discCount; 
             
         
-        StartCoroutine(RefreshLayout());
-        //StartCoroutine(LayoutRefresh());
-
+        GameManager.instance.StartCoroutine(GameManager.instance.LayoutRefresh(tracksVerticalLayout.GetComponent<RectTransform>()));
+        GameManager.instance.StartCoroutine(GameManager.instance.LayoutRefresh(contentTransform));
         }
         content.SetActive(true);    
     }
@@ -116,14 +115,13 @@ public class BigAlbumPreview : MonoBehaviour
         return discCount;
     }
 
-    private IEnumerator RefreshLayout() {
-
-        yield return new WaitForEndOfFrame(); 
-        // Force the layout updates in the correct order
-        LayoutRebuilder.ForceRebuildLayoutImmediate(tracksVerticalLayout.GetComponent<RectTransform>()); // Rebuild tracks first
-        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
+    public void RemoveAlbum() {
+        int releaseID = GameManager.instance.library.Owned[curIndex].id;
+        Library.Remove(releaseID);
+        GameManager.instance.RemoveLibrary(curIndex);
     }
 
+    
     private void OnDisable()
     {
         content.SetActive(false);

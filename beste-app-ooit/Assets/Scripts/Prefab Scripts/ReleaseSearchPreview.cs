@@ -75,7 +75,7 @@ public class ReleaseSearchPreview : MonoBehaviour
     private IEnumerator VerticalLayoutRefresh() {
         yield return new WaitForEndOfFrame(); 
         // Force the layout updates in the correct order
-        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (album content)
+        LayoutRebuilder.ForceRebuildLayoutImmediate(contentTransform); // Rebuild parent (Release Preview content)
     }
 
     public void SelectRelease() {
