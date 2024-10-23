@@ -12,8 +12,7 @@ using UnityEngine.Networking;
 
 namespace Discogs {
     public static class GlobalVariables {
-        //public readonly static string declarationofindependenceoftheunitedstatesofamerica = "theunanimousdeclarationofthethirteenunitedstatesofamericawheninthecourseofhumaneventsitbecomesnecessaryforonepeopletodissolvethepoliticalbandswhichhaveconnectedthemwithanotherandtoassumeamongthepowersoftheearththeseparateandequalstationtowhichthelawsofnatureandofnaturesgodentitlethemadecentrespecttotheopinionsofmankindrequiresthattheyshoulddeclarethecauseswhichimpelthemtotheseparationweholdthesetruthstobeselfevidentthatallmenarecreatedequalthattheyareendowedbytheircreatorwithcertainunalienablerightsthatamongthesearelifelibertyandthepursuitofhappinessthattosecuretheserightsgovernmentsareinstitutedamongmenderivingtheirjustpowersfromtheconsentofthegovernedthatwheneveranyformofgovernmentbecomesdestructiveoftheseendsitistherightofthepeopletoalterortoabolishitandtoinstitutenewgovernmentlayingitsfoundationonsuchprinciplesandorganizingitspowersinsuchformastothemshallseemmostlikelytoeffecttheirsafetyandhappinessprudenceindeedwilldictatethatgovernmentslongestablishedshouldnotbechangedforlightandtransientcausesandaccordinglyallexperiencehathshewnthatmankindaremoredisposedtosufferwhileevilsaresufferablethantorightthemselvesbyabolishingtheformstowhichtheyareaccustomedbutwhenalongtrainofabusesandusurpationspursuinginvariablythesameobjectevincesadesigntoreducethemunderabsolutedespotismitistheirrightitistheirdutytothrowoffsuchgovernmentandtoprovidenewguardsfortheirfuturesecuritysuchhasbeenthepatientsufferanceofthesecoloniesandsuchisnowthenecessitywhichconstrainsthemtoaltertheirformersystemsofgovernmentthehistoryofthepresentkingofgreatbritainisahistoryofrepeatedinjuriesandusurpationsallhavingindirectobjecttheestablishmentofanabsolutetyrannyoverthesestatestoprovethisletfactsbesubmittedtoacandidworldhehasrefusedhisassenttolawsthemostwholesomeandnecessaryforthepublicgoodhehasforbiddenhisgovernorstopasslawsofimmediateandpressingimportanceunlesssuspendedintheiroperationtillhisassentshouldbeobtainedandwhensosuspendedhehasutterlyneglectedtoattendtothemhehasrefusedtopassotherlawsfortheaccommodationoflargedistrictsofpeopleunlessthosepeoplewouldrelinquishtherightofrepresentationinthelegislaturearightinestimabletothemandformidabletotyrantsonlyhehascalledtogetherlegislativebodiesatplacesunusualuncomfortableanddistantfromthedepositoryoftheirpublicrecordsforthesolepurposeoffatiguingthemintocompliancewithhismeasureshehasdissolvedrepresentativehousesrepeatedlyforopposingwithmanlyfirmnesshisinvasionsontherightsofthepeoplehehasrefusedforalongtimeaftersuchdissolutionstocauseotherstobeelectedwherebythelegislativepowersincapableofannihilationhavereturnedtothepeopleatlargefortheirexercisethestateremaininginthemeantimeexposedtoallthedangersofinvasionfromwithoutandconvulsionswithinhehasendeavouredtopreventthepopulationofthesestatesforthatpurposeobstructingthelawsfornaturalizationofforeignersrefusingtopassotherstoencouragetheirmigrationshitherandraisingtheconditionsofnewappropriationsoflandshehasobstructedtheadministrationofjusticebyrefusinghisassenttolawsforestablishingjudiciarypowershehasmadejudgesdependentonhiswillaloneforthetenureoftheirofficesandtheamountandpaymentoftheirsalarieshehaserectedamultitudeofnewofficesandsenthitherswarmsofofficerstoharrassourpeopleandeatouttheirsubstancehehaskeptamongusintimesofpeacestandingarmieswithouttheconsentofourlegislatureshehasaffectedtorenderthemilitaryindependentofandsuperiortothecivilpowerhehascombinedwithotherstosubjectustoajurisdictionforeigntoourconstitutionandunacknowledgedbyourlawsgivinghisassenttotheiractsofpretendedlegislationforquarteringlargebodiesofarmedtroopsamongusforprotectingthembyamocktrialfrompunishmentforanymurderswhichtheyshouldcommitontheinhabitantsofthesestatesforcuttingoffourtradewithallpartsoftheworldforimposingtaxesonuswithoutourconsentfordeprivingusinmanycasesofthebenefitsoftrialbyjuryfortransportingusbeyondseastobetriedforpretendedoffencesforabolishingthefreesystemofenglishlawsinaneighbouringprovinceestablishingthereinanarbitrarygovernmentandenlargingitsboundariessoastorenderitatonceanexampleandfitinstrumentforintroducingthesameabsoluteruleintothesecoloniesfortakingawayourchartersabolishingourmostvaluablelawsandalteringfundamentallytheformsofourgovernmentsforsuspendingourownlegislaturesanddeclaringthemselvesinvestedwithpowertolegislateforusinallcaseswhatsoeverhehasabdicatedgovernmentherebydeclaringusoutofhisprotectionandwagingwaragainstushehasplunderedourseasravagedourcoastsburntourtownsanddestroyedthelivesofourpeopleheisatthistimetransportinglargearmiesofforeignmercenariestocompleattheworksofdeathdesolationandtyrannyalreadybegunwithcircumstancesofcruelty&perfidyscarcelyparalleledinthemostbarbarousagesandtotallyunworthytheheadofacivilizednationhehasconstrainedourfellowcitizenstakencaptiveonthehighseastobeararmsagainsttheircountrytobecometheexecutionersoftheirfriendsandbrethrenortofallthemselvesbytheirhandshehasexciteddomesticinsurrectionsamongstusandhasendeavouredtobringontheinhabitantsofourfrontiersthemercilessindiansavageswhoseknownruleofwarfareisanundistinguisheddestructionofallagessexesandconditionsineverystageoftheseoppressionswehavepetitionedforredressinthemosthumbletermsourrepeatedpetitionshavebeenansweredonlybyrepeatedinjuryaprincewhosecharacteristhusmarkedbyeveryactwhichmaydefineatyrantisunfittobetherulerofafreepeoplenorhavewebeenwantinginattentionstoourbrittishbrethrenwehavewarnedthemfromtimetotimeofattemptsbytheirlegislaturetoextendanunwarrantablejurisdictionoveruswehaveremindedthemofthecircumstancesofouremigrationandsettlementherewehaveappealedtotheirnativejusticeandmagnanimityandwehaveconjuredthembythetiesofourcommonkindredtodisavowtheseusurpationswhichwouldinevitablyinterruptourconnectionsandcorrespondencetheytoohavebeendeaftothevoiceofjusticeandofconsanguinitywemustthereforeacquiesceinthenecessitywhichdenouncesourseparationandholdthemasweholdtherestofmankindenemiesinwarinpeacefriendswethereforetherepresentativesoftheunitedstatesofamericaingeneralcongressassembledappealingtothesupremejudgeoftheworldfortherectitudeofourintentionsdointhenameandbyauthorityofthegoodpeopleofthesecoloniessolemnlypublishanddeclarethattheseunitedcoloniesareandofrightoughttobefreeandindependentstatesthattheyareabsolvedfromallallegiancetothebritishcrownandthatallpoliticalconnectionbetweenthemandthestateofgreatbritainisandoughttobetotallydissolvedandthatasfreeandindependentstatestheyhavefullpowertolevywarconcludepeacecontractalliancesestablishcommerceandtodoallotheractsandthingswhichindependentstatesmayofrightdoandforthesupportofthisdeclarationwithafirmrelianceontheprotectionofdivineprovidencewemutuallypledgetoeachotherourlivesourfortunesandoursacredhonor";        
-        public readonly static string FileExtension = "skibidi";
+        public readonly static string FileExtension = "aic";
         public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
         public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
         public readonly static string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
@@ -285,6 +284,7 @@ namespace Discogs {
         public string[] styles;
         public ClassComponents.Track[] tracklist;
         public ClassComponents.ReleaseImage image;
+        public Texture2D texture;
     }
 
     //Class for Saved Releases
@@ -463,8 +463,8 @@ namespace Discogs {
 
     //Saved Info
     public static class Library {
-        public static void Add(ReleaseInfo releaseToSave,bool multiples_allowed = false) {
-            FileModification.Add<UserLibrary>(GlobalVariables.libPath,false,releaseToSave,multiples_allowed);
+        public static async Task Add(ReleaseInfo releaseToSave,bool multiples_allowed = false) {
+            await FileModification.Add<UserLibrary>(GlobalVariables.libPath,false,releaseToSave,multiples_allowed);
         }
         public static void Remove(int releaseToRemoveID) {
             FileModification.Remove<UserLibrary>(GlobalVariables.libPath,false,releaseToRemoveID);
@@ -478,29 +478,23 @@ namespace Discogs {
         public static void HardSave(UserLibrary libraryToSave) {
             FileModification.HardSave(GlobalVariables.libPath,libraryToSave);
         }
-        public static bool Contains(ReleaseInfo relToCheck) {
-            return FileModification.Contains(Load().Owned,relToCheck);
-        }
 
         public static class Wishlist {
-            public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
-            FileModification.Add<UserLibrary>(GlobalVariables.libPath,true,releaseToSave,multiples_allowed);
+            public static async Task Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+                await FileModification.Add<UserLibrary>(GlobalVariables.libPath,true,releaseToSave,multiples_allowed);
             }
 
             public static void Remove(int releaseToRemoveID) {
                 FileModification.Remove<UserLibrary>(GlobalVariables.libPath,true,releaseToRemoveID);
             }
 
-            public static bool Contains(ReleaseInfo relToCheck) {
-                return FileModification.Contains(Load().Wishlist,relToCheck);
-            }
         }
         
     }
 
     public static class Game {
-        public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
-            FileModification.Add<GameData>(GlobalVariables.gamePath,false,releaseToSave, multiples_allowed);
+        public static async Task Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+            await FileModification.Add<GameData>(GlobalVariables.gamePath,false,releaseToSave, multiples_allowed);
         }
         public static void Remove(int releaseToRemoveID) {
             FileModification.Remove<GameData>(GlobalVariables.gamePath,false,releaseToRemoveID);
@@ -514,21 +508,15 @@ namespace Discogs {
         public static void HardSave(GameData libraryToSave) {
             FileModification.HardSave(GlobalVariables.gamePath,libraryToSave);
         }
-        public static bool Contains(ReleaseInfo relToCheck) {
-            return FileModification.Contains(Load().Owned,relToCheck);
-        }
 
         public static class Wishlist {
-            public static void Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
-            FileModification.Add<GameData>(GlobalVariables.gamePath,true,releaseToSave, multiples_allowed);
+            public static async Task Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
+                await FileModification.Add<GameData>(GlobalVariables.gamePath,true,releaseToSave, multiples_allowed);
             }
             public static void Remove(int releaseToRemoveID) {
                 FileModification.Remove<GameData>(GlobalVariables.gamePath,true,releaseToRemoveID);
             }
 
-            public static bool Contains(ReleaseInfo relToCheck) {
-                return FileModification.Contains(Load().Wishlist,relToCheck);
-            }
         }
         
     }
@@ -552,31 +540,32 @@ namespace Discogs {
     }
 
     public static class Convert {
-        public static ReleaseInfoOptimized OptimizeReleaseInfo(ReleaseInfo releaseInfoInput) {
+        public static async Task<ReleaseInfoOptimized> OptimizeReleaseInfo(ReleaseInfo releaseInfoInput) {
             ReleaseInfoOptimized _releaseInfoInputOpt = JsonUtility.FromJson<ReleaseInfoOptimized>(JsonUtility.ToJson(releaseInfoInput));
             _releaseInfoInputOpt.image = releaseInfoInput.images[0];
+            _releaseInfoInputOpt.texture = await Get.Image(releaseInfoInput.images[0].resource_url);
             return _releaseInfoInputOpt;
         }
     }
 
     public static class FileModification {
-        public static void Add<inputType>(string path, bool Wishlist, ReleaseInfo itemToSave, bool multiples_allowed) where inputType : UserLibrary,new() {
+        public static async Task Add<inputType>(string path, bool Wishlist, ReleaseInfo itemToSave, bool multiples_allowed) where inputType : UserLibrary,new() {
             inputType _saveLibrary = Load<inputType>(path);
             if (!Wishlist) {
                 if (_saveLibrary.Contains(itemToSave)) {
                     if (multiples_allowed) {
-                        _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                        _saveLibrary.Owned.Add(await Convert.OptimizeReleaseInfo(itemToSave));
                     }
                 } else {
-                    _saveLibrary.Owned.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                    _saveLibrary.Owned.Add(await Convert.OptimizeReleaseInfo(itemToSave));
                 }
             } else {
                 if (_saveLibrary.Contains(itemToSave)) {
                     if (multiples_allowed) {
-                        _saveLibrary.Wishlist.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                        _saveLibrary.Wishlist.Add(await Convert.OptimizeReleaseInfo(itemToSave));
                     }
                 } else {
-                    _saveLibrary.Wishlist.Add(Convert.OptimizeReleaseInfo(itemToSave));
+                    _saveLibrary.Wishlist.Add(await Convert.OptimizeReleaseInfo(itemToSave));
                 }
             }
             HardSave(path,_saveLibrary);
@@ -639,15 +628,6 @@ namespace Discogs {
             File.WriteAllText(path,JsonUtility.ToJson(_saveLibrary,true));
         }
         
-        public static bool Contains(List<ReleaseInfoOptimized> rels,ReleaseInfo relCheck) {
-            foreach (var rel in rels) {
-                if (rel.id == relCheck.id) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        
         private static void ConditionalSave<inputType>(string path, bool Theme, inputType inputClass) where inputType : class,new(){ //WIP
             UserSettings saveLib = Load<UserSettings>(path);
             Type classType = typeof(inputType);
@@ -667,30 +647,8 @@ namespace Discogs {
                     }
                 }
             }
-
             HardSave(path,saveLib);
         }
-        
-        /*
-        public static void Add() {
-            FileModification.Add();
-        }
-        public static void Remove() {
-            FileModification.Remove();
-        }
-        public static UserLibrary Load() {
-            return FileModification.Load();
-        }
-        public static string LoadStr() {
-            return FileModification.LoadStr();
-        }
-        public static void HardSave() {
-            FileModification.HardSave();
-        }
-        public static bool Contains() {
-            return FileModification.Contains();
-        }
-        */
     }
 }
 
