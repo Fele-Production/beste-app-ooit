@@ -87,7 +87,7 @@ public class SearchManager : MonoBehaviour
         
         UserLibrary oldLibrary = GameManager.instance.library;
         releaseInfo = await Get.ReleaseInfo(curReleaseID);
-        Library.Add(releaseInfo);
+        await Library.Add(releaseInfo);
         UserLibrary curLibrary = Library.Load();
 
         if(oldLibrary != curLibrary) {
