@@ -284,7 +284,7 @@ namespace Discogs {
         public string[] styles;
         public ClassComponents.Track[] tracklist;
         public ClassComponents.ReleaseImage image;
-        public Texture2D texture;
+        public Sprite texture;
     }
 
     //Class for Saved Releases
@@ -543,7 +543,8 @@ namespace Discogs {
         public static async Task<ReleaseInfoOptimized> OptimizeReleaseInfo(ReleaseInfo releaseInfoInput) {
             ReleaseInfoOptimized _releaseInfoInputOpt = JsonUtility.FromJson<ReleaseInfoOptimized>(JsonUtility.ToJson(releaseInfoInput));
             _releaseInfoInputOpt.image = releaseInfoInput.images[0];
-            _releaseInfoInputOpt.texture = await Get.Image(releaseInfoInput.images[0].resource_url);
+            Texture2D _texture = await Get.Image(releaseInfoInput.images[0].resource_url);
+            _releaseInfoInputOpt.texture = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
             return _releaseInfoInputOpt;
         }
     }
