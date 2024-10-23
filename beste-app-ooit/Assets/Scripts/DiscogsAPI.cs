@@ -12,6 +12,7 @@ using UnityEngine.Networking;
 
 namespace Discogs {
     public static class GlobalVariables {
+        public readonly static string DeprecatedFileExtension = "skibidi";
         public readonly static string FileExtension = "aic";
         public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
         public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
@@ -592,7 +593,7 @@ namespace Discogs {
             HardSave(path,_removeLibrary);
         }
 
-        public static inputType Load<inputType>(string path) where inputType : class, new(){
+        public static inputType Load<inputType>(string path) where inputType : class, new(){    
             string _LibraryStr;
             inputType _Library;
             if ((typeof(inputType) != typeof(UserLibrary))&&(typeof(inputType) != typeof(GameData))&&(typeof(inputType) != typeof(UserSettings))) {
@@ -603,8 +604,14 @@ namespace Discogs {
             if (File.Exists(path)) {
                 _LibraryStr = File.ReadAllText(path);
             } else {
-                _LibraryStr = "";
-                File.Create(path);
+                string oldpath = path.Replace(GlobalVariables.FileExtension,GlobalVariables.DeprecatedFileExtension);
+                if (File.Exists(oldpath)) {
+                    _LibraryStr = File.ReadAllText(oldpath);
+                } else {
+                    _LibraryStr = "";
+                }
+                HardSave(path,JsonUtility.FromJson<inputType>(_LibraryStr));
+                File.Delete(oldpath);
             }
             _Library = JsonUtility.FromJson<inputType>(_LibraryStr);
             if (_Library == null) {
@@ -625,10 +632,11 @@ namespace Discogs {
             return _LibraryStr;
         }
 
-        public static void HardSave(string path,object _saveLibrary) {
+        public static void HardSave<inputType>(string path,inputType _saveLibrary) where inputType : class,new(){
             File.WriteAllText(path,JsonUtility.ToJson(_saveLibrary,true));
         }
         
+
         private static void ConditionalSave<inputType>(string path, bool Theme, inputType inputClass) where inputType : class,new(){ //WIP
             UserSettings saveLib = Load<UserSettings>(path);
             Type classType = typeof(inputType);
