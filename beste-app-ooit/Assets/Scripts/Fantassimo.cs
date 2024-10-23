@@ -17,7 +17,6 @@ public class Fantassimo : MonoBehaviour {
     private readonly List<Image> imgs = new List<Image>();
     private readonly float[] coloure = {0f,255f,255f};
     public bool greenlit = false;
-    [HideInInspector] public bool Enabled = false;
 
     public void AddImage(Image newIm) {
         imgs.Add(newIm);
@@ -29,16 +28,19 @@ public class Fantassimo : MonoBehaviour {
     void Update() {
         if (greenlit) {
             Time.fixedDeltaTime = 10f/9f/255f;
-            Enabled = true;
         } else {
             Time.fixedDeltaTime = 1000f;
-            Enabled = false;
+            fixedImg.color = new Color(1,1,1);
+            if (imgs.Count>0) {
+                foreach (var img in imgs) {
+                    img.color = new Color(1,1,1);
+                }
+            }
         }
     }
 
-
     void FixedUpdate() {
-        if (Enabled) {
+        if (greenlit) {
             if ((y%2)==0) {
                 coloure[x%3]++;
                 if (coloure[x%3]>=255) {

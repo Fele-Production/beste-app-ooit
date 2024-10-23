@@ -34,7 +34,7 @@ public class UIManager : MonoBehaviour {
     public Fantassimo discoScript;
     public Image backdropImage;
     [HideInInspector] List<Texture2D> BackdropOptions = new();
-    [HideInInspector] int currentBackdrop = -1;
+    [HideInInspector] int currentBackdrop;
     [SerializeField] public UserSettings userSettings = new();
 
     public void NextPage() {
@@ -98,7 +98,7 @@ public class UIManager : MonoBehaviour {
     }     
 
     public void RefreshHome() {
-        if(GameManager.instance.libraryChanged == true) {
+        if(GameManager.instance.libraryChanged) {
             GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
             GameManager.instance.libraryChanged = false;
         }
@@ -130,11 +130,17 @@ public class UIManager : MonoBehaviour {
     }
 
     void Update() {
-        //UserSettings userSettings = Settings.Load();
+        //UserSettings userSettings = Settings.Load(); we hebben nog niks om settings aan te passen dus
         discoScript.greenlit = userSettings.Theme.Fantassimo;
+
         if (currentBackdrop!=userSettings.Theme.Backdrop) {
-            backdropImage.sprite = Sprite.Create(BackdropOptions[userSettings.Theme.Backdrop],new Rect(0,0,BackdropOptions[userSettings.Theme.Backdrop].width,BackdropOptions[userSettings.Theme.Backdrop].height), new Vector2(0,0));
-            currentBackdrop = userSettings.Theme.Backdrop;
+            try {
+                backdropImage.sprite = Sprite.Create(BackdropOptions[userSettings.Theme.Backdrop],new Rect(0,0,BackdropOptions[userSettings.Theme.Backdrop].width,BackdropOptions[userSettings.Theme.Backdrop].height), new Vector2(0,0));
+                currentBackdrop = userSettings.Theme.Backdrop;
+            }
+            catch {
+                //yeah idfk just let the rollie do what it do
+            }
         }
     }
 }
