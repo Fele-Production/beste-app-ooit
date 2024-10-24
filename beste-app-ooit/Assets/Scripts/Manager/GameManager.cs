@@ -56,8 +56,9 @@ public class GameManager : MonoBehaviour
             albumContent2 = GameObject.Find("Albums Content 2"); 
         }
         
-        for(int i = 0; i < curAlbums.Count; i++) {
-            Destroy(curAlbums[i]);
+        foreach (var t in curAlbums)
+        {
+            Destroy(t);
         }
 
         curAlbums.Clear();
@@ -74,7 +75,7 @@ public class GameManager : MonoBehaviour
             curAlbums[i].GetComponent<SmallAlbumPrefab>().curIndex = i; 
         }
 
-        Invoke("HomeCoroutineStart", invokeDelay);
+        Invoke(nameof(HomeCoroutineStart), invokeDelay);
     }
 
     public void AddLibrary(Sprite _sprite) {
@@ -119,14 +120,17 @@ public class GameManager : MonoBehaviour
     public IEnumerator HomeLayoutRefresh() {
         //Refreshes the layout, so the UI is correctly displayed 
         crRunning = true;
+        var content1Trans = albumContent1.GetComponent<RectTransform>();
+        var content2Trans = albumContent2.GetComponent<RectTransform>();
+        
         yield return new WaitForEndOfFrame();
 
-        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent1.GetComponent<RectTransform>());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent2.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content1Trans);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content2Trans);
 
         yield return new WaitForEndOfFrame();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent1.GetComponent<RectTransform>());
-        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent2.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content1Trans);
+        LayoutRebuilder.ForceRebuildLayoutImmediate(content2Trans);
 
         crRunning = false;
     }

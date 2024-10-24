@@ -6,12 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using Discogs;
+using UnityEngine.Serialization;
 
 public class UIManager : MonoBehaviour {
     [Header("Search Settings")]
     public int resultsPerPage;
-    public int searchResultsPerPage;
-    [SerializeField] public bool PerfMode;
+    public bool perfMode;
 
     [Header("Search Objects")]
     public SearchManager searchManager;
@@ -33,31 +33,47 @@ public class UIManager : MonoBehaviour {
     [Header ("Theme Actors")]
     public Fantassimo discoScript;
     public Image backdropImage;
-    [HideInInspector] List<Texture2D> BackdropOptions = new();
-    [HideInInspector] int currentBackdrop;
+    private List<Texture2D> BackdropOptions = new();
+    private int currentBackdrop;
     [SerializeField] public UserSettings userSettings = new();
-
+    
+    
+    //Goes to the next results page
     public void NextPage() {
         searchManager.curPage++;
         backButton.interactable = true;
+        
+        //Check if there are more results to load, if not disable the next button
+        switch (searchManager.curType)
+        {
+            case "master":
+            {
+                if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
+                    nextButton.interactable = false;
+                }
 
-        if(searchManager.curType == "master") {
-            if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
-                nextButton.interactable = false;
-            } 
-        } else if(searchManager.curType == "release") {
-            if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
-                nextButton.interactable = false;
+                break;
+            }
+            case "release":
+            {
+                if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
+                    nextButton.interactable = false;
+                }
+
+                break;
             }
         }
              
 
         RefreshSearch();  
     }
-
+    
+    //Goes to the previous results page
     public void PreviousPage() {
         searchManager.curPage--;
         nextButton.interactable = true;
+        
+        //Checks if on page 1, if so disable the back button
         if(searchManager.curPage == 1) {
             backButton.interactable = false;
         }   
@@ -67,8 +83,10 @@ public class UIManager : MonoBehaviour {
 
     public void RefreshSearch() {
         SendMessage("imstillalive");
-        for(int i = 0; i < curSearchPreviews.Count; i++) {
-            Destroy(curSearchPreviews[i]);
+        
+        foreach (var t in curSearchPreviews)
+        {
+            Destroy(t);
         }
 
         searchManager.searched = true;
@@ -90,19 +108,24 @@ public class UIManager : MonoBehaviour {
                 resultsToLoad = searchManager.releaseResult.versions.Length - ((searchManager.curPage-1) * resultsPerPage);
             }
             for(int i = 0; i < resultsToLoad; i++) {
-                    curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
-                    curSearchPreviews[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
-                }
+                curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
+                curSearchPreviews[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
+            }
             
         }
     }     
 
     public void RefreshHome() {
-        if(GameManager.instance.libraryChanged) {
-            GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
-            GameManager.instance.libraryChanged = false;
+        if (!GameManager.instance.libraryChanged)
+        {
+            return;
         }
+
+        GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
+        GameManager.instance.libraryChanged = false;
     }
+    
+    //SearchingAnimation; Changes the text every few seconds, as if it's an animation
     public IEnumerator SearchingAnimation() {
         searchingText.enabled = true;
         while (!searchManager.searched) {
@@ -139,7 +162,7 @@ public class UIManager : MonoBehaviour {
                 currentBackdrop = userSettings.Theme.Backdrop;
             }
             catch {
-                //yeah idfk just let the rollie do what it do
+                //Yeah idfk just let the rollie do what it do
             }
         }
     }

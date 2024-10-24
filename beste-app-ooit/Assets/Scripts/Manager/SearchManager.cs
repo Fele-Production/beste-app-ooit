@@ -81,7 +81,8 @@ public class SearchManager : MonoBehaviour
         //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;
         uiManager.backButton.interactable = false;
-        if(releaseResult.versions.Length > resultsPerPage) { uiManager.nextButton.interactable = true; } else { uiManager.nextButton.interactable = false; }  
+        if(releaseResult.versions.Length > resultsPerPage) { uiManager.nextButton.interactable = true; }
+        else { uiManager.nextButton.interactable = false; }  
         
         //Refresh Image URL's
         urls.Clear();
