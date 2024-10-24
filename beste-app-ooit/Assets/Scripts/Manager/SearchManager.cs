@@ -74,7 +74,7 @@ public class SearchManager : MonoBehaviour
             Destroy(uiManager.curSearchPreviews[i]);
         }
         uiManager.curSearchPreviews.Clear();
-        
+
         uiManager.StartCoroutine(uiManager.SearchingAnimation());
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
         
@@ -139,8 +139,9 @@ public class SearchManager : MonoBehaviour
     void Update() {
         if(searched) {
             uiManager.searchedMenu.SetActive(true);
+            uiManager.searchingText.enabled = false;
         } else {
-            uiManager.searchedMenu.SetActive(false);
+            uiManager.searchedMenu.SetActive(false); 
         }
     }
 }
