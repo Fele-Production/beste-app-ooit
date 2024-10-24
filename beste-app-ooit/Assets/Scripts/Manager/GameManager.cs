@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+        //Make an instance of GameManager so that all scripts can access it easily
         if(instance == null) {
             instance = this;
             DontDestroyOnLoad(this);
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour
 
         curAlbums.Clear();
 
+        //Places all the albums in the correct row
         for(int i = 0; i < library.Owned.Count; i++) {
 
             if(i % 2 == 0) {
@@ -104,7 +106,7 @@ public class GameManager : MonoBehaviour
 
 
     public void SelectAlbum(int _index, Sprite _sprite) {
-        bigAlbumPreview.enabled = true;
+        //Enable the big album preview and give it the sprite (album cover) and curIndex
         bigAlbumPreview.gameObject.SetActive(true);
         bigAlbumPreview.curIndex = _index;
         bigAlbumPreview.curSprite = _sprite;
@@ -115,9 +117,8 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator HomeLayoutRefresh() {
+        //Refreshes the layout, so the UI is correctly displayed 
         crRunning = true;
-
-        Debug.Log("Refreshing Home...");
         yield return new WaitForEndOfFrame();
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(albumContent1.GetComponent<RectTransform>());
@@ -131,8 +132,8 @@ public class GameManager : MonoBehaviour
     }
     
     public IEnumerator LayoutRefresh(RectTransform _content) {
-        yield return new WaitForEndOfFrame(); 
-        // Force the layout updates in the correct order
-        LayoutRebuilder.ForceRebuildLayoutImmediate(_content); // Rebuild parent (album content)
+        //Refreshes the layout, so the UI is correctly displayed 
+        yield return new WaitForEndOfFrame();
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_content);
     }
 }

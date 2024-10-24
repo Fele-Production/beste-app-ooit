@@ -36,16 +36,25 @@ public class SearchManager : MonoBehaviour
     [SerializeField] public Discogs.ReleaseInfo releaseInfo = new ();
 
    
-
-    public async void SearchMaster() {
+    //Search Master based on the prompt given 
+    public async void SearchMaster() {  
+        searched = false;
         curType = "master";
+
+        for(int i = 0; i < uiManager.curSearchPreviews.Count; i++) {
+            Destroy(uiManager.curSearchPreviews[i]);
+        }
+        uiManager.curSearchPreviews.Clear();
+
         uiManager.StartCoroutine(uiManager.SearchingAnimation());
         masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text,1, searchResultsPerPage);
-        
+
+        //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;
         uiManager.backButton.interactable = false;
         if(masterResult.results.Length > resultsPerPage) { uiManager.nextButton.interactable = true; } else { uiManager.nextButton.interactable = false; }  
-        
+
+        //Refresh Image URL's
         urls.Clear();
 
         for(int i = 0; i < masterResult.results.Length; i++) {
@@ -56,17 +65,25 @@ public class SearchManager : MonoBehaviour
         uiManager.RefreshSearch();
     }
 
+    //Search Releases based on MasterID given
     public async void SearchRelease() {
-        Debug.Log("Searching Releases...");
+        searched = false;
+        curType = "release";
+
+        for(int i = 0; i < uiManager.curSearchPreviews.Count; i++) {
+            Destroy(uiManager.curSearchPreviews[i]);
+        }
+        uiManager.curSearchPreviews.Clear();
+        
         uiManager.StartCoroutine(uiManager.SearchingAnimation());
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
-        Debug.Log("Finished Searching for releases");
-        curType = "release";
         
+        //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;
         uiManager.backButton.interactable = false;
         if(releaseResult.versions.Length > resultsPerPage) { uiManager.nextButton.interactable = true; } else { uiManager.nextButton.interactable = false; }  
         
+        //Refresh Image URL's
         urls.Clear();
 
         //if (/*Discogs.Settings.Load().Settings.PerformanceMode||PerfMode) { */ 
@@ -83,6 +100,8 @@ public class SearchManager : MonoBehaviour
         uiManager.RefreshSearch();
     }
 
+
+    //Get ReleaseInfo based on ReleaseID and saves it
     public async void SaveRelease() {
         
         UserLibrary oldLibrary = GameManager.instance.library;
@@ -90,8 +109,8 @@ public class SearchManager : MonoBehaviour
         await Library.Add(releaseInfo);
         UserLibrary curLibrary = Library.Load();
 
-        if(oldLibrary != curLibrary) {
-            
+        //Checks if library has/hasn't changed (i.e, you have this release already)
+        if(oldLibrary != curLibrary) {    
             GameManager.instance.AddLibrary(curCoverImg); 
         } else {
             Debug.LogWarning("Library hasn't changed"); 
@@ -99,20 +118,24 @@ public class SearchManager : MonoBehaviour
         
     }
 
-    public void GetMasterID(int _position) {
-        curMasterID = masterResult.results[_position + ((curPage-1)*resultsPerPage)].master_id;
+
+    //Selects the Master ID based on the index given
+    public void GetMasterID(int _index) {
+        curMasterID = masterResult.results[_index + ((curPage-1)*resultsPerPage)].master_id;
         
         uiManager.confirmReleaseMenu.SetActive(true);
     }
-
-    public void GetReleaseID(int _position, Sprite _sprite) {
-        curReleaseID = releaseResult.versions[_position + ((curPage-1)*resultsPerPage)].id;
+    
+    //Selects the Release ID based on the index given
+    public void GetReleaseID(int _index, Sprite _sprite) {
+        curReleaseID = releaseResult.versions[_index + ((curPage-1)*resultsPerPage)].id;
         curCoverImg = _sprite;
 
 
         uiManager.saveReleaseMenu.SetActive(true);
     }
 
+    //Only enables the Next and back buttons if searched == true
     void Update() {
         if(searched) {
             uiManager.searchedMenu.SetActive(true);
