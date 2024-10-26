@@ -118,20 +118,24 @@ public class GameManager : MonoBehaviour
     }
 
     public IEnumerator HomeLayoutRefresh() {
+        Debug.Log("Refreshing home layout");
         //Refreshes the layout, so the UI is correctly displayed 
         crRunning = true;
         var content1Trans = albumContent1.GetComponent<RectTransform>();
         var content2Trans = albumContent2.GetComponent<RectTransform>();
+        var sizeFitter1 = albumContent2.GetComponent<ContentSizeFitter>();
+        var sizeFitter2 = albumContent2.GetComponent<ContentSizeFitter>();
+        sizeFitter1.enabled = false;
+        sizeFitter2.enabled = false;
+
         
         yield return new WaitForEndOfFrame();
 
         LayoutRebuilder.ForceRebuildLayoutImmediate(content1Trans);
         LayoutRebuilder.ForceRebuildLayoutImmediate(content2Trans);
-
-        yield return new WaitForEndOfFrame();
-        LayoutRebuilder.ForceRebuildLayoutImmediate(content1Trans);
-        LayoutRebuilder.ForceRebuildLayoutImmediate(content2Trans);
-
+        
+        sizeFitter1.enabled = false;
+        sizeFitter2.enabled = false;
         crRunning = false;
     }
     

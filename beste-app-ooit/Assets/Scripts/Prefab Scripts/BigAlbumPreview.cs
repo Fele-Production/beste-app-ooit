@@ -6,7 +6,6 @@ using UnityEngine;
 using Discogs;
 using System;
 
-
 public class BigAlbumPreview : MonoBehaviour
 {
     [Header("Settings")]
@@ -32,10 +31,6 @@ public class BigAlbumPreview : MonoBehaviour
     public GameObject trackPrefab;
     public List<GameObject> curTracks;
     public Sprite curSprite;
-
-    
-    
-
     
     private void OnEnable() 
     {
@@ -63,8 +58,8 @@ public class BigAlbumPreview : MonoBehaviour
                 artistText.text = "---";
             }
 
-            for(int i = 0; i < curTracks.Count; i++) {
-                Destroy(curTracks[i]);
+            foreach (var t in curTracks) {
+                Destroy(t);
             }
 
             if(curLibrary.Owned[curIndex].tracklist != null) {
@@ -111,7 +106,7 @@ public class BigAlbumPreview : MonoBehaviour
                 start = 'a';
             }
         }
-        int discCount = (int)(((letter - start + 1) / 2) + 0.5f);
+        discCount = (int)(((letter - start + 1) / 2) + 0.5f);
         return discCount;
     }
 
@@ -119,6 +114,7 @@ public class BigAlbumPreview : MonoBehaviour
         int releaseID = GameManager.instance.library.Owned[curIndex].id;
         Library.Remove(releaseID);
         GameManager.instance.RemoveLibrary(curIndex);
+        GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
     }
 
     

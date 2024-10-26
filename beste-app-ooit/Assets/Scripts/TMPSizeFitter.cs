@@ -14,29 +14,19 @@ public class TMPSizeFitter : MonoBehaviour
     public float preferredHeight;
 
     private void SetHeight() {
-        if(text == null) {
-            Debug.LogError("Text = null");
-            return;
-        }
         textRectTransform.sizeDelta = new Vector2(textRectTransform.sizeDelta.x, preferredHeight); 
 
         if(GameManager.instance.crRunning == false) {
             GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
         } 
-
-        //StartCoroutine(VerticalLayoutRefresh());
     }
-
-    private IEnumerator VerticalLayoutRefresh() {
-        yield return new WaitForEndOfFrame(); 
-        // Force the layout updates in the correct order
-        LayoutRebuilder.ForceRebuildLayoutImmediate(albumContentTransform); // Rebuild parent (album content)
-    }
-
-    private void Awake() {  
-    }
-
+    
     private void Start() {
+        if(text == null) {
+            Debug.LogError("Text = null");
+            return;
+        }
+        
         SmallAlbumPrefab smallAlbumPrefab = this.GetComponentInParent<SmallAlbumPrefab>();
         if(smallAlbumPrefab.curIndex % 2 == 0) {
             albumContentTransform = GameManager.instance.albumContent1.GetComponent<RectTransform>();
