@@ -16,14 +16,19 @@ public class SearchManager : MonoBehaviour
     public int resultsPerPage;
     public int searchResultsPerPage;
     [SerializeField] public bool PerfMode;
-
+    public float searchingAnimDelay;
+    
+    [Header("Search Variables")]
+    public int curPage = 1;
+    public int curStartPage = 0;
+    public string curType = "master";
+    
+    
     [Header ("Search Other")]
     public List<GameObject> curSearchPreviews;
     public List<Texture2D> imgD;
     public List<string> urls;
-    public int curPage = 1;
-    public string curType = "master";
-    public float searchingAnimDelay;
+    
     [HideInInspector] public int pageBuffer {get; private set;}
     public bool searched = false;
     [SerializeField] private int curMasterID;
@@ -38,16 +43,17 @@ public class SearchManager : MonoBehaviour
    
     //Search Master based on the prompt given 
     public async void SearchMaster() {  
+        curStartPage = curPage;
         searched = false;
         curType = "master";
 
-        for(int i = 0; i < uiManager.curSearchPreviews.Count; i++) {
-            Destroy(uiManager.curSearchPreviews[i]);
+        foreach (var t in uiManager.curSearchPreviews) {
+            Destroy(t);
         }
         uiManager.curSearchPreviews.Clear();
 
         uiManager.StartCoroutine(uiManager.SearchingAnimation());
-        masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text,1, searchResultsPerPage);
+        masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text, curStartPage, searchResultsPerPage);
 
         //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;

@@ -48,23 +48,32 @@ public class UIManager : MonoBehaviour {
         {
             case "master":
             {
-                if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
+                /*
+                if(searchManager.masterResult.pagination.items > searchManager.curPage * resultsPerPage)
+                {
+                    searchManager.SearchMaster();
+                    nextButton.interactable = true;
+                } 
+                else*/ if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
                     nextButton.interactable = false;
                 }
 
                 break;
             }
             case "release":
-            {
-                if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
+            {   
+                /*if(searchManager.releaseResult.pagination.items <= searchManager.curPage * resultsPerPage)
+                {
+                    searchManager.SearchRelease();
+                    nextButton.interactable = true;
+                }
+                else */ if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
                     nextButton.interactable = false;
                 }
 
                 break;
             }
         }
-             
-
         RefreshSearch();  
     }
     
@@ -116,11 +125,9 @@ public class UIManager : MonoBehaviour {
     }     
 
     public void RefreshHome() {
-        if (!GameManager.instance.libraryChanged)
-        {
+        if (!GameManager.instance.libraryChanged) {
             return;
         }
-
         GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
         GameManager.instance.libraryChanged = false;
     }

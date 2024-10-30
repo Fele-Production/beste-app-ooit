@@ -123,7 +123,7 @@ public class GameManager : MonoBehaviour
         crRunning = true;
         var content1Trans = albumContent1.GetComponent<RectTransform>();
         var content2Trans = albumContent2.GetComponent<RectTransform>();
-        var sizeFitter1 = albumContent2.GetComponent<ContentSizeFitter>();
+        var sizeFitter1 = albumContent1.GetComponent<ContentSizeFitter>();
         var sizeFitter2 = albumContent2.GetComponent<ContentSizeFitter>();
         sizeFitter1.enabled = false;
         sizeFitter2.enabled = false;
@@ -134,8 +134,8 @@ public class GameManager : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(content1Trans);
         LayoutRebuilder.ForceRebuildLayoutImmediate(content2Trans);
         
-        sizeFitter1.enabled = false;
-        sizeFitter2.enabled = false;
+        sizeFitter1.enabled = true;
+        sizeFitter2.enabled = true;
         crRunning = false;
     }
     
