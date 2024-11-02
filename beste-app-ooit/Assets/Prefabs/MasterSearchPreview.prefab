@@ -459,11 +459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a491decf4014df247a22152a874d3a5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invokeDelay: 0.005
+  invokeDelay: 0.1
   distance: 450
-  curPosition: 0
+  curPage: 0
+  curIndex: 0
   curDistance: 0
-  pageBuffer: 0
   searchManager: {fileID: 0}
   titleText: {fileID: 4327483855719223321}
   artistText: {fileID: 3671298501972191074}

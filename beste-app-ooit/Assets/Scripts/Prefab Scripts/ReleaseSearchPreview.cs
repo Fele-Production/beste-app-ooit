@@ -12,9 +12,9 @@ public class ReleaseSearchPreview : MonoBehaviour
     
 
     [Header("Variables")]
-    public int curPosition;
+    public int curIndex;
+    public int curPage;
     public int curDistance;
-    public int pageBuffer;
     private Sprite coverImage;
 
     [Header("Objects")]
@@ -31,46 +31,45 @@ public class ReleaseSearchPreview : MonoBehaviour
     }
 
     void Start() {
-        curDistance = curPosition * distance;
+        curDistance = curIndex * distance;
         this.transform.localPosition = new Vector3(0, 750 - curDistance, 0);
-        pageBuffer = (searchManager.curPage-1) * searchManager.resultsPerPage;
 
         
-        if (searchManager.releaseResult.versions.Length != 0) {
-            if(searchManager.releaseResult.versions[curPosition + pageBuffer].title != null) {
-                    titleText.text = searchManager.releaseResult.versions[curPosition + pageBuffer].title;
-            Texture2D curImg = searchManager.imgD[(curPosition + pageBuffer) * 2];
+        if (searchManager.releaseResult.versions.Length != 0
+            && searchManager.releaseResult.versions[curIndex].title != null) {
+            
+            titleText.text = searchManager.releaseResult.versions[curIndex].title;
+            Texture2D curImg = searchManager.imgD[curIndex * 2];
             coverImage = Sprite.Create(curImg,new Rect(0,0,curImg.width,curImg.height), new Vector2(0,0));
             imgTest.sprite = coverImage;
             
-            } else {
-                titleText.text = "---";
-            }
+        } else { 
+            titleText.text = "---";
+        }
 
-            if(searchManager.releaseResult.versions[curPosition + pageBuffer].released != null) {
-                yearText.text = searchManager.releaseResult.versions[curPosition + pageBuffer].released;
-            } else {
-                yearText.text = "----";
-            } 
+        if(searchManager.releaseResult.versions[curIndex].released != null) {
+            yearText.text = searchManager.releaseResult.versions[curIndex].released;
+        }
+        else
+        {
+            yearText.text = "----";
+        }
 
-            if(searchManager.releaseResult.versions[curPosition + pageBuffer].country != null) {
-                countryText.text = searchManager.releaseResult.versions[curPosition + pageBuffer].country;
+        if(searchManager.releaseResult.versions[curIndex].country != null) { 
+            countryText.text = searchManager.releaseResult.versions[curIndex].country;
+        } else { 
+            countryText.text = "---";
+        }
+        if(searchManager.releaseResult.versions[curIndex].format != null) {
+            string[] splitArray = searchManager.releaseResult.versions[curIndex].format.Split(", ");
+            if(splitArray.Length >= 3) {
+                    editionText.text = splitArray[2]; 
             } else {
-                countryText.text = "---";
-            } 
-
-            if(searchManager.releaseResult.versions[curPosition + pageBuffer].format != null) {
-                string[] splitArray = searchManager.releaseResult.versions[curPosition + pageBuffer].format.Split(", ");
-                if(splitArray.Length >= 3) {
-                    editionText.text = splitArray[2];
-                } else {
                     editionText.text = "Standard";
-                }
             }
-
-            StartCoroutine("VerticalLayoutRefresh");
-        }   
-    }
+        }
+        StartCoroutine("VerticalLayoutRefresh");
+    }   
 
     private IEnumerator VerticalLayoutRefresh() {
         yield return new WaitForEndOfFrame(); 
@@ -79,6 +78,6 @@ public class ReleaseSearchPreview : MonoBehaviour
     }
 
     public void SelectRelease() {
-        searchManager.GetReleaseID(curPosition, coverImage);
+        searchManager.GetReleaseID(curIndex, curPage, coverImage);
     }
 }

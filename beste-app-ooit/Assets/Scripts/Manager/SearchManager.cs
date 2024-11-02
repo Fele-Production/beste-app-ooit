@@ -22,43 +22,46 @@ public class SearchManager : MonoBehaviour
     public int curPage = 1;
     public int curStartPage = 0;
     public string curType = "master";
-    
-    
-    [Header ("Search Other")]
-    public List<GameObject> curSearchPreviews;
-    public List<Texture2D> imgD;
-    public List<string> urls;
-    
     [HideInInspector] public int pageBuffer {get; private set;}
     public bool searched = false;
     [SerializeField] private int curMasterID;
     [SerializeField] private int curReleaseID;
+    
+    [Header ("Search Objects")]
+    public List<GameObject> curSearchPreviews;
+    public GameObject searchMasterPreviewPrefab;
+    public GameObject searchReleasePreviewPrefab;
+    [SerializeField] Transform searchResultsTrans;
+    [SerializeField] Transform searchScrollContentTrans;
+    
     [SerializeField] private Sprite curCoverImg;
 
     [Header ("Search Results")]
-    [SerializeField] public Discogs.Master masterResult = new ();
+    public List<string> urls;
+    public List<Texture2D> imgD;
+    [SerializeField] public Discogs.Master masterResult = new (); 
+    [SerializeField] public List<Discogs.Master> masterResultList = new ();
     [SerializeField] public Discogs.Release releaseResult = new ();
+    [SerializeField] public List<Discogs.Release> releaseResultList = new ();
     [SerializeField] public Discogs.ReleaseInfo releaseInfo = new ();
 
-   
+
     //Search Master based on the prompt given 
-    public async void SearchMaster() {  
-        curStartPage = curPage;
-        searched = false;
+    public async void SearchMaster() {
         curType = "master";
 
-        foreach (var t in uiManager.curSearchPreviews) {
+        foreach (var t in curSearchPreviews) {
             Destroy(t);
         }
-        uiManager.curSearchPreviews.Clear();
+        curSearchPreviews.Clear();
+        uiManager.StartCoroutine(uiManager.FirstSearchingAnimation());
 
-        uiManager.StartCoroutine(uiManager.SearchingAnimation());
-        masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text, curStartPage, searchResultsPerPage);
+        masterResultList.Clear();
+        masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text, 1, searchResultsPerPage);
+        masterResultList.Add(masterResult);
 
         //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;
-        uiManager.backButton.interactable = false;
-        if(masterResult.results.Length > resultsPerPage) { uiManager.nextButton.interactable = true; } else { uiManager.nextButton.interactable = false; }  
 
         //Refresh Image URL's
         urls.Clear();
@@ -68,7 +71,7 @@ public class SearchManager : MonoBehaviour
         }
         imgD = await Discogs.Get.ImageList(urls);
 
-        uiManager.RefreshSearch();
+        FirstSearchResults();
     }
 
     //Search Releases based on MasterID given
@@ -76,19 +79,24 @@ public class SearchManager : MonoBehaviour
         searched = false;
         curType = "release";
 
-        for(int i = 0; i < uiManager.curSearchPreviews.Count; i++) {
-            Destroy(uiManager.curSearchPreviews[i]);
+        foreach (var t in curSearchPreviews) {
+            Destroy(t);
         }
-        uiManager.curSearchPreviews.Clear();
+        curSearchPreviews.Clear();
 
-        uiManager.StartCoroutine(uiManager.SearchingAnimation());
+        uiManager.StartCoroutine(uiManager.FirstSearchingAnimation());
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
+        releaseResultList.Add(releaseResult);
         
         //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
         curPage = 1;
-        uiManager.backButton.interactable = false;
-        if(releaseResult.versions.Length > resultsPerPage) { uiManager.nextButton.interactable = true; }
-        else { uiManager.nextButton.interactable = false; }  
+        if (releaseResult.pagination.items > resultsPerPage) {
+            uiManager.moreButton.interactable = true;
+        }
+        else
+        {
+            uiManager.moreButton.interactable = false;
+        }  
         
         //Refresh Image URL's
         urls.Clear();
@@ -104,10 +112,152 @@ public class SearchManager : MonoBehaviour
         }*/
         imgD = await Discogs.Get.ImageList(urls);
 
-        uiManager.RefreshSearch();
+        FirstSearchResults();
+    }
+    
+    public void FirstSearchResults() {
+        SendMessage("imstillalive");
+        
+        searched = true;
+        curSearchPreviews.Clear();
+        uiManager.StopCoroutine(uiManager.FirstSearchingAnimation());
+        int resultsToLoad = resultsPerPage;
+
+        switch (curType)
+        {
+            case "master":
+            {
+
+                if (resultsPerPage > masterResult.results.Length)
+                {
+                    resultsToLoad = masterResult.results.Length;
+                }
+
+                for (int i = 0; i < resultsToLoad; i++)
+                {
+                    curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchResultsTrans, false));
+                    SearchPreview _searchPreview = curSearchPreviews[i].GetComponent<SearchPreview>();
+                    _searchPreview.curIndex = i;
+                    _searchPreview.curPage = curPage;
+                }
+
+                break;
+            }
+            case "release":
+            {
+                if (resultsPerPage > releaseResult.versions.Length)
+                {
+                    resultsToLoad = releaseResult.versions.Length;
+                }
+
+                for (int i = 0; i < resultsToLoad; i++)
+                {
+                    curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchResultsTrans, false));
+                    ReleaseSearchPreview _searchPreview = curSearchPreviews[i].GetComponent<ReleaseSearchPreview>();
+                    _searchPreview.curIndex = i;
+                    _searchPreview.curPage = curPage;
+                }
+
+                break;
+            }
+        } 
+        
+        LayoutRebuilder.ForceRebuildLayoutImmediate(searchResultsTrans.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(searchScrollContentTrans.GetComponent<RectTransform>());
+        
+        //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
+        if(masterResult.pagination.items > curSearchPreviews.Count) { uiManager.moreButton.interactable = true; } else { uiManager.moreButton.interactable = false; }
     }
 
+    private void AddResultsPrefabs()
+    {
+        searched = true;
+        uiManager.StopCoroutine(uiManager.AddSearchingAnimation());
+        int resultsToLoad = resultsPerPage;
 
+        switch (curType)
+        {
+            case "master":
+            {
+
+                if (resultsPerPage > masterResult.results.Length)
+                {
+                    resultsToLoad = masterResult.results.Length - resultsPerPage;
+                }
+
+                for (int i = 0; i < resultsToLoad; i++)
+                {
+                    curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchResultsTrans, false));
+                    SearchPreview _searchPreview = curSearchPreviews[i].GetComponent<SearchPreview>();
+                    _searchPreview.curIndex = i;
+                    _searchPreview.curPage = curPage;
+                }
+
+                break;
+            }
+            case "release":
+            {
+                if(resultsPerPage > releaseResult.versions.Length)
+                {
+                    resultsToLoad = releaseResult.versions.Length - resultsPerPage;
+                }
+                for(int i = 0; i < resultsToLoad; i++) {
+                    curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchResultsTrans, false));
+                    ReleaseSearchPreview _searchPreview = curSearchPreviews[i].GetComponent<ReleaseSearchPreview>();
+                    _searchPreview.curIndex = i;
+                    _searchPreview.curPage = curPage;
+                }
+
+                break;
+            } 
+                
+        }  
+        LayoutRebuilder.ForceRebuildLayoutImmediate(searchResultsTrans.GetComponent<RectTransform>());
+        LayoutRebuilder.ForceRebuildLayoutImmediate(searchScrollContentTrans.GetComponent<RectTransform>());
+        
+        //Reset UI buttons to the standard, making them clickable if there are more than results 'resultsPerPage'
+        if(masterResult.pagination.items > curSearchPreviews.Count) { uiManager.moreButton.interactable = true; } else { uiManager.moreButton.interactable = false; }  
+    }
+    
+    public async void AddResults()
+    {
+        searched = false;
+        Debug.Log("Adding More Results...");
+        uiManager.moreButton.gameObject.SetActive(false);
+        curPage++;
+        switch (curType)
+        {
+            case "master":
+            {
+                uiManager.StartCoroutine(uiManager.AddSearchingAnimation());
+                masterResult = await Discogs.Get.Masters(uiManager.searchPrompt.text, curPage, searchResultsPerPage);
+                masterResultList.Add(masterResult);
+                
+                //Refresh Image URL's
+                urls.Clear();
+                for(int i = 0; i < masterResult.results.Length; i++) {
+                    urls.Add(masterResult.results[i+pageBuffer].cover_image);
+                }
+                break;
+            }
+            case "release":
+            {   
+                uiManager.StartCoroutine(uiManager.AddSearchingAnimation());
+                releaseResult = await Discogs.Get.Releases(curMasterID, curPage, searchResultsPerPage);
+                
+                //Refresh Image URL's
+                urls.Clear();
+                for(int i = 0; i < releaseResult.versions.Length; i++) {
+                    urls.Add(releaseResult.versions[i+pageBuffer].thumb);
+                }
+                break;
+            }
+        }
+        
+        imgD = await Discogs.Get.ImageList(urls);
+        AddResultsPrefabs();
+    }
+    
     //Get ReleaseInfo based on ReleaseID and saves it
     public async void SaveRelease() {
         
@@ -127,28 +277,27 @@ public class SearchManager : MonoBehaviour
 
 
     //Selects the Master ID based on the index given
-    public void GetMasterID(int _index) {
-        curMasterID = masterResult.results[_index + ((curPage-1)*resultsPerPage)].master_id;
-        
+    public void GetMasterID(int _index, int _page) {
+        curMasterID = masterResultList[_page-1].results[_index].master_id;
         uiManager.confirmReleaseMenu.SetActive(true);
     }
     
     //Selects the Release ID based on the index given
-    public void GetReleaseID(int _index, Sprite _sprite) {
+    public void GetReleaseID(int _index, int _page, Sprite _sprite) {
+        curReleaseID = releaseResultList[_page-1].versions[_index].id;
         curReleaseID = releaseResult.versions[_index + ((curPage-1)*resultsPerPage)].id;
         curCoverImg = _sprite;
-
-
         uiManager.saveReleaseMenu.SetActive(true);
     }
 
     //Only enables the Next and back buttons if searched == true
     void Update() {
         if(searched) {
-            uiManager.searchedMenu.SetActive(true);
+            uiManager.moreButton.gameObject.SetActive(true);
             uiManager.searchingText.enabled = false;
-        } else {
-            uiManager.searchedMenu.SetActive(false); 
+            uiManager.addSearchingText.enabled = false;
+        } else{
+            uiManager.moreButton.gameObject.SetActive(false);
         }
     }
 }

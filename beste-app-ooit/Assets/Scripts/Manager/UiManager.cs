@@ -21,12 +21,11 @@ public class UIManager : MonoBehaviour {
     public GameObject searchedMenu; 
     public TMP_InputField searchPrompt;
     public TMP_Text searchingText;
-    public GameObject searchMasterPreviewPrefab;
-    public GameObject searchReleasePreviewPrefab;
+    public TMP_Text addSearchingText;
     public Button nextButton;
     public Button backButton;
-    public List<GameObject> curSearchPreviews;
-
+    public Button moreButton;
+    
     [Header ("Search Other")]
     public float searchingAnimDelay;
 
@@ -48,13 +47,13 @@ public class UIManager : MonoBehaviour {
         {
             case "master":
             {
-                /*
-                if(searchManager.masterResult.pagination.items > searchManager.curPage * resultsPerPage)
+                
+                if(searchManager.masterResult.pagination.items > searchManager.curPage * resultsPerPage && searchManager.masterResult.results.Length == searchManager.curPage * resultsPerPage)
                 {
                     searchManager.SearchMaster();
                     nextButton.interactable = true;
                 } 
-                else*/ if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
+                else if(searchManager.masterResult.results.Length <= searchManager.curPage * resultsPerPage) {
                     nextButton.interactable = false;
                 }
 
@@ -62,19 +61,19 @@ public class UIManager : MonoBehaviour {
             }
             case "release":
             {   
-                /*if(searchManager.releaseResult.pagination.items <= searchManager.curPage * resultsPerPage)
+                if(searchManager.releaseResult.pagination.items <= searchManager.curPage * resultsPerPage)
                 {
                     searchManager.SearchRelease();
                     nextButton.interactable = true;
                 }
-                else */ if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
+                else if(searchManager.releaseResult.versions.Length <= searchManager.curPage * resultsPerPage) {
                     nextButton.interactable = false;
                 }
 
                 break;
             }
         }
-        RefreshSearch();  
+        searchManager.FirstSearchResults(); 
     }
     
     //Goes to the previous results page
@@ -87,53 +86,11 @@ public class UIManager : MonoBehaviour {
             backButton.interactable = false;
         }   
 
-        RefreshSearch();
-    }
-
-    public void RefreshSearch() {
-        SendMessage("imstillalive");
-        
-        foreach (var t in curSearchPreviews)
-        {
-            Destroy(t);
-        }
-
-        searchManager.searched = true;
-        curSearchPreviews.Clear();
-        StopCoroutine(SearchingAnimation());
-        int resultsToLoad = resultsPerPage;
-
-        if(searchManager.curType == "master") {
-            if(resultsPerPage > (searchManager.masterResult.results.Length - ((searchManager.curPage-1) * resultsPerPage))) {
-                resultsToLoad = searchManager.masterResult.results.Length - ((searchManager.curPage-1) * resultsPerPage);
-            }
-            for(int i = 0; i < resultsToLoad; i++) {
-                curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
-                curSearchPreviews[i].GetComponent<SearchPreview>().curPosition = i; 
-                
-            }
-        } else if (searchManager.curType == "release") {
-            if(resultsPerPage > (searchManager.releaseResult.versions.Length - ((searchManager.curPage-1) * resultsPerPage))) {
-                resultsToLoad = searchManager.releaseResult.versions.Length - ((searchManager.curPage-1) * resultsPerPage);
-            }
-            for(int i = 0; i < resultsToLoad; i++) {
-                curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchMenu.transform.Find("SearchResults"), false));
-                curSearchPreviews[i].GetComponent<ReleaseSearchPreview>().curPosition = i; 
-            }
-            
-        }
-    }     
-
-    public void RefreshHome() {
-        if (!GameManager.instance.libraryChanged) {
-            return;
-        }
-        GameManager.instance.StartCoroutine(GameManager.instance.HomeLayoutRefresh());
-        GameManager.instance.libraryChanged = false;
+        searchManager.FirstSearchResults();
     }
     
     //SearchingAnimation; Changes the text every few seconds, as if it's an animation
-    public IEnumerator SearchingAnimation() {
+    public IEnumerator FirstSearchingAnimation() {
         searchingText.enabled = true;
         while (!searchManager.searched) {
             searchingText.text = "Searching. ";
@@ -148,6 +105,24 @@ public class UIManager : MonoBehaviour {
         }
         searchingText.enabled = false;
     }
+    
+    public IEnumerator AddSearchingAnimation() {
+        addSearchingText.enabled = true;
+        moreButton.enabled = false;
+        while (!searchManager.searched) {
+            searchingText.text = ".";
+            if (searchManager.searched) {break;}
+            yield return new WaitForSeconds(searchingAnimDelay);
+            searchingText.text = "..";
+            if (searchManager.searched) {break;}
+            yield return new WaitForSeconds(searchingAnimDelay);
+            searchingText.text = "...";
+            if (searchManager.searched) {break;}
+            yield return new WaitForSeconds(searchingAnimDelay);
+        }
+        searchingText.enabled = false;
+        moreButton.enabled = true;
+    }
 
     void Start() {
         BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BLUE BACKDROP aka ORIGINAL pixil-frame-0 (12).png"));
@@ -155,8 +130,6 @@ public class UIManager : MonoBehaviour {
         BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/GREEN BACKDROP pixil-frame-0 (10).png"));
         
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
-        nextButton = searchedMenu.transform.Find("Forward").GetComponent<Button>();
-        backButton = searchedMenu.transform.Find("Back").GetComponent<Button>();
     }
 
     void Update() {
