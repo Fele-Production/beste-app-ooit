@@ -187,8 +187,9 @@ public class SearchManager : MonoBehaviour
 
                 for (int i = 0; i < resultsToLoad; i++)
                 {
-                    curSearchPreviews.Add(Instantiate(searchMasterPreviewPrefab, searchResultsTrans, false));
-                    SearchPreview _searchPreview = curSearchPreviews[i].GetComponent<SearchPreview>();
+                    GameObject _newPrefriew = Instantiate(searchMasterPreviewPrefab, searchResultsTrans, false);
+                    curSearchPreviews.Add(_newPrefriew);
+                    SearchPreview _searchPreview = _newPrefriew.GetComponent<SearchPreview>();
                     _searchPreview.curIndex = i;
                     _searchPreview.curPage = curPage;
                 }
@@ -202,8 +203,9 @@ public class SearchManager : MonoBehaviour
                     resultsToLoad = releaseResult.versions.Length - resultsPerPage;
                 }
                 for(int i = 0; i < resultsToLoad; i++) {
-                    curSearchPreviews.Add(Instantiate(searchReleasePreviewPrefab, searchResultsTrans, false));
-                    ReleaseSearchPreview _searchPreview = curSearchPreviews[i].GetComponent<ReleaseSearchPreview>();
+                    GameObject _newPrefriew = Instantiate(searchReleasePreviewPrefab, searchResultsTrans, false);
+                    curSearchPreviews.Add(_newPrefriew);
+                    ReleaseSearchPreview _searchPreview = _newPrefriew.GetComponent<ReleaseSearchPreview>();
                     _searchPreview.curIndex = i;
                     _searchPreview.curPage = curPage;
                 }

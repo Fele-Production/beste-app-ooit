@@ -107,20 +107,20 @@ public class UIManager : MonoBehaviour {
     }
     
     public IEnumerator AddSearchingAnimation() {
-        addSearchingText.enabled = true;
+        addSearchingText.gameObject.SetActive(true);
         moreButton.enabled = false;
         while (!searchManager.searched) {
-            searchingText.text = ".";
+            addSearchingText.text = ".";
             if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
-            searchingText.text = "..";
+            addSearchingText.text = "..";
             if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
-            searchingText.text = "...";
+            addSearchingText.text = "...";
             if (searchManager.searched) {break;}
             yield return new WaitForSeconds(searchingAnimDelay);
         }
-        searchingText.enabled = false;
+        addSearchingText.gameObject.SetActive(false);
         moreButton.enabled = true;
     }
 
