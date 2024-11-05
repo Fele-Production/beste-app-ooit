@@ -125,9 +125,9 @@ public class UIManager : MonoBehaviour {
     }
 
     void Start() {
-        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BLUE BACKDROP aka ORIGINAL pixil-frame-0 (12).png"));
-        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/BEIGE BACKDROP pixil-frame-0 (11).png"));
-        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Plaat fanaat players n backdrops with animated frames/Backdrops/GREEN BACKDROP pixil-frame-0 (10).png"));
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Backdrops/Blue.png"));
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Backdrops/Beige.png"));
+        BackdropOptions.Add(Get.ImageFromPath("Assets/Sprites/Lefonki Designs/Backdrops/Green.png"));
         
         searchedMenu = searchMenu.transform.Find("Searched Menu").gameObject;
     }

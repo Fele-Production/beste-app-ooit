@@ -15,7 +15,7 @@ namespace Discogs {
     public static class GlobalVariables {
         public readonly static string[] DeprecatedFileExtensions = {"aic","skibidi"}; //New (first) to Old (last)
         public readonly static string FileExtension = "G59"; //1 color, 2 numbers
-        public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
+        public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\Plaat Fanaat
         public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
         public readonly static string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
         public readonly static string coversPath = $"{Application.persistentDataPath}/Textures";
@@ -482,8 +482,8 @@ namespace Discogs {
             FileModification.HardSave(GlobalVariables.libPath,libraryToSave);
         }
 
-        public static async Task ReloadTextures() {
-            await FileModification.ReloadTextures<UserLibrary>(GlobalVariables.libPath);
+        public static async void ReloadTextures() {
+            FileModification.ReloadTextures<UserLibrary>(GlobalVariables.libPath);
         }
 
         public static class Wishlist {
@@ -516,8 +516,8 @@ namespace Discogs {
             FileModification.HardSave(GlobalVariables.gamePath,libraryToSave);
         }
 
-        public static async Task ReloadTextures() {
-            await FileModification.ReloadTextures<GameData>(GlobalVariables.gamePath);
+        public static async void ReloadTextures() {
+            FileModification.ReloadTextures<GameData>(GlobalVariables.gamePath);
         }
 
         public static class Wishlist {
@@ -699,10 +699,10 @@ namespace Discogs {
             HardSave(path,saveLib);
         }
 
-        public static async Task ReloadTextures<inputType>(string libPath) where inputType : UserLibrary,new(){
+        public static async void ReloadTextures<inputType>(string libPath) where inputType : UserLibrary,new(){
             inputType ReloadedLib = Load<inputType>(libPath);
             foreach (ReleaseInfoOptimized release in ReloadedLib.Owned) {
-                if (release.texture.Length==0) {
+                if (!File.Exists(release.texture)) {
                     Texture2D _texture = await Get.Image(release.image.resource_url);
                     string _texturepath = $"{GlobalVariables.coversPath}/{release.id}.png";
                     if (!Directory.Exists(GlobalVariables.coversPath)) {

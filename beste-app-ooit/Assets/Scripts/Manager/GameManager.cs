@@ -35,18 +35,17 @@ public class GameManager : MonoBehaviour
         } else{
             Destroy(this.gameObject);
         }
-    }
 
-    async void Start() {
         //Initialize Data Files
+        Library.ReloadTextures();
+        Game.ReloadTextures();
+        InitializeLibrary();
         Game.Load();
-        await Game.ReloadTextures();
         Settings.Load();
-        await InitializeLibrary();
     }
 
-    public async Task InitializeLibrary() {
-        await Library.ReloadTextures();
+    public async void InitializeLibrary() {
+        Library.ReloadTextures();
         library = Library.Load();
 
         if(albumContent1 == null) {
