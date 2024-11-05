@@ -297,7 +297,6 @@ public class SearchManager : MonoBehaviour
         if(searched) {
             uiManager.moreButton.gameObject.SetActive(true);
             uiManager.searchingText.enabled = false;
-            uiManager.addSearchingText.enabled = false;
         } else{
             uiManager.moreButton.gameObject.SetActive(false);
         }
