@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Discogs;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class GameManager : MonoBehaviour
 {
@@ -26,8 +27,7 @@ public class GameManager : MonoBehaviour
     
     public static GameManager instance;
 
-    void Awake()
-    {
+    void Awake() {
         //Make an instance of GameManager so that all scripts can access it easily
         if(instance == null) {
             instance = this;
@@ -37,16 +37,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void Start()
-    {
+    async void Start() {
         //Initialize Data Files
         Game.Load();
+        await Game.ReloadTextures();
         Settings.Load();
-        Debug.Log("Loaded everything");
-        InitializeLibrary();
+        await InitializeLibrary();
     }
 
-    public void InitializeLibrary() {
+    public async Task InitializeLibrary() {
+        await Library.ReloadTextures();
         library = Library.Load();
 
         if(albumContent1 == null) {

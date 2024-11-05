@@ -6,17 +6,19 @@ using System.IO;
 
 using UnityEngine;
 using UnityEngine.Networking;
+using Unity.VisualScripting;
 
 
 
 
 namespace Discogs {
     public static class GlobalVariables {
-        public readonly static string DeprecatedFileExtension = "skibidi";
-        public readonly static string FileExtension = "aic";
+        public readonly static string[] DeprecatedFileExtensions = {"aic","skibidi"}; //New (first) to Old (last)
+        public readonly static string FileExtension = "G59"; //1 color, 2 numbers
         public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\beste-app-ooit
         public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
         public readonly static string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
+        public readonly static string coversPath = $"{Application.persistentDataPath}/Textures";
     }
 
     public static class ClientConfig {
@@ -285,7 +287,7 @@ namespace Discogs {
         public string[] styles;
         public ClassComponents.Track[] tracklist;
         public ClassComponents.ReleaseImage image;
-        public Sprite texture;
+        public string texture;
     }
 
     //Class for Saved Releases
@@ -480,6 +482,10 @@ namespace Discogs {
             FileModification.HardSave(GlobalVariables.libPath,libraryToSave);
         }
 
+        public static async Task ReloadTextures() {
+            await FileModification.ReloadTextures<UserLibrary>(GlobalVariables.libPath);
+        }
+
         public static class Wishlist {
             public static async Task Add(ReleaseInfo releaseToSave, bool multiples_allowed = false) {
                 await FileModification.Add<UserLibrary>(GlobalVariables.libPath,true,releaseToSave,multiples_allowed);
@@ -508,6 +514,10 @@ namespace Discogs {
         }
         public static void HardSave(GameData libraryToSave) {
             FileModification.HardSave(GlobalVariables.gamePath,libraryToSave);
+        }
+
+        public static async Task ReloadTextures() {
+            await FileModification.ReloadTextures<GameData>(GlobalVariables.gamePath);
         }
 
         public static class Wishlist {
@@ -541,11 +551,20 @@ namespace Discogs {
     }
 
     public static class Convert {
+        //Optimizing Releases
         public static async Task<ReleaseInfoOptimized> OptimizeReleaseInfo(ReleaseInfo releaseInfoInput) {
             ReleaseInfoOptimized _releaseInfoInputOpt = JsonUtility.FromJson<ReleaseInfoOptimized>(JsonUtility.ToJson(releaseInfoInput));
             _releaseInfoInputOpt.image = releaseInfoInput.images[0];
             Texture2D _texture = await Get.Image(releaseInfoInput.images[0].resource_url);
-            _releaseInfoInputOpt.texture = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
+            string _texturepath = $"{GlobalVariables.coversPath}/{_releaseInfoInputOpt.id}.png";
+            if (!Directory.Exists(GlobalVariables.coversPath)) {
+                Directory.CreateDirectory(GlobalVariables.coversPath);
+            }
+            if (!File.Exists(_texturepath)) {
+                Byte[] _textureBytes = _texture.EncodeToPNG();
+                await File.WriteAllBytesAsync(_texturepath,_textureBytes);
+            }
+            _releaseInfoInputOpt.texture = _texturepath;
             return _releaseInfoInputOpt;
         }
     }
@@ -590,29 +609,20 @@ namespace Discogs {
                     }
                 }
             }
+            string _texturepath = $"{GlobalVariables.coversPath}/{releaseToRemoveID}.png";
+            if (File.Exists(_texturepath)) {
+                File.Delete(_texturepath);
+            }
+
             HardSave(path,_removeLibrary);
         }
 
         public static inputType Load<inputType>(string path) where inputType : class, new(){    
             string _LibraryStr;
             inputType _Library;
-            if ((typeof(inputType) != typeof(UserLibrary))&&(typeof(inputType) != typeof(GameData))&&(typeof(inputType) != typeof(UserSettings))) {
-                Debug.LogError($"Invalid Type for Template: {typeof(inputType).Name}");
-                return default;
-            }
-            
-            if (File.Exists(path)) {
-                _LibraryStr = File.ReadAllText(path);
-            } else {
-                string oldpath = path.Replace(GlobalVariables.FileExtension,GlobalVariables.DeprecatedFileExtension);
-                if (File.Exists(oldpath)) {
-                    _LibraryStr = File.ReadAllText(oldpath);
-                } else {
-                    _LibraryStr = "";
-                }
-                HardSave(path,JsonUtility.FromJson<inputType>(_LibraryStr));
-                File.Delete(oldpath);
-            }
+
+            _LibraryStr = CheckOld<inputType>(path);
+
             _Library = JsonUtility.FromJson<inputType>(_LibraryStr);
             if (_Library == null) {
                 Debug.LogWarning($"Trying to convert incompatible JSON to {typeof(inputType)}, returning new()");
@@ -620,7 +630,37 @@ namespace Discogs {
             }
             return _Library;
         }
-        
+
+        public static string CheckOld<inputType>(string path) where inputType : class,new() {
+            //If exists read
+            if (File.Exists(path)) {
+                return File.ReadAllText(path);
+            }
+            //If not:
+            string _LibraryStr = ""; //Sets default
+
+            foreach (string oldext in GlobalVariables.DeprecatedFileExtensions) {
+                string oldpath = path.Replace(GlobalVariables.FileExtension,oldext);
+                if (File.Exists(oldpath)) {
+                    string _OldFileStr = File.ReadAllText(oldpath);
+                    if (_OldFileStr.Length != 0) {
+                        _LibraryStr = _OldFileStr;
+                        HardSave(path,JsonUtility.FromJson<inputType>(_LibraryStr));
+                        File.Delete(oldpath);
+                        break;
+                    }
+                }
+            }
+            foreach (string oldext in GlobalVariables.DeprecatedFileExtensions) {
+                string oldpath = path.Replace(GlobalVariables.FileExtension,oldext);
+                if (File.Exists(oldpath)) {
+                    File.Delete(oldpath);
+                }
+            }
+
+            return _LibraryStr;
+        }
+
         public static string LoadStr(string path) {
             string _LibraryStr;
             if (File.Exists(path)) {
@@ -658,128 +698,38 @@ namespace Discogs {
             }
             HardSave(path,saveLib);
         }
+
+        public static async Task ReloadTextures<inputType>(string libPath) where inputType : UserLibrary,new(){
+            inputType ReloadedLib = Load<inputType>(libPath);
+            foreach (ReleaseInfoOptimized release in ReloadedLib.Owned) {
+                if (release.texture.Length==0) {
+                    Texture2D _texture = await Get.Image(release.image.resource_url);
+                    string _texturepath = $"{GlobalVariables.coversPath}/{release.id}.png";
+                    if (!Directory.Exists(GlobalVariables.coversPath)) {
+                        Directory.CreateDirectory(GlobalVariables.coversPath);
+                    }
+                    if (!File.Exists(_texturepath)) {
+                        Byte[] _textureBytes = _texture.EncodeToPNG();
+                        await File.WriteAllBytesAsync(_texturepath,_textureBytes);
+                    }
+                    release.texture = _texturepath;
+                }
+            }
+            foreach (ReleaseInfoOptimized release in ReloadedLib.Wishlist) {
+                if (release.texture.Length == 0) {
+                    Texture2D _texture = await Get.Image(release.image.resource_url);
+                    string _texturepath = $"{GlobalVariables.coversPath}/{release.id}.png";
+                    if (!Directory.Exists(GlobalVariables.coversPath)) {
+                        Directory.CreateDirectory(GlobalVariables.coversPath);
+                    }
+                    if (!File.Exists(_texturepath)) {
+                        byte[] _textureBytes = _texture.EncodeToPNG();
+                        await File.WriteAllBytesAsync(_texturepath,_textureBytes);
+                    }
+                    release.texture = _texturepath;
+                }
+            }
+            HardSave(libPath,ReloadedLib);
+        }
     }
 }
-
-
-
-
-
-
-
-/* SEARCH QUERY THINGIES
-___________MASTER___________________
-query   --INCLUDED
-string (optional) Example: nirvana
-Your search query
-
-type    --INCLUDED
-string (optional) Example: release
-String. One of release, master, artist, label
-
-title
-string (optional) Example: nirvana - nevermind
-Search by combined “Artist Name - Release Title” title field.
-
-release_title
-string (optional) Example: nevermind
-Search release titles.
-
-credit
-string (optional) Example: kurt
-Search release credits.
-
-artist
-string (optional) Example: nirvana
-Search artist names.
-
-anv
-string (optional) Example: nirvana
-Search artist ANV.
-
-label
-string (optional) Example: dgc
-Search label names.
-
-genre
-string (optional) Example: rock
-Search genres.
-
-style
-string (optional) Example: grunge
-Search styles.
-
-country
-string (optional) Example: canada
-Search release country.
-
-year
-string (optional) Example: 1991
-Search release year.
-
-format
-string (optional) Example: album
-Search formats.
-
-catno
-string (optional) Example: DGCD-24425
-Search catalog number.
-
-barcode
-string (optional) Example: 7 2064-24425-2 4
-Search barcodes.
-
-track
-string (optional) Example: smells like teen spirit
-Search track titles.
-
-submitter
-string (optional) Example: milKt
-Search submitter username.
-
-contributor
-string (optional) Example: jerome99
-Search contributor usernames.
-__________RELEASES__________
-master_id --INCLUDED
-number (required) Example: 1000
-The Master ID
-
-page --INCLUDED
-number (optional) Example: 3
-The page you want to request
-
-per_page --INCLUDED
-number (optional) Example: 25
-The number of items per page
-
-format --HARDCODED
-string (optional) Example: Vinyl
-The format to filter
-
-label
-string (optional) Example: Scorpio Music
-The label to filter
-
-released
-string (optional) Example: 1992
-The release year to filter
-
-country
-string (optional) Example: Belgium
-The country to filter
-
-sort
-string (optional) Example: released
-Sort items by this field:
-released (i.e. year of the release)
-title (i.e. title of the release)
-format
-label
-catno (i.e. catalog number of the release)
-country
-
-sort_order
-string (optional) Example: asc
-Sort items in a particular order (one of asc, desc)
-*/

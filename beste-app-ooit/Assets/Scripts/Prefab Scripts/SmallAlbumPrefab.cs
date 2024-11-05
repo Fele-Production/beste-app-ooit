@@ -30,11 +30,10 @@ public class SmallAlbumPrefab : MonoBehaviour
     public Sprite coverImage;
     
     
-    public async void Start() {
+    public void Start() {
         if(coverImage == null) {
-            url = GameManager.instance.library.Owned[curIndex].image.resource_url;
-            Texture2D _texture = await Discogs.Get.Image(url);
-            coverImage = Sprite.Create(_texture,new Rect(0,0,_texture.width,_texture.height), new Vector2(0,0));
+            Texture2D _texture = Get.ImageFromPath(GameManager.instance.library.Owned[curIndex].texture);
+            coverImage = Sprite.Create(_texture,new(0,0,_texture.width,_texture.height),new(0,0));
         }
         
         cover.sprite = coverImage;
@@ -47,7 +46,7 @@ public class SmallAlbumPrefab : MonoBehaviour
                 titleText.text = "---";
             }
 
-            StartCoroutine("VerticalLayoutRefresh");
+            StartCoroutine(nameof(VerticalLayoutRefresh));
         }
     }
 
