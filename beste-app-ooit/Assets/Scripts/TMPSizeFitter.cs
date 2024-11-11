@@ -7,11 +7,15 @@ using Unity.VisualScripting;
 
 public class TMPSizeFitter : MonoBehaviour
 {
+    [Header("Variables")]
+    public float preferredHeight;
+    
+    [Header("Objects")]
     public TextMeshProUGUI text;
     public Transform contentTransform;
     public RectTransform textRectTransform;
     public RectTransform albumContentTransform;
-    public float preferredHeight;
+    
 
     private void SetHeight() {
         textRectTransform.sizeDelta = new Vector2(textRectTransform.sizeDelta.x, preferredHeight); 
