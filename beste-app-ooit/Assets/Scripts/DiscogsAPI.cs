@@ -10,7 +10,7 @@ using Unity.VisualScripting;
 
 
 
-
+//namespace is discogs
 namespace Discogs {
     public static class GlobalVariables {
         public readonly static string[] DeprecatedFileExtensions = {"aic","skibidi"}; //New (first) to Old (last)
