@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Republic
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -546,8 +546,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 2024
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -681,8 +681,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: ---
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -830,8 +830,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: ---
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

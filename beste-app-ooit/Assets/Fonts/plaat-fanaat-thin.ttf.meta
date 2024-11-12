@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c462e4baeb12c584c9398ebbc9bcb904
+guid: 6915cee43afe5be4cad6a57e01c34c4d
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Plaat Fanaat
+  - Plaat Fanaat thin
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0

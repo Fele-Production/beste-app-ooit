@@ -144,8 +144,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Stick Season
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -223,11 +223,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fb696a6f24a39441ae663587c049d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  preferredHeight: 0
   text: {fileID: 774711930742424245}
   contentTransform: {fileID: 4242126144007786020}
   textRectTransform: {fileID: 2289698188903136902}
   albumContentTransform: {fileID: 0}
-  preferredHeight: 0
 --- !u!114 &4045545371897011289
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -537,8 +537,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
-  m_sharedMaterial: {fileID: 8993205115011893697, guid: 865e6ebf3040b5f40ab9bb40cc4d9237, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c75e23e777deda441a97173d331fb73f, type: 2}
+  m_sharedMaterial: {fileID: 6059192031129146908, guid: c75e23e777deda441a97173d331fb73f, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
