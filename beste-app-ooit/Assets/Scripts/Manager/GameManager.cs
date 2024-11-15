@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         Settings.Load();
     }
 
-    public async void InitializeLibrary() {
+    public void InitializeLibrary() {
         Library.ReloadTextures();
         library = Library.Load();
 

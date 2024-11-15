@@ -13,12 +13,12 @@ using Unity.VisualScripting;
 //namespace is discogs
 namespace Discogs {
     public static class GlobalVariables {
-        public readonly static string[] DeprecatedFileExtensions = {"aic","skibidi"}; //New (first) to Old (last)
-        public readonly static string FileExtension = "G59"; //1 color, 2 numbers
-        public readonly static string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\Plaat Fanaat
-        public readonly static string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
-        public readonly static string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
-        public readonly static string coversPath = $"{Application.persistentDataPath}/Textures";
+        public static readonly string[] DeprecatedFileExtensions = {"aic","skibidi"}; //New (first) to Old (last)
+        public const string FileExtension = "G59"; //1 color, 2 numbers
+        public static readonly string libPath = $"{Application.persistentDataPath}/UserData.{FileExtension}"; //C:\Users\(USER)\AppData\LocalLow\Fele Productions\Plaat Fanaat
+        public static readonly string setPath = $"{Application.persistentDataPath}/UserSettings.{FileExtension}";
+        public static readonly string gamePath = $"{Application.persistentDataPath}/GameData.{FileExtension}";
+        public static readonly string coversPath = $"{Application.persistentDataPath}/Textures";
     }
 
     public static class ClientConfig {
@@ -482,7 +482,7 @@ namespace Discogs {
             FileModification.HardSave(GlobalVariables.libPath,libraryToSave);
         }
 
-        public static async void ReloadTextures() {
+        public static void ReloadTextures() {
             FileModification.ReloadTextures<UserLibrary>(GlobalVariables.libPath);
         }
 
@@ -516,7 +516,7 @@ namespace Discogs {
             FileModification.HardSave(GlobalVariables.gamePath,libraryToSave);
         }
 
-        public static async void ReloadTextures() {
+        public static void ReloadTextures() {
             FileModification.ReloadTextures<GameData>(GlobalVariables.gamePath);
         }
 
