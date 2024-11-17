@@ -13,6 +13,7 @@ public class SearchPreview : MonoBehaviour
     [Header("Variables")] 
     public int curPage;
     public int curIndex;
+    public int listIndex;
     public int curDistance;
 
     [Header("Other")]

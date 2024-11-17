@@ -43,6 +43,10 @@ public class GameManager : MonoBehaviour
         Game.Load();
         Settings.Load();
     }
+    
+    void Start() {
+        Screen.SetResolution(Screen.width, Screen.height, false);
+    }
 
     public async void InitializeLibrary() {
         Library.ReloadTextures();

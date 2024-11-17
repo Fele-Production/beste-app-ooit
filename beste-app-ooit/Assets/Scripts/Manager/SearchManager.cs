@@ -47,7 +47,9 @@ public class SearchManager : MonoBehaviour
 
 
     //Search Master based on the prompt given 
-    public async void SearchMaster() {
+    public async void SearchMaster()
+    {
+        searched = false;
         curType = "master";
 
         foreach (var t in curSearchPreviews) {
@@ -85,6 +87,8 @@ public class SearchManager : MonoBehaviour
         curSearchPreviews.Clear();
 
         uiManager.StartCoroutine(uiManager.FirstSearchingAnimation());
+
+        releaseResultList.Clear();
         releaseResult = await Discogs.Get.Releases(curMasterID, 1, searchResultsPerPage);
         releaseResultList.Add(releaseResult);
         
@@ -191,6 +195,7 @@ public class SearchManager : MonoBehaviour
                     curSearchPreviews.Add(_newPrefriew);
                     SearchPreview _searchPreview = _newPrefriew.GetComponent<SearchPreview>();
                     _searchPreview.curIndex = i;
+                    _searchPreview.listIndex = masterResultList.Count - 1;
                     _searchPreview.curPage = curPage;
                 }
 
@@ -287,7 +292,6 @@ public class SearchManager : MonoBehaviour
     //Selects the Release ID based on the index given
     public void GetReleaseID(int _index, int _page, Sprite _sprite) {
         curReleaseID = releaseResultList[_page-1].versions[_index].id;
-        curReleaseID = releaseResult.versions[_index + ((curPage-1)*resultsPerPage)].id;
         curCoverImg = _sprite;
         uiManager.saveReleaseMenu.SetActive(true);
     }
