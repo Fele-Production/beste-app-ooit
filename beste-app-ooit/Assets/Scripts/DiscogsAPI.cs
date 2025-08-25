@@ -203,6 +203,7 @@ namespace Discogs {
         public class UserTheme {
             public bool Fantassimo = false;
             public int Backdrop = 0; //0=blue 1=beige 2=green
+            public string RecordPlayer = "Yellow"; //yellow gray blue
             //Add whatever the fuck you can customize
         }
 
@@ -536,10 +537,11 @@ namespace Discogs {
         public static UserSettings Load() {
             return FileModification.Load<UserSettings>(GlobalVariables.setPath);
         }
-        public static void SaveTheme(bool? IFantassimo, int? IBackdrop) {
+        public static void SaveTheme(bool? IFantassimo, int? IBackdrop, string IRecordPlayer) {
             UserSettings _themeSettings = Load(); 
             if (IFantassimo.HasValue) {_themeSettings.Theme.Fantassimo = IFantassimo.Value;}
             if (IBackdrop.HasValue) {_themeSettings.Theme.Backdrop = IBackdrop.Value;}
+            if (IRecordPlayer != default) {_themeSettings.Theme.RecordPlayer = IRecordPlayer;}
             File.WriteAllText(GlobalVariables.setPath,JsonUtility.ToJson(_themeSettings,true));
         }
 

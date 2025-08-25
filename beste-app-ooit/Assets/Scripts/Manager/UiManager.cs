@@ -32,6 +32,7 @@ public class UIManager : MonoBehaviour {
     [Header ("Theme Actors")]
     public Fantassimo discoScript;
     public Image backdropImage;
+    public RPAppearance RPA;
     private List<Texture2D> BackdropOptions = new();
     private int currentBackdrop;
     [SerializeField] public UserSettings userSettings = new();
@@ -133,7 +134,7 @@ public class UIManager : MonoBehaviour {
     }
 
     void Update() {
-        //UserSettings userSettings = Settings.Load(); we hebben nog niks om settings aan te passen dus
+        UserSettings userSettings = Settings.Load();
         discoScript.greenlit = userSettings.Theme.Fantassimo;
 
         if (currentBackdrop!=userSettings.Theme.Backdrop) {
@@ -145,5 +146,7 @@ public class UIManager : MonoBehaviour {
                 //Yeah idfk just let the rollie do what it do
             }
         }
+        
+        RPA.ChangeColor(userSettings.Theme.RecordPlayer);
     }
 }

@@ -1055,10 +1055,12 @@ MonoBehaviour:
   searchingAnimDelay: 0.5
   discoScript: {fileID: 235609890}
   backdropImage: {fileID: 235609891}
+  RPA: {fileID: 469840218}
   userSettings:
     Theme:
       Fantassimo: 0
       Backdrop: 0
+      RecordPlayer: Yellow
     Settings:
       PerformanceMode: 0
 --- !u!114 &235609890
@@ -2299,6 +2301,7 @@ GameObject:
   - component: {fileID: 469840214}
   - component: {fileID: 469840217}
   - component: {fileID: 469840216}
+  - component: {fileID: 469840218}
   m_Layer: 5
   m_Name: RecordPlayer
   m_TagString: Untagged
@@ -2472,6 +2475,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   record_player: {fileID: 469840216}
+--- !u!114 &469840218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469840212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4cddcbf01f47754296cec614c7e7632, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  curTexture: {fileID: 469840214}
 --- !u!1001 &497285462
 PrefabInstance:
   m_ObjectHideFlags: 0
